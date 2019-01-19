@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body {
+			width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+			overflow:hidden;
+		}
+		body {
+			background-color:#000;
+			background-position: center center;
+            /* border: 1px solid red; */
+		}
+        #show {
+			display:none;
+            color: #fff
+		}
+        #clock {
+			position:absolute;
+			top:0;
+			left:0;
+			text-align:center;
+			color:#fff;
+			font-family:"等线 Light","Microsoft Yahei Light";
+			font-size:100px;
+			text-shadow: 0 0 30px yellow;
+			z-index:-2;
+		}
+		#clock .sec {
+			font-size:0.5em; 
+		}
+        #time {
+			position:relative;
+		}
+        #clock .st {
+			position:absolute;
+			right:2%;
+			top:15%;
+			font-size:0.25em;
+			line-height:1;
+		}
+        #canvas {
+			margin:0;
+			padding:0;
+			position:absolute;
+			left:0;
+			top:0;
+			z-index:-1;
+		}
+        #canvas2 {
+			margin:0;
+			padding:0;
+			position:absolute;
+			left:0;
+			top:0;
+			z-index:-1;
+            /* border: 1px solid red; */
+            margin-top: 100px;
+		}
+        #Mp3input{
+            position: relative;
+            color: #fff;
+            border: 1px solid #999;
+            text-decoration: none;
+            width:70px;
+            
+        }
+        #uploadedFile{
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            border:1px solid red;
+            width:70px;
+            
+        }
+        #uploadedFile span{
+            position: absolute;
+            left: 0;
+            opacity: 1;
+            z-index:-100;
+            font-size:12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="show">测试</div>
+    <div id="Mp3input">
+        <span>选择文件</span>
+            <input type="file" id="uploadedFile"></input>
+        
+    </div>
+
+    <div id="clock">00:00</div>
+    <canvas id="canvas">您的浏览器不支持canvas标签</canvas>
+    <canvas id="canvas2">您的浏览器不支持canvas标签</canvas>
+</body>
+<script>
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                function( callback ){
+                    window.setTimeout(callback, 1000 / 60);
+                };
+    })();
+    //querySelector() 方法仅仅返回匹配指定选择器的第一个元素。如果你需要返回所有的元素，请使用 querySelectorAll() 方法替代。
+    var show = document.querySelector("#show");
+    var clock = document.querySelector("#clock");
+    function showi(str){
+			show.innerHTML = str;
+	}
+    var tStyle = false;
+    function add0(n){
+			return n<10 ? '0'+n : ''+n;
+	}
+    function addAmPm(n){
+        var str = n<=12 ? "AM":"PM";
+        return str;
+    }
+    function changeHourToAm(h){
+        var str =  h<=12 ? h : h-12;
+        return str;
+    }
+    function getTime(){
+        var t = new Date();
+        var hour = add0(t.getHours());
+        var min = add0(t.getMinutes());
+        var sec = add0(t.getSeconds());
+        if(tStyle){
+            clock.innerHTML = hour+" : "+min+" <span class='sec'>"+sec+"</span>";
+        }else{
+            hour = add0(changeHourToAm(t.getHours()));
+            clock.innerHTML = "<span id='time'>"+hour+" : "+min+" <span class='sec'>"+
+            sec+"</span><span class='st'>"+addAmPm(t.getHours())+"</span></span>";
+        }
+    };
+    function autoTime(){
+			getTime();
+            
+			setTimeout(autoTime, 1000);
+	}
+    autoTime();
+
+
+    var timeSystem = function(){
+        this.clockSystem = new clockSystem();
+    }
+
+    timeSystem.prototype = {
+        start:function(){
+		this.timer.start();
+	    },
+
+    }
+
+    var clockSystem = function(){
+        this.startTime = 0;
+        this.running = false;
+        this.paused = false;
+        this.totalPausedTime = 0;
+        this.startPause = 0;
+        //经过的时间，除了暂停的
+        this.elapsed = undefined;
+    }
+    clockSystem.prototype = {
+        //开始
+        start:function(now){
+            //new Date()参与计算会自动转换为从1970.1.1开始的毫秒数 
+            this.startTime = now ? now : new Date();
+            console.log(this.startTime);
+            //蜗牛的错了todo
+            this.elapsed = undefined;
+            this.totalPausedTime = 0;
+            this.running = true;
+            this.startPause = 0;
+        },
+        //停止
+        stop:function(now){
+            if(this.paused){
+			    this.unpause();
+		    }
+            this.elapsed = (now ? now : +new Date()) - this.startTime - this.totalPausedTime;
+		    this.running = false;
+        },
+        //暂停
+        pause:function(now){
+            this.startPause = now ? now : +new Date();
+		    this.paused = true;
+        },
+        //继续
+        unpause:function(now){
+            //只有暂停可以继续
+            if(!this.pause){
+			return;
+		    }
+            this.paused = false;
+            this.totalPausedTime += (now ? now : +new Date()) - this.startPause;
+		    this.startPause = 0;
+        },
+        getElapsedTime:function(now){
+            if(this.running){
+			
+			    return (now ? now : new Date())-this.startTime-this.totalPausedTime;
+			
+            }else{
+                
+                return this.elapsed;
+            }
+        },
+        isPaused:function(){
+            return this.paused;
+        },
+        isRunning:function(){
+            return this.running;
+        },
+        reset:function(now){
+            this.elapsed = 0;
+            this.startTime = now ? now : +new Date();
+            this.running = false;
+            this.totalPausedTime = 0;
+            this.startPause = 0;
+        }
+    }
+
+
+    // 设定参数
+    var param = {
+        style : 2, // 样式
+        r : 0.5, // 圆的半径
+        color : "rgba(255,255,255,0.8)", // 颜色
+        blurColor : "yellow", // 模糊颜色
+        arr1 : [], // 外圆点集合
+        arr2 : [], // 内圆点集合
+        rotation : 2, // 是否旋转
+        offsetAngle : 0, //旋转角度
+        arr : [],  // 获取到的频谱数组
+        waveArr : new Array(120),
+        cX : 0.5, // 圆中心点在x轴位置
+        cY : 0.5,
+        tX : 50, // 时间在x轴上的位置
+        tY : 50,
+        range : 1, // 振幅
+        shadowBlur: 15,
+        lineWidth : 3,
+        showCircle : true,
+        //是否模糊
+        isBlur: false
+    };
+
+    var canvas = document.querySelector("#canvas");
+	var ctx = canvas.getContext("2d");
+    //配置canvas元素
+    var w, h, minW;
+    function resize(clock,canvas,ctx,param){
+        console.log("1");
+        //全屏配置
+        canvas.width = w = window.innerWidth;
+        canvas.height = h = window.innerHeight;
+        //最小宽高
+        minW = Math.min(w, h);
+        clock.style.width = w+'px';
+        clock.style.height = clock.style.lineHeight = h+'px';
+        setCan(clock,ctx,param);
+    };
+    resize(clock,canvas,ctx,param);
+    clock.style.fontSize = Math.floor(h/300*20) + 'px';
+    //窗口大小改变事件监听
+    //为 HTML 与 BODY 元素设置 height:100% 和 width:100% 将不会触发 window.onresize 事件
+    window.onresize = function(){
+        resize(clock,canvas,ctx,param);
+    }
+
+    function setCan(clock,ctx,param){
+        clock.style.color = param.color;
+        ctx.strokeStyle = param.color;
+        //ctx.fillstyle = param.color;
+        ctx.lineWidth = param.lineWidth;
+        ctx.shadowBlur = param.isBlur ? param.shadowBlur : 0;
+        ctx.shadowColor = param.blurColor;
+        clock.style.textShadow = param.isBlur ? '0 0 20px '+param.blurColor : 'none';
+    };
+
+
+    /* 生成点，核心 */
+    function createPoint(arr){
+        param.arr1 = [];//外圆点集合
+		param.arr2 = [];//内圆点集合
+        for(var i=0; i<120; i++){
+            var deg = Math.PI/180*(i+param.offsetAngle)*3; //当前角度
+            var w1 = arr[i] ? (arr[i]-100)/300: 0;//点 
+            var w2;
+            if(param.waveArr[i]){
+                w2 = param.waveArr[i] - 0.1;//0.1 ?
+            }else{
+                w2 = 0;
+            };
+            w1 = Math.max(w1, w2);
+            param.waveArr[i] = w1 = Math.min(w1, 1.2);
+            var w = w1*param.range*100; //range 振幅
+            var offset1 = param.r*minW/2+w+1; // 外圆偏移
+			var offset2 = param.r*minW/2-w-1; // 内圆偏移,2w+2
+            var p1 = getXY(offset1, deg);
+            var p2 = getXY(offset2, deg);
+            param.arr1.push({'x':p1.x, 'y':p1.y});
+            param.arr2.push({'x':p2.x, 'y':p2.y});
+        }
+        if(param.rotation){
+            //偏移角度
+            param.offsetAngle += param.rotation/100;
+            if(param.offsetAngle>=360){
+                param.offsetAngle = 0;
+            }else if(param.offsetAngle<=0){
+                param.offsetAngle = 360;
+            }
+        };
+    }
+    function getXY(offset, deg){
+			return {'x':Math.cos(deg)*offset+param.cX*w, 'y':Math.sin(deg)*offset+param.cY*h};
+    };
+
+    createPoint([]);
+
+    /* 连线 */
+    function style1(){
+        // 外圆
+        ctx.beginPath();
+        ctx.moveTo(param.arr1[0].x, param.arr1[0].y);
+        for(var i=0; i<120; i++){
+            ctx.lineTo(param.arr1[i].x, param.arr1[i].y);
+        };
+        ctx.closePath();
+        ctx.stroke();
+        // 内圆
+        ctx.beginPath();
+        ctx.moveTo(param.arr2[0].x, param.arr2[0].y);
+        for(var i=0; i<120; i++){
+            ctx.lineTo(param.arr2[i].x, param.arr2[i].y);
+        };
+        ctx.closePath();
+        ctx.stroke();
+        // 内外圆连线
+        ctx.beginPath();
+        for(var i=0; i<120; i++){
+            ctx.moveTo(param.arr1[i].x, param.arr1[i].y);
+            ctx.lineTo(param.arr2[i].x, param.arr2[i].y);
+        };
+        ctx.closePath();
+        ctx.stroke();
+    };
+
+    function style2(){
+        // 内外圆连线
+        ctx.beginPath();
+        for(var i=0; i<120; i++){
+            ctx.moveTo(param.arr1[i].x, param.arr1[i].y);
+            ctx.lineTo(param.arr2[i].x, param.arr2[i].y);
+        };
+        ctx.closePath();
+        ctx.stroke();
+    };
+    style2();
+
+    function auto(){
+        ctx.clearRect(0,0,w,h);
+        createPoint(param.arr);
+        if( param.showCircle ){
+            switch (param.style) {
+                case 1:
+                style1();
+                break;
+                case 2:
+                style2();
+                break;
+            }
+        }
+        requestAnimFrame(auto);
+    }
+    auto();
+
+    window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+    try {
+        var audioContext = new window.AudioContext();
+    } catch (e) {
+        Console.log('!Your browser does not support AudioContext');
+    }
+
+
+
+
+</script>
+<script>
+    
+    var Visualizer = function() {
+        this.file = null; //要处理的文件，后面会讲解如何获取文件
+        this.fileName = null; //要处理的文件的名，文件名
+        this.audioContext = null; //进行音频处理的上下文，稍后会进行初始化
+        this.source = null; //保存音频
+        this.audioBufferSouceNode = null;
+        this.ranimationID=0;
+        this.array = [];
+        this.drawMeter = null;
+    }
+    Visualizer.prototype = {
+        ini: function() {
+        this._prepareAPI();
+        this._addEventListner();
+        },
+        _prepareAPI:function(){
+            window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+            window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame;
+            //安全地实例化一个AudioContext并赋值到Visualizer的audioContext属性上，方便后面处理音频使用
+            try {
+                this.audioContext = new AudioContext();
+                console.log("13");
+            } catch (e) {
+                console.log('!妳的浏览器不支持AudioContext:(');
+                console.log(e);
+            }
+        },
+        _addEventListner: function() {
+            //todo 通过拖拽获取
+            var that = this;
+            var audioInput = document.getElementById('uploadedFile');
+            //var dropContainer = document.getElementsByTagName("canvas")[0];
+            //监听是否有文件被选中
+            audioInput.onchange = function() {
+                //这里判断一下文件长度可以确定用户是否真的选择了文件，如果点了取消则文件长度为0
+                if (audioInput.files.length !== 0) {
+                    that.file = audioInput.files[0]; //将文件赋值到Visualizer对象的属性上
+                    that.fileName = that.file.name;
+                    that._start(); //获取到文件后，开始程序，这个方法会在后面定义并实现
+                };
+            };
+        },
+        _start: function() {
+            var that = this; //当前this指代Visualizer对象，赋值给that以以便在其他地方使用
+            var file = this.file;
+            var fr = new FileReader();  //实例化一个FileReader用于读取文件
+            fr.onload = function(e){    //文件读取完后调用此函数
+                var fileResult = e.target.result;
+                var audioContext = that.audioContext; //从Visualizer得到最开始实例化的AudioContext用来做解码ArrayBuffer
+                audioContext.decodeAudioData(fileResult,function(buffer){
+                    that._visualize(audioContext, buffer);
+                }, function(e) { //这个是解码失败会调用的函数
+                    console.log("!哎玛，文件解码失败:(");
+                });
+            }
+            //将上一步获取的文件传递给FileReader从而将其读取为ArrayBuffer格式
+            fr.readAsArrayBuffer(file);
+        },
+        _visualize: function(audioContext, buffer) {
+            console.log(this.audioBufferSouceNode);
+            if (this.audioBufferSouceNode!=null) {
+                this.audioBufferSouceNode.stop(0); //立即停止
+            }   
+            this.audioBufferSouceNode = audioContext.createBufferSource();
+            //AudioBufferSource对象的属性有五个。分别是：buffer、playbackRate、loop、loopstart和loopend，
+            //buffer自然就是音频buffer数据，playbackRate是渲染音频流的速度，其默认值是1。
+            //loop则是播放循环属性，默认为false，如果设为true则会循环播放音频。
+            //loopstart和loopend则是循环开始和结束的时间段，以秒为单位，默认值均为0，
+            //只有当loop的值为true的时候这两个属性才会起效。
+            this.audioBufferSouceNode.loop = true;//设置循环播放
+            var analyser = audioContext.createAnalyser();
+            //将source与分析器连接
+            this.audioBufferSouceNode.connect(analyser);
+            //将分析器与destination连接，这样才能形成到达扬声器的通路
+            analyser.connect(audioContext.destination);
+            //将上一步解码得到的buffer数据赋值给source
+            this.audioBufferSouceNode.buffer = buffer;
+            //播放
+            this.audioBufferSouceNode.start(0);
+            //音乐响起后，把analyser传递到另一个方法开始绘制频谱图了，因为绘图需要的信息要从analyser里面获取
+            this._drawSpectrum(analyser);
+        },
+        _drawSpectrum(analyser){
+            var canvas2 = document.querySelector("#canvas2");
+            var ctx2 = canvas2.getContext("2d");  
+            var cwidth = canvas2.width;
+            var cheight = canvas2.height-2;
+            var capHeight = 2;
+            console.log(cwidth);
+            console.log(cheight);
+            //能量条间的间距
+            var gap = 2;
+            //能量条的宽度
+            var meterWidth = 10;
+            var meterNum = cwidth / (10 + 2);
+
+            var self = this;
+
+            self.array = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(self.array);
+            console.log(self.array);
+            var step = Math.round(self.array.length / meterNum);//计算从analyser中的采样步长
+            ctx2.clearRect(0, 0, cwidth, cheight); //清理画布准备画画
+            //定义一个渐变样式用于画图
+            gradient = ctx2.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(1, '#0f0');
+            gradient.addColorStop(0.5, '#ff0');
+            gradient.addColorStop(0, '#f00');
+            ctx2.fillStyle = gradient;
+            var lastFpsUpdateTime = 0;
+
+            self.drawMeter = function() {
+                var now = new Date();
+                if(now-lastFpsUpdateTime>33){
+                    self.array = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(self.array);
+                    param.arr = self.array;
+                    var step = Math.round(self.array.length / meterNum); //计算采样步长
+                    ctx2.clearRect(0, 0, cwidth, cheight); //清理画布准备画画
+                    //对信源数组进行抽样遍历，画出每个频谱条
+                    for (var i = 0; i < meterNum; i++) {
+                        var value = self.array[i * step]/2;//太高所以除了2
+                        ctx2.fillRect(i * 12 /*频谱条的宽度+条间间距*/ , cheight - value + capHeight, meterWidth, cheight);
+                    }
+                    lastFpsUpdateTime = now;
+                    //console.log( self.ranimationID);
+                    //console.log( param.arr);
+                } 
+                self.ranimationID = requestAnimationFrame(self.drawMeter);
+            }
+            console.log( self.ranimationID);
+            if(self.ranimationID!=0){
+                //meiluanyong
+                //window.cancelAnimationFrame(self.ranimationID);//后停止
+                console.log( self.ranimationID);
+            }else{
+                self.ranimationID = requestAnimationFrame(self.drawMeter);
+            }
+        }
+    }
+
+    //loadSound("sample.mp3"); //调用
+    function loadSound(url) {
+        var request = new XMLHttpRequest(); //建立一个请求
+        request.open('GET', url, true); //配置好请求类型，文件路径等
+        request.responseType = 'arraybuffer'; //配置数据返回类型
+        // 一旦获取完成，对音频进行进一步操作，比如解码
+        request.onload = function() {
+            var arraybuffer = request.response;
+        }
+        request.send();
+    }
+
+    new Visualizer().ini();
+
+
+
+</script>
+</html>
