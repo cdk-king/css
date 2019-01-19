@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+	</head>
+	<body>
+		<canvas id='canvas' width="600" height="500" style="border:dashed 2px #ccc;">
+			您的浏览器不支持canvas，建议使用最新版的Chrome
+		</canvas>
+	</body>
+	<script>
+		var count = 0;
+		var canvas=document.getElementById('canvas');
+		var ctx= canvas.getContext('2d');
+		var drawtree = function(ctx,startX,startY,length,angle,depth,branchWidth){
+			count++;
+			console.log(count);
+			var rand=Math.random;
+			var n_lenght;
+			var n_angle;
+			var n_depth;
+			var maxbranch = 3;
+			var endx;
+			var endy;
+			var maxangle = 2*Math.PI/4;
+			var subbranch;
+			ctx.beginPath();
+			ctx.moveTo(startX,startY);
+			endx = startX + length*Math.cos(angle);
+			endy = startY + length * Math.sin(angle);
+			//线条样式
+			ctx.lineCap = 'round';
+			ctx.lineWidth = branchWidth;
+			ctx.lineTo(endx,endy);
+			if(depth<=2){
+				//树的枝干
+				ctx.strokeStyle = 'rgb(0,' + (((rand() * 64) +128) >>0) + ',0)';
+			}else{
+				//树的叶子
+				ctx.strokeStyle =  'rgb(0,' + (((rand() * 64) +64) >>0) + ',50,25)';
+			}
+			ctx.stroke();
+			
+			n_depth = depth -1;
+			//判断树是否结束
+			if(!n_depth){
+				return;
+			}
+			subbranch = rand() * (maxbranch-1) +1;
+			branchWidth = branchWidth*0.6;
+			
+			for(var i = 0;i<subbranch;i++){
+				n_angle = angle+Math.random()*maxangle-maxangle * 0.5;
+				n_lenght = length*(0.5+rand()*0.5);
+				
+				setTimeout(function(){
+					drawtree(ctx,endx,endy,(length*(0.5+rand()*0.5)),(angle+Math.random()*maxangle-maxangle * 0.5), n_depth, branchWidth);
+				},500)
+			}
+			
+		}
+
+
+		//初始化的树
+		drawtree(ctx,300,470,100,-Math.PI / 2, 10, 12);
+	</script>
+	<script>
+
+	</script>
+</html>

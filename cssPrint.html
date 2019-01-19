@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+	</head>
+	<body>
+		<div id="div"></div>
+	</body>
+	<script>
+		var data = "html{\ncolor:red;\n}";
+		var div = document.getElementById("div");
+		writer(div,data,0);
+		
+		function writer(el,data,index){
+			
+			
+			updateCss(data.substring(0,index+1));
+			el.innerText=data.substring(0,index+1);
+			index++;
+			if(index<data.length){
+				if(data.substring(index-1,index)==","){
+					setTimeout(function(){
+						writer(el,data,index);
+					},1000)
+				}else{
+					setTimeout(function(){
+						writer(el,data,index);
+					},50)
+				}
+				
+			}
+			
+		}	
+		function updateCss(data){
+			var style = document.createElement('style');
+			style.type = 'text/css';
+			style.innerHTML=data;
+			document.getElementsByTagName('HEAD').item(0).appendChild(style);
+		}
+		function mapData(data){
+			
+			
+		}
+		function checkSymbol(data){
+			
+			
+		}
+	</script>
+</html>
