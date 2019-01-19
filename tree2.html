@@ -19,11 +19,18 @@
 		<canvas id="myCanvas">此浏览器不支持canvas</canvas>
 	</body>
 	<script>
+		//initRadius = 15;
+		//this.radius = this.radius*0.985;
+		
+		//initRadius = 20;
+		//this.radius = this.radius*0.988;
+		
+		
 		var w = window.innerWidth;
 		var h = window.innerHeight;
 		var ctx = null;
 		var treeNum = 3;
-		var initRadius = 15;		//树干的初始宽度
+		var initRadius = 18;		//树干的初始宽度
 		var maxGeneration = 5;		//最多分支的次数
 		var branchArray = null;		//树干的集合
 		var flowers = [];			//花的集合
@@ -49,6 +56,8 @@
 				ctx = canvas.getContext("2d");
 				initTree();
 				loop();
+				var sun=new Sun();
+				sun.draw();
 			}
 		}
 		
@@ -192,6 +201,34 @@
 			
 		}
 		
+	function Star(x,y,r,cycle,bColor,eColor){
+		this.x=x;
+		this.y=y;
+		this.r=r;
+		this.cycle=cycle;
+		this.time=0;
+		this.bColor=bColor;
+		this.eColor=eColor;
+		this.draw=function(){
+				ctx.save();
+				ctx.translate(500,500);
+				ctx.rotate(this.time*(360/this.cycle)*Math.PI/180);
+				ctx.beginPath();
+				ctx.arc(this.x,this.y,this.r,0,360,false);
+				ctx.closePath();
+				var color=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r); 
+				color.addColorStop(0,this.bColor);
+				color.addColorStop(1,this.eColor);
+				ctx.fillStyle=color;
+				ctx.fill();
+				ctx.restore();
+				this.time+=1;
+		}
+	}
+	function Sun(){
+		Star.call(this,500 ,-110,30,0,"#FFFF00","#FF9900");
+	} 	
+		
 		
 	/**
      * 循环遍历所有树干和花，并调用更新和draw方法，实现动画效果
@@ -208,8 +245,10 @@
         }
         MyRequestAnimationFrame(loop);
     }
-
+	
 	window.onload = initCanvas;
+	
+		
 		
 	</script>
 </html>
