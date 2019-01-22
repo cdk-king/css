@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			/*background: #21333C;*/
+			background: -webkit-gradient(linear, 0 0, 0 bottom, from(#261300), to(#21333C)); 
+		    /*background: -webkit-linear-gradient(top, #21333C 0%, #261300 100%);
+			background: linear-gradient(to bottom, #21333C 0%, #261300 100%);*/
+
+		}
+		
+		#snailbait-fps {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			/*border: 1px solid red;*/
+			display: none;
+			opacity: 0;
+		}
+		
+		#snailbait-score {
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			font: 46px fantasy;
+			text-align: center;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			-webkit-transition: opacity 5s;
+			-moz-transition: opacity 5s;
+			-o-transition: opacity 5s;
+			transition: opacity 5s;
+			display: none;
+			opacity: 0;
+		}
+	</style>
+
+	<body>
+		<div id="snailbait-fps"></div>
+		<div id="snailbait-score">0</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script src='js/dat.gui.min.js'></script>
+	<script>
+		var fpsElement = document.getElementById("snailbait-fps");
+		var scoreElement = document.getElementById("snailbait-score");
+		var lastFpsUpdateTime = 0;
+		var lastAnimationFrameTime = 0;
+		var fps = 0;
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+
+		var centerX = width / 2;
+		var centerY = height / 2;
+		var mouseX = centerX;
+		var mouseY = centerY;
+		var angleX = 0;
+		var angleY = 0;
+		
+		var rains = [];
+		var drops = [];
+		var rain_pool = [];
+		var drop_pool = [];
+		var drop_time= 0;
+		var drop_delay= 40000/width;
+		
+		
+		var lastDropTime = 0;
+		var RainVx = 0;
+		var RainColor = "#fff";
+		var DropColor = "#fff";
+		var isChangeVx = false;
+		var platform = 150;
+		
+		var Rain = function(){
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;	
+			this.vy = 10+Math.random()*4-2;
+			this.vx = RainVx;
+			this.vz = 0;
+			this.speed = 25;
+			this.splashed = false;
+			this.color = RainColor;
+		}
+		Rain.width = 1;
+		Rain.height = 40;
+		Rain.prototype.init = function() {
+			this.y = Math.random() * -100;
+			this.z = Math.random() * 0.5 + 0.5;
+			this.splashed = false;
+		}
+		Rain.prototype.recycle = function() {
+			rain_pool.push(this);
+		}
+		//回收雨水颗粒并产生一个液滴
+		Rain.prototype.splash = function() {
+			if (!this.splashed) {
+				this.splashed = true;
+		
+				for (var i=0; i<16; i++) {
+					var drop = drop_pool.pop() || new Drop();
+					drops.push(drop);
+					drop.init(this.x);
+				}
+			}
+		}
+		Rain.prototype.draw = function(ctx){
+				ctx.beginPath();
+				var rain_height = Rain.height;
+				var real_x = this.x ;
+				var real_y = this.y;
+				ctx.moveTo(real_x, real_y);
+				// magic number 1.5 compensates for lack of trig in drawing angled rain
+				//神奇数字1.5弥补斜角绘制中缺少摩擦力的问题
+				ctx.lineTo(real_x + this.vx*2.5, real_y + this.vy*2.5);
+				this.x += this.vx;
+				this.y += this.vy;
+				ctx.lineWidth = Rain.width;
+				//ctx.strokeStyle = '#fff'; 
+				ctx.strokeStyle = this.color;
+				ctx.stroke();
+
+		}
+		var Drop = function(){
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+			this.r = Math.round(Math.random() * 1 + 0.5);
+			this.color = DropColor;
+		}
+		Drop.max_speed = 5;
+
+		Drop.prototype.init = function(x) {
+			this.x = x;
+			this.y = height-platform;
+			var angle = Math.random() * Math.PI - (Math.PI * 0.5);
+			var speed = Math.random() * Drop.max_speed;
+			this.vx = Math.sin(angle) * speed;
+			this.vy = -Math.cos(angle) * speed;
+		}
+		Drop.prototype.recycle = function() {
+			drop_pool.push(this);
+		}
+		Drop.prototype.draw = function(ctx){
+				ctx.beginPath();
+				var Drop_height = Drop.height;
+				var real_x = this.x ;
+				var real_y = this.y;
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+				this.x += this.vx;
+				this.y += this.vy;
+				//应用重力-魔术数字0.3代表伪造重力常数
+				this.vy = this.vy+0.3;
+				ctx.lineWidth = Drop.width;
+				ctx.strokeStyle = this.color;
+				ctx.stroke();
+
+		}
+
+		function calculateFps(now) {
+			fps = 1 / (now - lastAnimationFrameTime) * 1000 * 1;
+			//console.log(now - this.lastAnimationFrameTime);
+			if(now - lastFpsUpdateTime > 1000) {
+				lastFpsUpdateTime = now;
+				fpsElement.innerHTML = fps.toFixed(0) + ' fps';
+				//console.log(fps.toFixed(0));
+			}
+			lastAnimationFrameTime = now;
+
+			return fps;
+		}
+		function drawRain1(rain,index){
+			//rain.vx = 0;
+			//rain.vy = 10;
+			
+			for(var j= 0;j<rains.length;j++){
+				var rain = rains[j];
+				if(rain.y+rain.vy*2.5>height-platform){
+				rain.recycle();
+				rains.splice(j, 1);
+				j--;
+				for (var i=0; i<10; i++) {
+					var drop = drop_pool.pop() || new Drop();
+					drop.init(rain.x);
+					drops.push(drop);
+					
+				}
+			}
+			rain.draw(context);
+			//context.clearRect(0, canvas.height-150, canvas.width, 150);
+			}
+		}
+		function drawRain2(rain,index){
+			//rain.vx = 0;
+			//rain.vy = 10;
+			if(rain.y+rain.vy*2.5>height-platform){
+				rain.recycle();
+				rains.splice(index, 1);
+
+				for (var i=0; i<10; i++) {
+					var drop = drop_pool.pop() || new Drop();
+					drop.init(rain.x);
+					drops.push(drop);
+					
+				}
+			}
+			rain.draw(context);
+		}
+		function drawDrop(drop,index){
+			if(drop.y>height-platform){
+				drop.recycle();
+				drops.splice(index, 1);			
+			}
+			drop.draw(context);
+			
+		}
+		drawFrame();
+		
+		function drawFrame(now) {
+			//calculateFps(now);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			drop_time = now - lastDropTime; 
+			if(drop_time>drop_delay){
+				lastDropTime = now;
+				var new_rain = rain_pool.pop() || new Rain();
+				new_rain.init();
+				new_rain.x =  Math.random() * width;
+				rains.push(new_rain);
+				//console.log(new_rain.color);
+				//console.log(drop_pool.length);
+			}
+			drawRain1();
+			//rains.forEach(drawRain2);
+			drops.forEach(drawDrop);
+			
+			window.requestAnimationFrame(drawFrame, canvas);
+		}
+		function changeRainVx(item,index){
+			if(!isChangeVx){
+				item.vx = 0;
+			}else{
+				item.vx = -item.vy*mouseX/centerX;
+			}
+		}
+		
+		document.addEventListener('mousemove', function(e) {
+			var x = centerX - e.clientX;
+			var y = centerY - e.clientY;
+			mouseX = x;
+			mouseY = y;
+			if(isChangeVx){
+				rains.forEach(changeRainVx);
+				rain_pool.forEach(changeRainVx);	  
+				RainVx = -(10+Math.random()*4-2)*mouseX/centerX;
+			}
+		})
+		
+		function changColor(item,index){
+			item.color = params.颜色;	
+		}
+		function changSpeed1(item,index){
+			item.vy = 10*params.速度1+Math.random()*4-2;	
+		}
+		function changSpeed2(item,index){
+			
+		}
+
+		var params = {
+			方向: false,
+			exposure: 0.68,
+			速度1:1,
+			名字:"cdk",
+			颜色:"#ffffff", 
+			背景颜色:"#21333C", 
+			速度2: 1 //其实是半球光照  
+		};
+
+		var gui = new dat.GUI();
+		gui.add(params, '名字');
+		var speedController1 = gui.add(params, '速度1', 0, 5);
+		var speedController2 = gui.add(params, '速度2', 0, 5);
+		var directionController = gui.add(params, '方向');
+		var colorController1 = gui.addColor(params, '颜色');
+		var colorController2 = gui.addColor(params, '背景颜色');
+		gui.open();
+		
+		speedController1.onChange(function(value) {
+		    console.log("速度1:" + params.速度1);		   
+		    Rain.vy = 10*params.速度1+Math.random()*4-2;	
+		    console.log("速度1:" + Rain.vy);
+		    rains.forEach(changSpeed1);		   
+		    rain_pool.forEach(changSpeed1);	  
+		});
+		speedController2.onChange(function(value) {
+		    console.log("速度2:" + params.速度2);
+		    drop_delay = (40000/width)/params.速度2;
+		});
+		colorController1.onChange(function(value) {
+		    console.log("颜色:" + params.颜色);
+		    DropColor = params.颜色;
+		    RainColor = params.颜色;
+		    console.log(Rain.color);
+		    rains.forEach(changColor);
+		    drops.forEach(changColor);
+		    rain_pool.forEach(changColor);
+		    drop_pool.forEach(changColor);
+		});
+		colorController2.onChange(function(value) {
+		    console.log("背景颜色:" + params.背景颜色);
+		   	document.body.style.background = "-webkit-gradient(linear, 0 0, 0 bottom, from("+params.背景颜色+"), to(#21333C))";
+		});
+		directionController.onChange(function(value) {
+		    console.log("方向:" + params.方向);
+		    isChangeVx = params.方向;
+		    if(!isChangeVx){
+		    	rains.forEach(changeRainVx);
+				rain_pool.forEach(changeRainVx);
+		    	RainVx = 0;
+		    }
+		});
+	</script>
+
+</html>
