@@ -211,7 +211,7 @@
 		this.eColor=eColor;
 		this.draw=function(){
 				ctx.save();
-				ctx.translate(500,500);
+				//ctx.translate(500,500);
 				ctx.rotate(this.time*(360/this.cycle)*Math.PI/180);
 				ctx.beginPath();
 				ctx.arc(this.x,this.y,this.r,0,360,false);
@@ -226,7 +226,7 @@
 		}
 	}
 	function Sun(){
-		Star.call(this,500 ,-110,30,0,"#FFFF00","#FF9900");
+		Star.call(this,w/2+250,h-500,30,0,"#FFFF00","#FF9900");
 	} 	
 		
 		
