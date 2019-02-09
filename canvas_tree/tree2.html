@@ -34,6 +34,7 @@
 		var maxGeneration = 5;		//最多分支的次数
 		var branchArray = null;		//树干的集合
 		var flowers = [];			//花的集合
+		var leafs = [];			//叶的集合
 		
 		window.MyRequestAnimationFrame = window.requestAnimationFrame || 
 		window.mozRequestAnimationFrame ||
@@ -56,8 +57,6 @@
 				ctx = canvas.getContext("2d");
 				initTree();
 				loop();
-				var sun=new Sun();
-				sun.draw();
 			}
 		}
 		
@@ -143,8 +142,15 @@
 			if(b.generation >= maxGeneration-1){
 				flowers.push(new Flower(b.x,b.y));
 			}
+			//如果当前分支次数等于2,开叶
+			if(b.generation >= maxGeneration-2){
+				leafs.push(new Leaf(b.x,b.y));
+			}
 		}
 		
+		/*
+		树干集合 
+		 */
 		function BranchArray () {
 			this.branchs = [];
 		}
@@ -164,17 +170,62 @@
 		function random (min , max) {
 			return Math.random() * (max - min) + min ;
 		}
+
+		var spritesheet = new Image();
+		spritesheet.src = 'img/sy.png';
 		
+		function Leaf(x,y){
+			this.x = x;
+			this.y = y;
+			this.r = 15;
+			this.w = 10;
+			this.h = this.w/2;
+			this.speed = 1.0235;
+			this.angle = Math.random()*2*Math.PI;
+		}
+
+		Leaf.prototype = {
+			update:function(index){
+				if(this.w==20){
+					leafs.splice(index,1);
+					return;
+				}
+				this.w = this.w * this.speed;
+				this.h = this.w/2;
+				if(this.w > 20){
+					this.w = 20;
+					this.h = this.w/2;
+				}
+			},
+			draw:function(){
+				ctx.save();
+				ctx.fillStyle = "#00FF00";
+				ctx.beginPath();
+				ctx.translate(this.x, this.y);
+				ctx.rotate(this.angle);
+				//ctx.arc(this.x+10 , this.y , this.r ,Math.PI /2 ,3* Math.PI/2) ;
+				//ctx.arc(this.x-10 , this.y , this.r ,3* Math.PI/2,Math.PI /2) ;
+				ctx.drawImage(spritesheet, 0, 0,this.w,this.h);
+				ctx.rotate(this.angle*-1);
+				ctx.translate(this.x*-1, this.y*-1);
+				//ctx.stroke();
+				ctx.fill();
+				ctx.restore();
+			}
+		}
 		
 		function Flower(x,y){
 			this.x = x;
 			this.y = y;
-			this.r = 1;
+			//初始半径
+			this.r = 0.5;
 			this.petals = 5;
 			this.speed = 1.0235;
-			this.maxR = random(3,7);
+			//最大半径
+			this.maxR = random(3,5);
 		}
 		Flower.prototype.update = function(index){
+			//console.log(flowers.length);
 			if(this.r == this.maxR){
 				flowers.splice(index,1);
 				return;
@@ -186,6 +237,7 @@
 			
 		}
 		Flower.prototype.draw = function () {
+			ctx.save();
 			ctx.fillStyle = "#F3097B";
 			for(var i = 1;i<=this.petals;i++){
 				var x0 = this.x + this.r * Math.cos(Math.PI / 180  * (360 / this.petals) * i);
@@ -198,6 +250,7 @@
 			ctx.beginPath();
 			ctx.arc(this.x  , this.y  , this.r / 2 , 0  , 2 * Math.PI) ;
 			ctx.fill();
+			ctx.restore();
 			
 		}
 		
@@ -209,26 +262,36 @@
 		this.time=0;
 		this.bColor=bColor;
 		this.eColor=eColor;
-		this.draw=function(){
-				ctx.save();
-				//ctx.translate(500,500);
-				ctx.rotate(this.time*(360/this.cycle)*Math.PI/180);
-				ctx.beginPath();
-				ctx.arc(this.x,this.y,this.r,0,360,false);
-				ctx.closePath();
-				var color=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r); 
-				color.addColorStop(0,this.bColor);
-				color.addColorStop(1,this.eColor);
-				ctx.fillStyle=color;
-				ctx.fill();
-				ctx.restore();
-				this.time+=1;
+		
+	}
+	Star.prototype = {
+		draw:function(){
+			ctx.save();
+			//ctx.translate(500,500);
+			ctx.rotate(this.time*(360/this.cycle)*Math.PI/180);
+			ctx.beginPath();
+			ctx.arc(this.x,this.y,this.r,0,360,false);
+			ctx.closePath();
+			var color=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r); 
+			color.addColorStop(0,this.bColor);
+			color.addColorStop(1,this.eColor);
+			ctx.fillStyle=color;
+			ctx.fill();
+			ctx.restore();
+			this.time+=1;
+		},
+		update:function(){
+			//console.log("update");
 		}
 	}
-	function Sun(){
-		Star.call(this,w/2+250,h-500,30,0,"#FFFF00","#FF9900");
-	} 	
-		
+	var sun = new Star(w/2+250,h-500,30,0,"#FFFF00","#FF9900");	
+	sun.update = function(){
+		if(this.y <= h-500){
+			this.y = h-500;
+			return;
+		}
+		this.y = this.y-1;
+	}
 		
 	/**
      * 循环遍历所有树干和花，并调用更新和draw方法，实现动画效果
@@ -238,11 +301,19 @@
             var b = branchArray.branchs[i];
             b.grow();
         }
-        var len = flowers.length ;
+		sun.draw(); 
+		sun.update();
+
+		var len = leafs.length;
+        while (len --) {
+            leafs[len].draw();
+            leafs[len].update(len);
+		}
+		var len = flowers.length;
         while (len --) {
             flowers[len].draw();
-            flowers[len].update();
-        }
+            flowers[len].update(len);
+		}
         MyRequestAnimationFrame(loop);
     }
 	
