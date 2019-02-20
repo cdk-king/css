@@ -22,6 +22,7 @@ function init(){
     createFloor();
     //创建一些具有简单形状的物体
     createRectangularBody();
+    createCircularBody();
 
     setupDebugDraw();
     animate();
@@ -93,6 +94,23 @@ function createRectangularBody(){
 
     fixtureDef.shape = new b2PolygonShape;
     fixtureDef.shape.SetAsBox(30/scale,50/scale);
+
+    var body = world.CreateBody(bodyDef);
+    var fixture = body.CreateFixture(fixtureDef);
+}
+
+function createCircularBody(){
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.position.x = 130/scale;
+    bodyDef.position.y = 100/scale;
+
+    var fixtureDef = new b2FixtureDef;
+    fixtureDef.density = 1.0;
+    fixtureDef.friction = 0.5;
+    fixtureDef.restitution = 0.7;
+
+    fixtureDef.shape = new b2CircleShape(30/scale);
 
     var body = world.CreateBody(bodyDef);
     var fixture = body.CreateFixture(fixtureDef);
