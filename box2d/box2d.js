@@ -20,6 +20,8 @@ function init(){
     world = new b2World(gravity,allowSleep);
 
     createFloor();
+    //创建一些具有简单形状的物体
+    createRectangularBody();
 
     setupDebugDraw();
     animate();
@@ -76,4 +78,22 @@ function animate(){
     world.ClearForces();
     world.DrawDebugData();
     setTimeout(animate,timeStep);
+}
+
+function createRectangularBody(){
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.position.x = 40/scale;
+    bodyDef.position.y = 100/scale;
+
+    var fixtureDef = new b2FixtureDef;
+    fixtureDef.density = 1.0;
+    fixtureDef.friction = 0.5;
+    fixtureDef.restitution = 0.3;
+
+    fixtureDef.shape = new b2PolygonShape;
+    fixtureDef.shape.SetAsBox(30/scale,50/scale);
+
+    var body = world.CreateBody(bodyDef);
+    var fixture = body.CreateFixture(fixtureDef);
 }
