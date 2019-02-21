@@ -30,6 +30,8 @@ function init(){
     createRevoluteJoint();
     //创建具有自定义用户数据的对象
     createSpecialBody();
+    //创建接触监听器并追踪事件
+    listenForContact();
 
     setupDebugDraw();
     animate();
@@ -249,4 +251,23 @@ function createSpecialBody(){
 
     fixtureDef.shape = new b2CircleShape(30/scale);
     var fixture = specialBody.CreateFixture(fixtureDef);
+}
+
+function listenForContact(){
+    var listener = new Box2D.Dynamics.b2ContactListener;
+    listener.PostSolve = function(contact,impulse){//接触，冲击力
+        var body1 = contact.GetFixtureA().GetBody();
+        var body2 = contact.GetFixtureB().GetBody();
+
+        //如果接触的两个物体都具有生命值，则减少其生命值
+        if(body1 == specialBody || body2 == specialBody){
+            var impulseAlongNormal = impulse.normalImpulses[0];
+            specialBody.GetUserData().life -= impulseAlongNormal;
+            console.log("The special body was in a collision with impulse", 
+            impulseAlongNormal, 
+            "and its life has now become ", 
+            specialBody.GetUserData().life);
+        }
+    };
+    world.SetContactListener(listener);
 }
