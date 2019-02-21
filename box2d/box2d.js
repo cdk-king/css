@@ -28,6 +28,8 @@ function init(){
     createComplexBody();
     //将两个物体用转动关节连接起来
     createRevoluteJoint();
+    //创建具有自定义用户数据的对象
+    createSpecialBody();
 
     setupDebugDraw();
     animate();
@@ -222,5 +224,29 @@ function createRevoluteJoint(){
 
     jointDef.Initialize(body1,body2,jointCenter);
     world.CreateJoint(jointDef);
+}
 
+var specialBody;
+function createSpecialBody(){
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.position.x = 450/scale;
+    bodyDef.position.y = 0/scale;
+
+    specialBody = world.CreateBody(bodyDef);
+    specialBody.SetUserData(
+        {
+            name:"special",
+            life:250
+        }
+    );
+
+    //创建载具并向物体添加圆形状
+    var fixtureDef = new b2FixtureDef;
+    fixtureDef.density = 1.0;
+    fixtureDef.friction = 0.5;
+    fixtureDef.restitution = 0.5;
+
+    fixtureDef.shape = new b2CircleShape(30/scale);
+    var fixture = specialBody.CreateFixture(fixtureDef);
 }
