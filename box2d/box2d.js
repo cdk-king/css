@@ -87,11 +87,17 @@ function animate(){
     world.Step(timeStep,velocityIterations,positionIterations);
     world.ClearForces();
     world.DrawDebugData();
+
+    //自定义绘制
+    if(specialBody){
+        drawSpecialBody();
+    }
+
     //摧毁耗尽生命值的物体
     if(specialBody && specialBody.GetUserData().life<=0){
-        world.DestroyBody(specialBody);
-        specialBody = undefined;
-        console.log("这具特殊的body被毁了");
+        //world.DestroyBody(specialBody);
+        //specialBody = undefined;
+        //console.log("这具特殊的body被毁了");
     }
 
     setTimeout(animate,timeStep);
@@ -270,11 +276,45 @@ function listenForContact(){
         if(body1 == specialBody || body2 == specialBody){
             var impulseAlongNormal = impulse.normalImpulses[0];
             specialBody.GetUserData().life -= impulseAlongNormal;
-            console.log("那具特殊的body受到碰撞冲击", 
-            impulseAlongNormal, 
-            "它的生命现在变成了", 
-            specialBody.GetUserData().life);
+            // console.log("那具特殊的body受到碰撞冲击", 
+            // impulseAlongNormal, 
+            // "它的生命现在变成了", 
+            // specialBody.GetUserData().life);
         }
     };
     world.SetContactListener(listener);
+}
+
+function drawSpecialBody(){
+    //获取body的位置和角度
+    var position = specialBody.GetPosition();
+    var angel = specialBody.GetAngle();
+    //移动并旋转物体
+    context.translate(position.x*scale,position.y*scale);
+    context.rotate(angel);
+    //绘制实心的圆面
+    if(specialBody.GetUserData().life>100){
+        context.fillStyle = "rgba(200,150,250,255)";
+    }else{
+        context.fillStyle = "rgba(108,123,139,255)";
+    }
+    context.beginPath();
+    context.arc(0,0,30,0,2*Math.PI,false);
+    context.fill();
+    //绘制两个矩形的眼睛
+    context.fillStyle = "rgba(255,255,255,255)";
+    context.fillRect(-15,-15,10,5);
+    context.fillRect(5,-15,10,5);
+    //绘制向上或向下的圆弧，根据生命值决定是否微笑
+    context.strokeStyle = "rgba(255,255,255,255)";
+    context.beginPath();
+    if(specialBody.GetUserData().life>100){
+        context.arc(0,0,10,Math.PI,2*Math.PI,true);   
+    }else{
+        context.arc(0,10,10,Math.PI,2*Math.PI,false);
+    }
+    context.stroke();
+    //移动并旋转坐标轴至最初的位置和角度
+    context.rotate(-angel);
+    context.translate(-position.x*scale,-position.y*scale);
 }
