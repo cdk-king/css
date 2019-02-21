@@ -87,6 +87,13 @@ function animate(){
     world.Step(timeStep,velocityIterations,positionIterations);
     world.ClearForces();
     world.DrawDebugData();
+    //摧毁耗尽生命值的物体
+    if(specialBody && specialBody.GetUserData().life<=0){
+        world.DestroyBody(specialBody);
+        specialBody = undefined;
+        console.log("这具特殊的body被毁了");
+    }
+
     setTimeout(animate,timeStep);
 }
 
@@ -263,9 +270,9 @@ function listenForContact(){
         if(body1 == specialBody || body2 == specialBody){
             var impulseAlongNormal = impulse.normalImpulses[0];
             specialBody.GetUserData().life -= impulseAlongNormal;
-            console.log("The special body was in a collision with impulse", 
+            console.log("那具特殊的body受到碰撞冲击", 
             impulseAlongNormal, 
-            "and its life has now become ", 
+            "它的生命现在变成了", 
             specialBody.GetUserData().life);
         }
     };
