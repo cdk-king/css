@@ -23,6 +23,7 @@ function init(){
     //创建一些具有简单形状的物体
     createRectangularBody();
     createCircularBody();
+    createSimplePloygonBody();
 
     setupDebugDraw();
     animate();
@@ -111,6 +112,33 @@ function createCircularBody(){
     fixtureDef.restitution = 0.7;
 
     fixtureDef.shape = new b2CircleShape(30/scale);
+
+    var body = world.CreateBody(bodyDef);
+    var fixture = body.CreateFixture(fixtureDef);
+}
+
+function createSimplePloygonBody(){
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.position.x = 230/scale;
+    bodyDef.position.y = 50/scale;
+
+    var fixtureDef = new b2FixtureDef;
+    fixtureDef.density = 1.0;
+    fixtureDef.friction = 0.5;
+    fixtureDef.restitution = 0.2;
+    fixtureDef.shape = new b2PolygonShape;
+
+    //按顺时针方向创建一个b2Vec2顶点数组
+    var points = [
+        new b2Vec2(0,0),
+        new b2Vec2(40/scale,50/scale),
+        new b2Vec2(50/scale,100/scale),
+        new b2Vec2(-50/scale,100/scale),
+        new b2Vec2(-40/scale,50/scale),
+    ];
+    //调用SetAsArray()来使用顶点数组定义形状
+    fixtureDef.shape.SetAsArray(points,points.length);
 
     var body = world.CreateBody(bodyDef);
     var fixture = body.CreateFixture(fixtureDef);
