@@ -147,6 +147,11 @@
                 f:Math.sqrt(Math.pow(Math.abs(end.x),2)+Math.pow(Math.abs(end.y),2))*2
             });
             while(!existList({x: end.x, y: end.y},openList)){
+                if(openList.length==0){
+                    console.log("找不到路");
+                    alert("找不到路");
+                    break;
+                }
                 var currentPoint = openList.pop();
                 closeList.push(currentPoint);
                 var surroundPoint = getSurroundPoint(currentPoint);
