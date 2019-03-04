@@ -111,7 +111,7 @@
     	function clearPath(){
     		for(var i=0,l=map.length;i<l;i++){
 	    		for(var j=0,ll=map[i].length;j<ll;j++){
-	    			if(elems[j][i].className=="path"){
+	    			if(elems[j][i].className!="start" && elems[j][i].className!="end"){
                         elems[j][i].className = "";
                         elems[j][i].innerHTML = "";
 	    			}
