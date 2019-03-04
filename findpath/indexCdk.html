@@ -42,11 +42,17 @@
         background: url(block.gif) no-repeat center center;
         background-size: 80% 80%;
     }
+    .close{
+        background: #ccc
+    }
+    .open{
+        background: #00FF00;
+    }
 </style>
 </head>
 <body>
 	<div class="button">
-		<button onclick="javascript:console.time('t');searchRoad();console.timeEnd('t');">去吃鱼啦</button>
+		<button onclick="javascript:console.time('t');findpath();console.timeEnd('t');">去吃鱼啦</button>
 	</div>
     <script type="text/javascript">
     	var rows = 10,cols =10;
@@ -106,69 +112,92 @@
     		for(var i=0,l=map.length;i<l;i++){
 	    		for(var j=0,ll=map[i].length;j<ll;j++){
 	    			if(elems[j][i].className=="path"){
-	    				elems[j][i].className = "";
+                        elems[j][i].className = "";
+                        elems[j][i].innerHTML = "";
 	    			}
 	    		}
 	    	}
     	}
         //
-        function searchRoad() {
-            var openList = [], closeList = [],
-                result = [], result_index;
+        function findpath(){
+            clearPath();
+            //定义openList
+            //将起始点添加进oprnList
+            //
+            console.log(map);
+            //可走的
+            var openList = [];
+            //走过的
+            var closeList = [];
+            //添加起点
             openList.push({
-                x: start.x,
-                y: start.y,
-                G: 0
+                x:start.x,
+                y:start.y,
+                g:0,
+                h:Math.sqrt(Math.pow(Math.abs(end.x),2)+Math.pow(Math.abs(end.y),2)),
+                f:Math.sqrt(Math.pow(Math.abs(end.x),2)+Math.pow(Math.abs(end.y),2))*2
             });
-            while(!(result_index=existList({x: end.x, y: end.y}, openList))){
+            while(!existList({x: end.x, y: end.y},openList)){
                 var currentPoint = openList.pop();
                 closeList.push(currentPoint);
-                var sourroundPoint = getSurroundPoint(currentPoint);
-                //map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
-                sourroundPoint.map(function(item, index) {
-                    if (item.x >= 0 &&
-                        item.x < cols &&
-                        item.y >= 0 &&
-                        item.y < rows &&
-                        map[item.x][item.y] !== 1 &&
-                        !existList(item, closeList)) {
-                        var g = currentPoint.G + ((item.x - currentPoint.x) * (item.y - currentPoint.y) === 0 ? 10 : 14);
-                        if (!existList(item, openList)) {
-                            item['H'] = Math.abs(end.x - item.x) * 10 + Math.abs(end.y - item.y) * 10;
-                            item['G'] = g;
-                            item['F'] = item.G + item.H;
-                            item['parent'] = currentPoint;
+                var surroundPoint = getSurroundPoint(currentPoint);
+                for(var i = 0;i<surroundPoint.length;i++){
+                    var item = surroundPoint[i];
+                    if(!(item.x<0 || item.x>rows-1 || item.y<0 || item.y>cols-1 || map[item.x][item.y] == 1 || existList(item,closeList))){
+                        //初始点的距离
+                        var g = currentPoint.g+1;
+                        if(!existList(item,openList)){
+                            item.g = g;
+                            item.h = Math.sqrt(Math.pow(Math.abs(end.x-item.x),2)+Math.pow(Math.abs(end.y-item.y),2));
+                            item.f = item.g+item.h*2;
+                            item.parent = currentPoint;
                             openList.push(item);
                         }
                     }
-                });
-                if (openList.length === 0) {
-                    alert('没有可用路径');
-                    break;
                 }
-                openList.sort(sortF);
-            };
-
-            if (result_index) {
-                var currentObj = openList[result_index];
-                while(currentObj.x !== start.x || currentObj.y != start.y){
-                    //unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
-                    result.unshift({
-                        x: currentObj.x,
-                        y: currentObj.y
-                    });
-                    currentObj = currentObj.parent;
-                };
+                sortf(openList);
             }
-            for(var i=0,l=result.length;i<l;i++){
-                if(result[i].x==end.x&&result[i].y==end.y) continue;
+            var result = [];
+            //反推
+            if(existList({x: end.x, y: end.y},openList)){
+                var index = existList({x: end.x, y: end.y},openList);
+                var currentPoint = openList[index];
+
+                while (currentPoint.x !== start.x || currentPoint.y != start.y) {
+                    result.push(currentPoint);
+                    currentPoint = currentPoint.parent;
+                }
+                
+            }
+            
+            for(var i=1,l=result.length;i<l;i++){
                 elems[result[i].x][result[i].y].className = 'path';
             }
-            return result;
+            for(var i=0,l=closeList.length;i<l;i++){
+                elems[closeList[i].x][closeList[i].y].className += ' close';
+                "<span class = 'close'></span>"
+                elems[closeList[i].x][closeList[i].y].innerHTML  = "<span class = 'close'>"+Math.floor(closeList[i].f)+"</span>";
+            }
+            for(var i=0,l=openList.length;i<l;i++){
+                elems[openList[i].x][openList[i].y].className += ' open';
+                elems[openList[i].x][openList[i].y].innerHTML  = Math.floor(openList[i].f);
+            }
         }
         //用F值对数组排序
         function sortF(a,b){
             return b.F- a.F;
+        }
+        //排序
+        function sortf(list){
+            for(var i= 0;i<list.length;i++){
+                for(var j = i;j<list.length-1;j++){
+                    if(list[i].f<list[j+1].f){
+                        var item = list[i];
+                        list[i] = list[j+1];
+                        list[j+1] = item;
+                    }
+                }
+            }
         }
         //获取周围的格子坐标
         function getSurroundPoint(currentPoint) {
