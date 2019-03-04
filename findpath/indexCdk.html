@@ -43,10 +43,10 @@
         background-size: 80% 80%;
     }
     .close{
-        background: #ccc
+        background: rgba(160, 160, 160, 0.5);
     }
     .open{
-        background: #00FF00;
+        background:rgba(186, 241, 186, 0.5);
     }
 </style>
 </head>
@@ -82,11 +82,12 @@
     			elems[j][i] = tr.appendChild(td);
     			(function(i,j){
     				td.onclick = function(){
-    					clearPath();
+                        clearPath();
+                        resetStartEnd();
     					if(elems[j][i].className=="block"){
     						elems[j][i].className = "";
     						map[j][i] = 0;
-    					}else if(!elems[j][i].className){
+    					}else if(elems[j][i].className !="block" && elems[j][i].className!="start" && elems[j][i].className!="end"){
     						elems[j][i].className = 'block';
     						map[j][i] = 1;
     					}
@@ -111,16 +112,24 @@
     	function clearPath(){
     		for(var i=0,l=map.length;i<l;i++){
 	    		for(var j=0,ll=map[i].length;j<ll;j++){
-	    			if(elems[j][i].className!="start" && elems[j][i].className!="end"){
+	    			if(elems[j][i].className !="block" && elems[j][i].className!="start" && elems[j][i].className!="end"){
                         elems[j][i].className = "";
                         elems[j][i].innerHTML = "";
 	    			}
 	    		}
 	    	}
-    	}
+        }
+        function resetStartEnd(){
+            elems[start.x][start.y].className = "start";
+            elems[start.x][start.x].innerHTML = "";
+            elems[end.x][end.y].className = "end";
+            elems[end.x][end.y].innerHTML = "";
+        }
         //
         function findpath(){
             clearPath();
+            //初始化起点终点
+            resetStartEnd();
             //定义openList
             //将起始点添加进oprnList
             //
