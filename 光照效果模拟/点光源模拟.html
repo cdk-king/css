@@ -31,15 +31,21 @@
         function dot( v1, v2 ) {
             return v1[ 0 ] * v2[ 0 ] + v1[ 1 ] * v2[ 1 ] + v1[ 2 ] * v2[ 2 ];
         }
-
+        /**
+         * 将向量转为单位向量
+         * @param {Array<number>} v
+         * @return {Array<number>} 单位向量
+         */
         function normalize( v ) {
-            var len = Math.sqrt( v[ 0 ] * v[ 0 ] +  v[ 1 ] * v[ 1 ] +  v[ 2 ] * v[ 2 ] );
+            var len = 2* Math.sqrt( v[ 0 ] * v[ 0 ] +  v[ 1 ] * v[ 1 ] +  v[ 2 ] * v[ 2 ] );
             return [
                 v[ 0 ] / len,
                 v[ 1 ] / len,
                 v[ 2 ] / len
             ]
         }
+        var a = [1,1,1];
+        console.log(normalize(a));
 
         var canvas = document.getElementById( 'canvas' );
         var ctx = canvas.getContext( '2d' );
@@ -71,11 +77,12 @@
 
                     var position = [ x, y, 0 ];
                     var normal = [ 0, 0, 1 ];
-
-                    var currentToLight = normalize( sub( pointLight.position, position ) );
-
-                    var light = dot( currentToLight, normal );
-
+                    var reverseLightDirection = sub( pointLight.position, position );
+                    //var currentToLight = normalize( reverseLightDirection );
+                    var len = Math.sqrt(reverseLightDirection[0]*reverseLightDirection[0]+reverseLightDirection[1]*reverseLightDirection[1]+reverseLightDirection[2]*reverseLightDirection[2]);
+                    //var light = dot( reverseLightDirection, normal );
+                    var light = dot( reverseLightDirection, normal )/len;
+                    //console.log(light);
                     imageData.data[ index * 4 ] = Math.min( 255, ( pointLight.color.r + plane.color.r ) * light );
                     imageData.data[ index * 4 + 1 ] =  Math.min( 255, ( pointLight.color.g + plane.color.g ) * light );
                     imageData.data[ index * 4 + 2 ] =  Math.min( 255, ( pointLight.color.b + plane.color.b ) * light );

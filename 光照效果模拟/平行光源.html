@@ -75,6 +75,14 @@
                 ]
             }
 
+            function negate(v){
+                return [
+                    -v[0],
+                    -v[1],
+                    -v[2]
+                ]
+            }
+
             function drawArrow( ctx, start, end ) {
                 //箭头角度
                 var theta = Math.PI / 6;
@@ -107,8 +115,18 @@
             var angleLabel =  document.getElementById( 'angle' );
             var valueLabel = document.getElementById( 'value' );
 
+
+            var plane = {
+                center: [ 250, 250, 0 ],    // 平面中心点坐标
+                width: 500,                 // 宽
+                height: 500,                // 高
+                normal: [ 0, 0, 1 ],        // 朝向，即法向量     
+                color: { r: 255, g: 0, b: 0 }   // 颜色为红色
+            }
+
             var directionalLight = {
-                direction: [ 0, 0, -1 ]        // 从屏幕外垂直照向屏幕
+                direction: [ 0, 0, -1 ],        // 从屏幕外垂直照向屏幕
+                color: { r: 255, g: 0, b: 0 }   // 颜色为纯白色
             }
 
             input.addEventListener( 'input', function( e ) {
@@ -148,21 +166,39 @@
                 ctx.stroke();
 
 
-                //
-                //计算相反向量
-                var reverseLightDirection = normalize( [ -x, 0, y ] );
-                //计算向量点乘
-                var intensity = dot( reverseLightDirection, [ 0, 0, 1 ] );
+                var reverseLightDirection = [ -x, 0, y ] ;   // 计算平行光的反方向向量
+                var len = Math.sqrt(x*x+y*y);
+                var intensity = dot( reverseLightDirection, [ 0, 0, 1 ] )/len;      // 计算两向量点乘
+                console.log(intensity);
+                // 计算有光照时的颜色
+                var color = {
+                    r: intensity * directionalLight.color.r,
+                    g: intensity * directionalLight.color.g,
+                    b: intensity * directionalLight.color.b,
+                }
 
-                valueLabel.textContent = intensity.toFixed( 2 );
-                console.log(intensity * 255 >> 0);
-                ctx.fillStyle = 'rgb(' + ( intensity * 255 >> 0 ) + ', 0, 0)';
-
+                // var canvas = document.getElementById( 'canvas' );
+                // var ctx = canvas.getElementById( '2d' );
                 ctx.beginPath();
-
+                //ctx.rect( plane.center[ 0 ], plane.center[ 1 ], plane.width, plane.height );
                 ctx.rect( 50, 100, 250, 250 );
-
+                ctx.fillStyle = 'rgb(' + color.r + ',' + color.g + ',' + color.b+')';
                 ctx.fill();
+
+                //
+                // var reverseLightDirection = normalize( [ -x, 0, y ] );
+                // //计算向量点乘
+                // var intensity = dot( reverseLightDirection, [ 0, 0, 1 ] );
+
+                // valueLabel.textContent = intensity.toFixed( 2 );
+                // console.log(intensity * 255 >> 0);
+                // ctx.fillStyle = 'rgb(' + ( intensity * 255 >> 0 ) + ', 0, 0)';
+
+                // ctx.beginPath();
+
+                // ctx.rect( 50, 100, 250, 250 );
+
+                // ctx.fill(); 
 
             }
 
