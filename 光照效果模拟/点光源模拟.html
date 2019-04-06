@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas" width="1800" height="800"></canvas>
+    <canvas id="canvas" width="1000" height="800"></canvas>
     <p>滚动滚轮调节光源高度</p>
     <script>
 
@@ -60,7 +60,7 @@
 
         var pointLight = {
             position: [ 250, 250, 60 ],
-            color: {
+            color: {//白
                 r: 255,
                 g: 255,
                 b: 255
@@ -83,9 +83,14 @@
                     //var light = dot( reverseLightDirection, normal );
                     var light = dot( reverseLightDirection, normal )/len;
                     //console.log(light);
+                    //
                     imageData.data[ index * 4 ] = Math.min( 255, ( pointLight.color.r + plane.color.r ) * light );
                     imageData.data[ index * 4 + 1 ] =  Math.min( 255, ( pointLight.color.g + plane.color.g ) * light );
                     imageData.data[ index * 4 + 2 ] =  Math.min( 255, ( pointLight.color.b + plane.color.b ) * light );
+
+                    // imageData.data[ index * 4 ] = Math.min( 255, ( pointLight.color.r ) * light+ plane.color.r  );
+                    // imageData.data[ index * 4 + 1 ] =  Math.min( 255, ( pointLight.color.g  ) * light+ plane.color.g );
+                    // imageData.data[ index * 4 + 2 ] =  Math.min( 255, ( pointLight.color.b ) * light + plane.color.b );
                     imageData.data[ index * 4 + 3 ] = 255;
                 }
             }
