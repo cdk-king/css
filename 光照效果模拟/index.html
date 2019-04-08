@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas" width="640" height="480"></canvas>
+    <canvas id="canvas" width="640" height="640"></canvas>
 </body>
 <script>
     var canvas = document.getElementById("canvas");
@@ -104,7 +104,7 @@
         }
     };
 
-    var Sphere = function(center, radius) { 
+    var Sphere = function(center, radius) {
         this.center = center;
         this.radius = radius; 
     };
@@ -118,16 +118,25 @@
         },
         intersect:function(ray){
             //ray 光线
+            //o即发谢起点(origin)，d为方向。在本文的例子里，都假设d为单位向量(unit vector)，因此t为距离
+            //|x-c|=r,x=r(t)=o+td
+            //v=o-c
+            //t=-d*v+Math.sqrt((d*v)*(d*v)-(v*v-r*r))
             var v = ray.origin.subtract(this.center);
+            //(v*v-r*r)
             var a0 = v.sqrLength() - this.sqrRadius;
+            //dv,点积的结果不是向量
             var DdotV = ray.direction.dot(v);
 
             if (DdotV <= 0) {
+                //(d*v)*(d*v)-(v*v-r*r) 
                 var discr = DdotV * DdotV - a0;
                 if (discr >= 0) {
                     var result = new IntersectResult();
                     result.geometry = this;
+                    //t
                     result.distance = -DdotV - Math.sqrt(discr);
+                    //
                     result.position = ray.getPoint(result.distance);
                     result.normal = result.position.subtract(this.center).normalize();
                     return result;
@@ -156,11 +165,12 @@
         initialize:function(){
             this.right = this.front.cross(this.refUp);//叉积
             this.up = this.right.cross(this.front);
-            this.fovScale = Math.tan(this.fov * 0.5 * Math.PI / 180) * 2;
+            this.fovScale = Math.tan(this.fov * 0.5 * Math.PI / 180);
         },
         generateRay : function(x, y) {
-            var r = this.right.multiply((x - 0.5) * this.fovScale);
-            var u = this.up.multiply((y - 0.5) * this.fovScale);
+            var r = this.right.multiply((x - 0.5) * 2 * this.fovScale);
+            var u = this.up.multiply((y - 0.5) * 2 * this.fovScale);
+            //因之后的计算需要，最后把d变成单位向
             return new Ray3(this.eye, this.front.add(r).add(u).normalize());
         }
     }
@@ -193,10 +203,197 @@ function renderDepth(canvas, scene, camera, maxDepth) {
     ctx.putImageData(imgdata, 0, 0);
 }
 
-renderDepth(
+function renderNormal(canvas, scene, camera) {
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;            
+            var ray = camera.generateRay(sx, sy);
+            var result = scene.intersect(ray);
+            if (result.geometry) {
+                pixels[i    ] = (result.normal.x + 1) * 128;
+                pixels[i + 1] = (result.normal.y + 1) * 128;
+                pixels[i + 2] = (result.normal.z + 1) * 128;
+                pixels[i + 3] = 255;
+            }
+            i += 4;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+}
+
+var r = 10;
+// renderDepth(
+//     document.getElementById('canvas'),
+//     new Sphere(new Vector3(0, 0, -10), r),
+//     new PerspectiveCamera(new Vector3(0, 0, 10),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
+//     20);
+
+var animate = function(){
+    draw();
+    window.requestAnimationFrame(animate,canvas);
+}
+draw = function(){
+    ctx.clearRect(0, 0, w, h);
+    renderDepth(
     document.getElementById('canvas'),
-    new Sphere(new Vector3(0, 10, -10), 10),
-    new PerspectiveCamera(new Vector3(0, 10, 10),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
+    new Sphere(new Vector3(0, 0, -10), r),
+    new PerspectiveCamera(new Vector3(0, 0, 10),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
     20);
+}
+
+//animate();
+document.addEventListener( 'wheel', function( e ) {
+    if(r>=0){
+        r += e.deltaY * 0.01;
+    }else{
+        r =0;
+    }
+    
+}, false )
+
+var Color = function(r, g, b) { this.r = r; this.g = g; this.b = b };
+ 
+ Color.prototype = {
+     copy : function() { return new Color(this.r, this.g, this.b); },
+     add : function(c) { return new Color(this.r + c.r, this.g + c.g, this.b + c.b); },
+     multiply : function(s) { return new Color(this.r * s, this.g * s, this.b * s); },
+     modulate : function(c) { return new Color(this.r * c.r, this.g * c.g, this.b * c.b); }
+ };
+  
+ Color.black = new Color(0, 0, 0);
+ Color.white = new Color(1, 1, 1);
+ Color.red = new Color(1, 0, 0);
+ Color.green = new Color(0, 1, 0);
+ Color.blue = new Color(0, 0, 1);
+
+ //方格材料
+ var CheckerMaterial = function(scale, reflectiveness) { 
+     //scale的意义为1坐标单位有多少个格子
+     this.scale = scale; 
+     this.reflectiveness = reflectiveness; 
+    };
+ 
+ CheckerMaterial.prototype = {
+     sample : function(ray, position, normal) {
+         return Math.abs((Math.floor(position.x * 0.1) + Math.floor(position.z * this.scale)) % 2) < 1 ? Color.black : Color.white;
+     }
+ };
+
+
+//Phong和Blinn-Phong是计算镜面反射光的两种光照模型
+var PhongMaterial = function(diffuse, specular, shininess, reflectiveness) {
+    //漫射(diffuse)和镜射(specular)
+    this.diffuse = diffuse;
+    this.specular = specular;
+    this.shininess = shininess;
+    this.reflectiveness = reflectiveness;
+};
+ 
+// global temp
+var lightDir = new Vector3(1, 1, 1).normalize();
+var lightColor = Color.white;
+
+PhongMaterial.prototype = {
+    sample: function(ray, position, normal) {
+        var NdotL = normal.dot(lightDir);
+        var H = (lightDir.subtract(ray.direction)).normalize();
+        var NdotH = normal.dot(H);
+        var diffuseTerm = this.diffuse.multiply(Math.max(NdotL, 0));
+        var specularTerm = this.specular.multiply(Math.pow(Math.max(NdotH, 0), this.shininess));
+        return lightColor.modulate(diffuseTerm.add(specularTerm));
+    }
+};
+
+// rayTrace.htm
+function rayTrace(canvas, scene, camera) {
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;            
+            var ray = camera.generateRay(sx, sy);
+            var result = scene.intersect(ray);
+            if (result.geometry) {
+                var color = result.geometry.material.sample(ray, result.position, result.normal);
+                pixels[i] = color.r * 255;
+                pixels[i + 1] = color.g * 255;
+                pixels[i + 2] = color.b * 255;
+                pixels[i + 3] = 255;
+            }
+            i += 4;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+} 
+
+var Plane = function(normal, d) { 
+    this.normal = normal; 
+    this.d = d; 
+};
+ 
+Plane.prototype = {
+    copy : function() { return new plane(this.normal.copy(), this.d); },
+ 
+    initialize : function() {
+        this.position = this.normal.multiply(this.d);
+    },
+     
+    intersect : function(ray) {
+        var a = ray.direction.dot(this.normal);
+        if (a >= 0)
+            return IntersectResult.noHit;
+ 
+        var b = this.normal.dot(ray.origin.subtract(this.position));
+        var result = new IntersectResult();
+        result.geometry = this;
+        result.distance = -b / a;
+        result.position = ray.getPoint(result.distance);
+        result.normal = this.normal;
+        return result;
+    }
+};
+
+Union = function(geometries) { this.geometries = geometries; };
+ 
+Union.prototype = {
+    initialize: function() {
+        for (var i in this.geometries)
+            this.geometries[i].initialize();
+    },
+     
+    intersect: function(ray) {
+        var minDistance = Infinity;
+        var minResult = IntersectResult.noHit;
+        for (var i in this.geometries) {
+            var result = this.geometries[i].intersect(ray);
+            if (result.geometry && result.distance < minDistance) {
+                minDistance = result.distance;
+                minResult = result;
+            }
+        }
+        return minResult;
+    }
+};
+
+var plane = new Plane(new Vector3(0, 1, 0), 0);
+var sphere1 = new Sphere(new Vector3(-10, 10, -10), 10);
+var sphere2 = new Sphere(new Vector3(10, 10, -10), 10);
+plane.material = new CheckerMaterial(0.1);
+sphere1.material = new PhongMaterial(Color.red, Color.white, 16);
+sphere2.material = new PhongMaterial(Color.blue, Color.white, 16);
+rayTrace(
+    document.getElementById('rayTraceCanvas'), 
+    new Union([plane, sphere1, sphere2]),
+    new PerspectiveCamera(new Vector3(0, 5, 15), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
 </script>
 </html>
