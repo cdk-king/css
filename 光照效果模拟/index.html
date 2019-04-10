@@ -353,10 +353,14 @@ Plane.prototype = {
         if (a >= 0)
             return IntersectResult.noHit;
  
-        var b = this.normal.dot(ray.origin.subtract(this.position));
+        //var b = this.normal.dot(ray.origin.subtract(this.position));
+        //上一个是原来的，没看懂
+        //下面这个是我自己推导出来的
+        //公式n*x=p(this.d),x=o+td
+        var b = this.d-(ray.origin.dot(this.normal));
         var result = new IntersectResult();
         result.geometry = this;
-        result.distance = -b / a;
+        result.distance = b / a;
         result.position = ray.getPoint(result.distance);
         result.normal = this.normal;
         return result;
@@ -394,6 +398,7 @@ sphere2.material = new PhongMaterial(Color.blue, Color.white, 16);
 rayTrace(
     document.getElementById('rayTraceCanvas'), 
     new Union([plane, sphere1, sphere2]),
-    new PerspectiveCamera(new Vector3(0, 5, 15), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
+    new PerspectiveCamera(new Vector3(0, 5, 30), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
+    //new PerspectiveCamera(new Vector3(0, 0, 50),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
 </script>
 </html>
