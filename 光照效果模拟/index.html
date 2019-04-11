@@ -445,6 +445,23 @@ function rayTraceReflection(canvas, scene, camera, maxReflect) {
 //     new PerspectiveCamera(new Vector3(0, 5, 30), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
 //     //new PerspectiveCamera(new Vector3(0, 0, 50),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
 
+var eye = {
+    x:0,
+    y:5,
+    z:30
+};
+var front = {
+    x:0,
+    y:0,
+    z:-1
+}
+var up = {
+    x:0,
+    y:1,
+    z:0
+}
+var fov = 60;
+
 var plane = new Plane(new Vector3(0, 1, 0), 0);
 var sphere1 = new Sphere(new Vector3(-10, 10, -10), 10);
 var sphere2 = new Sphere(new Vector3(10, 10, -10), 10);
@@ -454,9 +471,139 @@ sphere2.material = new PhongMaterial(Color.blue, Color.white, 16, 0.25);
 rayTraceReflection(
     document.getElementById('rayTraceReflectionCanvas'), 
     new Union([plane, sphere1, sphere2]),
-    new PerspectiveCamera(new Vector3(0, 5, 30), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
-    3);
+    new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+    1);
 
+
+    document.onkeydown=function(event){
+            
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            var currKey=e.keyCode||e.which||e.charCode;
+            //console.log("按下键盘");
+            if(e){ 
+                //console.log(currKey.toString());
+                switch (currKey.toString()){
+                    case "87":
+                        //keyCode 87 = w
+                        eye.y++;
+                        break;
+                    case "68":
+                        //keyCode 68 = d
+                        eye.x++;
+                        break;
+                    case "65":
+                        //keyCode 65 = a A
+                        eye.x--;
+                        break;
+                    case "83":
+                        //keyCode 83 = s S
+                        eye.y--;
+                        break;
+                    case "37":
+                        //左箭头
+                        //console.log("按 左箭头");
+                        var q = -10 * Math.PI/180;
+                        var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                        front.x = x;
+                        front.z = z;
+                        break;
+                    case "38":
+                        //上箭头
+                        console.log("按 上箭头");
+                        var q = 10 * Math.PI/180;
+                        var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                        var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                        var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                        front.y = y;
+                        front.z = z;
+                        up.y = y2;
+                        up.z = z2;
+                        break;
+                    case "39":
+                        //右箭头
+                        //console.log("按 右箭头");
+                        //OB=(xcosα-ysinα,xsiaα+ycosα)
+                        var q = 10 * Math.PI/180;
+                        var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                        front.x = x;
+                        front.z = z;
+                        break;
+                    case "40":
+                        //下箭头
+                        console.log("按 下箭头");
+                        var q = -10 * Math.PI/180;
+                        var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                        var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                        var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                        front.y = y;
+                        front.z = z;
+                        up.y = y2;
+                        up.z = z2;
+                        break;
+                }
+
+                rayTraceReflection(
+                document.getElementById('rayTraceReflectionCanvas'), 
+                new Union([plane, sphere1, sphere2]),
+                new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+                1);
+            }
+        }
+        var mouse = {
+            x:0,
+            y:0,
+            isdown:false,
+            mousemovehandler:function(e){
+                //console.log("move");
+                if(this.isdown){
+                    if(this.x && this.y){
+                            var q = (e.clientX-this.x)*0.1 * Math.PI/180;
+                            var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                            var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                            front.x = x;
+                            front.z = z;
+
+                            var q = -(e.clientY-this.y)*0.1 * Math.PI/180;
+                            var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                            var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                            var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                            var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                            front.y = y;
+                            front.z = z;
+                            up.y = y2;
+                            up.z = z2;
+                    }else{
+                        this.x=e.clientX;
+                        this.y=e.clientY;
+                    }
+                    
+
+                    rayTraceReflection(
+                    document.getElementById('rayTraceReflectionCanvas'), 
+                    new Union([plane, sphere1, sphere2]),
+                    new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+                    1);
+                }
+                this.x=e.clientX;
+                this.y=e.clientY;
+            },
+            mousedownhandler:function(){
+                console.log("down");
+                this.isdown=true;
+            },
+            mouseuphandler:function(){
+                console.log("up");
+                this.isdown=false;
+            }
+
+        }
+        canvas.addEventListener("mousemove", mouse.mousemovehandler, false);
+        canvas.addEventListener("mousedown", mouse.mousedownhandler, false);
+        canvas.addEventListener("mouseup", mouse.mouseuphandler, false);
 
 </script>
 </html>
