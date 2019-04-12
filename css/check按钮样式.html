@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.tpl-switch input[type="checkbox"] {
+			position: absolute;
+			opacity: 0;
+			display: none;
+		}
+		
+		.tpl-switch input[type="checkbox"].ios-switch+div {
+			vertical-align: middle;
+			width: 40px;
+			height: 20px;
+			border-radius: 999px;
+			background-color: rgba(0, 0, 0, 0.1);
+			-webkit-transition-duration: .4s;
+			-webkit-transition-property: background-color, box-shadow;
+			/*-webkit-transition: background-color .4s linear;等价*/
+			margin-top: 6px;
+		}
+		
+		.tpl-switch input[type="checkbox"].ios-switch:checked+div {
+			width: 40px;
+			background-position: 0 0;
+			background-color: #36c6d3;
+		}
+		
+		.tpl-switch input[type="checkbox"].ios-switch+div>div {
+			float: left;
+			width: 18px;
+			height: 18px;
+			border-radius: inherit;
+			background: #ffffff;
+			-webkit-transition-timing-function: cubic-bezier(.54, 1.85, .5, 1);
+			-webkit-transition-duration: .4s;
+			-webkit-transition-property: transform, background-color, box-shadow;
+			-moz-transition-timing-function: cubic-bezier(.54, 1.85, .5, 1);
+			-moz-transition-duration: .4s;
+			-moz-transition-property: transform, background-color;
+			pointer-events: none;
+			margin-top: 1px;
+			margin-left: 1px;
+		}
+		
+		.tpl-switch input[type="checkbox"].ios-switch:checked+div>div {
+			-webkit-transform: translate3d(20px, 0, 0);
+			-moz-transform: translate3d(20px, 0, 0);
+			background-color: #ffffff;
+		}
+	</style>
+
+	<body>
+		<div class="tpl-switch">
+			<input type="checkbox" class="ios-switch bigswitch tpl-switch-btn" checked />
+			<div class="tpl-switch-btn-view">
+				<div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.11.0.js" ></script>
+	<script>
+		$('.tpl-switch').find('.tpl-switch-btn-view').on('click', function() {
+            $(this).prev('.tpl-switch-btn').prop("checked", function() {
+                    if ($(this).is(':checked')) {
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                // console.log('123123123')
+        })
+	</script>
+
+</html>

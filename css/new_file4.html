@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			width: 98%;
+			height: 80%;
+		}
+		
+		#canvas {
+			border: 1px solid red;
+		}
+	</style>
+
+	<body>
+
+		<canvas id="canvas"></canvas>
+		<canvas id="shapeCan"></canvas>
+	</body>
+	<script>
+		(function() {
+			var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			window.requestAnimationFrame = requestAnimationFrame;
+		})();
+
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+		var shapeCan = document.getElementById("shapeCan");
+		var sCtx = shapeCan.getContext("2d");
+		var width = document.body.offsetWidth;
+		var height = document.body.offsetHeight;
+		var centerY = height / 2;
+		var centerX = width / 2;
+		var mouseX = 0;
+		var mouseY = 0;
+		canvas.width = width;
+		canvas.height = height;
+		shapeCan.width = 200;
+		shapeCan.height = 200;
+		shapeCan.style.border = "1px solid blue";
+		sCtx.font = '3em Arial';
+
+		function Particle(options) {
+			var options = options || {};
+			this.x = options.x || (Math.random() * 30) - 15;
+			this.y = options.y || (Math.random() * 30) - 15;
+			this.z = options.z || (Math.random() * 30) - 15;
+
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+
+			this.startX = this.x;
+			this.startY = this.y;
+			this.startZ = this.z;
+
+			this.xPos = 100;
+			this.yPos = 100;
+
+			this.ran1 = 0;
+			this.ran2 = 0;
+		}
+		Particle.prototype = {
+			//不断循环
+			update: function() {
+				var phi = Math.random() * 2 * Math.PI;
+				var cosTheta = Math.random() * 2 - 1,
+					sinTheta = Math.sqrt(1 - cosTheta * cosTheta),
+					phi = Math.random() * 2 * Math.PI;
+				this.startX = this.startX * 1 + this.vx;
+				this.startY = this.startY * 1 + this.vy;
+				this.startZ = this.startZ * 1 + this.vz;
+
+				this.x = Math.round(this.startX);
+				this.y = Math.round(this.startY);
+				this.z = Math.round(this.startZ);
+
+				//console.log(this.z);
+			},
+			//每秒一次
+			explode: function() {
+				var cosTheta = Math.random() * 2 - 1,
+					sinTheta = Math.sqrt(1 - cosTheta * cosTheta),
+					phi = Math.random() * 2 * Math.PI;
+				//				this.vx = (Math.floor((Math.random() * 5) - 2.5)* Math.cos(phi)*sinTheta);
+				//				this.vy = (Math.floor((Math.random() * 5) - 2.5)* Math.sin(phi)*sinTheta);
+				//				this.vz = (Math.floor((Math.random() * 5) - 2.5)* cosTheta);
+				this.vx = (Math.floor((Math.random() * 5) - 2.5));
+				this.vy = (Math.floor((Math.random() * 5) - 2.5));
+				this.vz = (Math.floor((Math.random() * 5) - 2.5));
+			}
+		}
+
+		function Emitter() {
+			this.particles = [];
+			this.shapeParts = [];
+
+			this.x = 1;
+			this.y = 1;
+			this.z = 1;
+
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+
+			this.getShape();
+			this.startTime = new Date().getTime();
+			this.checkInterval = 1000;
+		}
+
+		Emitter.prototype = {
+			update: function() {
+				var partLen = this.particles.length;
+				var sPartLen = this.shapeParts.length;
+
+				//				this.shapeParts.sort(function (a, b) {
+				//		        	return b.x - a.x;
+				//		    	});
+
+				for(var i = 0; i < partLen; i++) {
+					var particle = this.particles[i];
+					if(particle) {
+						particle.update();
+					}
+				}
+			},
+			getShape: function() {
+				var d = new Date(),
+					hour = d.getHours() % 12,
+					min = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes(),
+					sec = (d.getSeconds() < 10 ? "0" : "") + d.getSeconds();
+				sCtx.beginPath();
+				sCtx.fillStyle = "red";
+				sCtx.clearRect(0, 0, shapeCan.width, shapeCan.height);
+				sCtx.fillText(hour + ":" + min + ":" + sec, 5, 50);
+				//sCtx.fillText(sec, 60, 110);
+				sCtx.fill();
+				var imageData = sCtx.getImageData(0, 0, shapeCan.width, shapeCan.height).data;
+
+				for(var i = 0; i < imageData.length; i += 4) {
+					var x = (i / 4) % 200;
+					var y = (i / 4 - x) / 200;
+					var index = i;
+					if(imageData[i + 3] > 0) {
+
+						for(var j = 0; j < 1; j++) {
+ 							//if (this.shapeParts[index + j]==undefined) {
+							var particle = new Particle({
+								x: ((x * 1)) + 150, //放大两倍
+								y: ((y * 1)) + 150,
+								z: 10
+							});
+							this.particles[index + j] = particle;
+							this.shapeParts[index + j] = particle;
+							//this.particles[index + p].explode();
+							//}
+						}
+
+					} else {
+						for(var j = 0; j < 1; j++) {
+							//下一秒将会空白的地方爆炸
+							if(this.shapeParts[index + j] != undefined) {
+								if(this.shapeParts[index + j].vx == 0) {
+									this.particles[index + j].explode();
+									//this.shapeParts[index + j].explode();
+									//console.log(this.shapeParts[index + j].vx);
+									//console.log(this.particles[index + j].vx);
+									this.shapeParts[index + j] = undefined;
+									//this.particles[index + j] = undefined;
+								}
+								
+							}
+						}
+					}
+				}
+			},
+			render: function() {
+				var size = 1;
+
+				var imgData = ctx.createImageData(width, height);
+				var data = imgData.data;
+				for(var i = 0; i < this.particles.length; i++) {
+					var particle = this.particles[i];
+
+					if(particle) {
+						if(particle.x < width && particle.x > 0 && particle.y > 0 && particle.y < height) {
+							if(particle.z > 150) {
+								size = 1;
+							}
+							//console.log(size);
+							for(var h = 0; h < 2; h++) {
+								for(var j = 0; j < 2; j++) {
+									//console.log(particle.x);
+									if(particle.x > 0 && particle.x < width && particle.y > 0 && particle.y < height) {
+										var pData = ((particle.x + h) + (width) * (particle.y + j)) * 4;
+										data[pData] = "20";
+										data[pData + 1] = "0";
+										data[pData + 2] = "0";
+										data[pData + 3] = "255";
+									}
+
+								}
+							}
+						} else {
+							this.particles[i] = undefined;
+							delete particle;
+						}
+					} else {
+						this.particles[i] = undefined;
+						delete particle;
+					}
+
+				}
+				ctx.putImageData(imgData, 0, 0);
+				imgData = null;
+			}
+
+		}
+
+		var emitter = new Emitter();
+		render();
+
+		function render() {
+			//获取图像
+			if(new Date().getTime() > emitter.startTime + emitter.checkInterval) {
+				emitter.startTime = new Date().getTime();
+				emitter.getShape();
+			}
+			//
+			emitter.update();
+			//绘图
+			emitter.render();
+			requestAnimationFrame(render);
+		}
+	</script>
+
+</html>

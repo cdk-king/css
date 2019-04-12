@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>自定义 高亮插件</title>
+		<script type="text/javascript" src="js/jquery-1.11.0.js" ></script>
+	</head>
+	<script>
+		//闭包限定命名空间
+(function ($) {
+	$.extend({
+		"highLight": function (options) {
+			var $this = $(this);
+			$this.css({
+                    backgroundColor: opts.background,
+                    color: opts.foreground
+                });
+		}
+	});
+    $.fn.extend({
+        "highLight": function (options) {
+            //检测用户传进来的参数是否合法
+            if (!isValid(options))
+                return this;
+            //使用jQuery.extend 覆盖插件默认参数
+            var opts = $.extend({}, defaluts, options); 
+            //首先在JQ中,each是遍历一个数组,比如你$('.some')返回的不一定只是一个jq对象,有可能是个数组,好多个elements.
+            //所以return this.each(){}是把所有你索引的对象都作用到这个插件下.你若保证你的插件每次都只会用一个JQ对象,
+            //那么你可以直接return this.
+            //this.each()执行完返回的是this，这时候再return this.each()，返回的依旧是this，而这个this上下文又是指代$(‘[title]‘)，
+            //意味着你可以在highLight()后继续加其他方法，
+            
+            //这里的this 就是 jQuery对象。这里return 为了支持链式调用
+            //遍历所有的要高亮的dom,当调用 highLight()插件的是一个集合的时候。
+            return this.each(function () {  
+                //获取当前dom 的 jQuery对象，这里的this是当前循环的dom
+                var $this = $(this);
+                //根据参数来设置 dom的样式
+                $this.css({
+                    backgroundColor: opts.background,
+                    color: opts.foreground
+                });
+                //格式化高亮文本
+                var markup = $this.html();
+                markup = $.fn.highLight.format(markup);
+                $this.html(markup);
+            });
+
+        }
+    });
+    //默认参数
+    var defaluts = {
+        foreground: 'red',
+        background: 'yellow'
+    };
+    //公共的格式化 方法. 默认是加粗，用户可以通过覆盖该方法达到不同的格式化效果。
+    $.fn.highLight.format = function (str) {
+        return "<strong>" + str + "</strong>";
+    }
+    //私有方法，检测参数是否合法
+    function isValid(options) {
+        return !options || (options && typeof options === "object") ? true : false;
+    }
+})(window.jQuery);
+		//调用
+        //调用者覆盖 插件暴露的共公方法
+        $.fn.highLight.format = function (txt) {
+            return "<em>" + txt + "</em>"
+        }
+        $(function () {
+            $("p").highLight({ foreground: 'orange', background: '#ccc' }); //调用自定义 高亮插件
+        });
+	</script>
+	<body>
+		<p>cdk表示我要高亮</p>
+		<em>其他的没门</em>
+	</body>
+</html>

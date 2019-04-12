@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,html{
+			overflow: hidden;
+		    width: 100%;
+		    height:100%;
+		    margin: 0;
+		    padding: 0;
+		    //background: #21333C;
+		}
+	</style>
+	<body>
+		<canvas id="canvas" >
+			
+		</canvas>
+	</body>
+	<script>
+		var c = document.getElementById('canvas');
+		var ctx = c.getContext('2d');
+		var body =  document.body;
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		c.setAttribute('width',width);
+		c.setAttribute('height',height);
+		
+		var Box = function(x,y,width,height,color){
+        	//原型属性?
+        	this.width = width;
+        	this.height = height;
+        	this.color = color;
+        	this.active = true;
+        	this.x = x;
+        	this.y = y;
+        }
+		Box.prototype = {
+        	draw:function(ctx){
+        		ctx.beginPath();
+				ctx.fillRect(this.x,this.y,this.width,this.height);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+        	}
+        }
+		var box1 = new Box(200,200,50,50,'#999');
+		box1.draw(ctx);
+		var box2 = new Box(100,200,50,50,'#999');
+		box2.draw(ctx);
+		var intersects  = function(rectA, rectB){
+		    return !(rectA.x + rectA.width < rectB.x || 
+		             rectB.x + rectB.width < rectA.x || 
+		             rectA.y + rectA.height < rectB.y || 
+		             rectB.y + rectB.height < rectA.y); 
+		} 
+	</script>
+</html>

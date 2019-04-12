@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>My second jQuery</title>
+<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+<style>
+	
+</style>
+<script type="text/javascript">
+	
+</script>
+</head>
+<body>
+<div></div>
+<div id="canvas-wrapper-test1" style="width: 400px; height: 150px; margin: 0px auto; text-align: center; background-color: #111111;" onclick="test1()"><span style="font-size: 18px;">&nbsp;</span></div>
+<p><span style="font-size: 18px;">
+<script type="text/javascript">
+var canvas1 = function () {
+				var that = this;
+				this.raf = null,
+				this.c = document.createElement('canvas'),
+				this.parent = document.getElementById('canvas-wrapper-test1');
+				this.c.width = 400;
+				this.c.height = 100;			
+				this.c.id = 'canvas-test1';
+				this.parent.appendChild(this.c);
+				//参数 contextID 指定了您想要在画布上绘制的类型。当前唯一的合法值是 "2d"
+				this.ctx = this.c.getContext('2d');
+				//fillStyle 属性设置或返回用于填充绘画的颜色、渐变或模式。
+				this.ctx.fillStyle = 'red';
+				var x = 0;
+				this.draw = function () {//闭包
+					
+					x += 3;
+					x = (x > 310) ? 0 : x;
+					that.ctx.fillRect(45, 40, x, 20);
+					if(x>308){
+						that.ctx.clearRect(0,0,that.c.width,that.c.height);
+					}
+					/*window.requestAnimationFrame()方法用于告诉浏览器，
+					你想在浏览器的下个重绘 之前来执行一个动画或者执行浏览器通过调用
+					一个特定的函数来更新动画的请求。*/
+					that.raf = window.requestAnimationFrame(that.draw);
+				};
+			};
+			var mycanvas1 = new canvas1();
+			
+			function test1 () {
+				if ( !mycanvas1.raf ) {
+					mycanvas1.raf = window.requestAnimationFrame(mycanvas1.draw);
+				} else {
+					//取消更新动画，mycanvas1.raf作为一个唯一的标识符.
+					//你可以将该值作为参数传给 window.cancelAnimationFrame() 来取消这个回调函数。
+					window.cancelAnimationFrame(mycanvas1.raf);
+					mycanvas1.raf = null;
+				}
+			}
+			
+// ]]></script>
+<div id="test" style="width:1px;height:17px;background:#0f0;">0%</div>
+<input type="button" value="Run" id="run"/>
+<script>
+	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+var start = null;
+var ele = document.getElementById("test");
+var progress = 0;
+
+function step(timestamp) {
+    progress += 1;
+    ele.style.width = progress + "%";
+    ele.innerHTML=progress + "%";
+    if (progress < 100) {
+        requestAnimationFrame(step);
+    }
+}
+requestAnimationFrame(step);
+document.getElementById("run").addEventListener("click", function() {
+    ele.style.width = "1px";
+    progress = 0;
+    requestAnimationFrame(step);
+}, false);
+</script>
+</body>
+</html>

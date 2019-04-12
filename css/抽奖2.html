@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖</title>
+
+</head>
+<style>
+	body{
+    margin: 0;
+    padding: 0;
+}
+.box{
+    width: 400px;
+    height: 200px;
+    border: 1px solid #0C4E7C;
+    margin: 0 auto;
+}
+#header{
+    color:darkred;
+    font-size: 24px;
+    text-align: center;
+    width: 400px;
+    height: 60px;
+    line-height: 60px;
+}
+#btn{
+    width: 200px;
+    overflow: hidden;
+    margin: 30px auto 0;
+}
+#btn span{
+    cursor: pointer;
+    border: 2px solid #a09a09;
+    border-radius: 7px;
+    margin-right: 10px;
+    color: #000;
+    display: inline-block;
+    height: 40px;
+    width: 80px;
+    background-color: #f2ec55;
+    line-height: 40px;
+    text-align: center;
+}
+</style>
+<body>
+<div class="box">
+    <div id="header">开始抽奖啦！</div>
+    <div id="btn">
+        <span id="start">开始</span>
+        <span id="stop">结束</span>
+    </div>
+</div>
+</body>
+<script>
+	var date = ["谢谢参与", "谢谢参与", "谢谢参与", "50元话费", "ipad", "佳能相机", "苹果手机", "3DS", "switch", "1000元超市购物卡"];
+var timer = null;
+var flag = 0;
+
+
+window.onload = function () {
+
+    // var header = document.getElementById("header");优化前
+    var start = document.getElementById("start");
+    var stop = document.getElementById("stop");
+//鼠标抽奖
+    eventUtil.addHandler(start, "click", getStart);
+    eventUtil.addHandler(stop, "click", getStop);
+//键盘抽奖；
+    document.onkeyup = function (event) {
+        var e = event || window.event;
+        //检测按键键值；
+        // console.log(e.keyCode);
+        if (e.keyCode === 13) { 
+            if (flag === 0) {
+                getStart();
+                flag = 1;
+            } else {
+                getStop();
+                flag = 0;
+            }
+        }
+    };
+
+    function getStart() {
+        clearInterval(timer);
+        var header = document.getElementById("header");//优化后
+        timer = setInterval(function () {
+            //代码优化前
+            //var x = parseInt(Math.random()*10);
+            var random = Math.floor(Math.random() * date.length);
+            header.innerHTML = date[random];
+        }, 50);
+        start.style.backgroundColor = "#999";
+        flag = 1;
+    }
+
+    function getStop() {
+        clearInterval(timer);
+        start.style.backgroundColor = "#f2ec55";
+        flag = 0;
+    }
+};
+
+var eventUtil = {
+    getEvent:function (event) {
+        return event?event:window.event;
+    },
+    getType: function (event) {
+        return event.type;
+    },
+    getTarget:function (event) {
+        return event.target||event.srcElement;
+    },
+    //阻止冒泡
+    stopPropagation:function (event) {
+        if(event.stopPropagation){
+            event.stopPropagation();
+        }else {
+            event.cancelBubble=true;
+        }
+    },
+    //阻止事件默认行为；
+    preventDefault:function(event){
+        if(event.preventDefault){
+            event.preventDefault();
+        }else {
+            event.returnValue = false;
+        }
+    },
+    //添加具柄；
+    addHandler: function (element, type, Handler) {
+        if (element.ç) {
+            element.addEventListener(type, Handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + type, Handler);
+        } else {
+            element["on" + type] = Handler;
+        }
+    },
+    //删除具柄；
+    removeHandler: function (element, type, Handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, Handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent("on" + type, Handler);
+        } else {
+            element["on" + type] = null;
+        }
+    }
+};
+</script>
+</html>

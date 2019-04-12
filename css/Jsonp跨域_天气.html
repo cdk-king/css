@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+    	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    	    <h1 class="mui-title">Jsonp跨域_天气</h1>
+    	</header>
+    	<div class="mui-content mui-content-padded">
+    		<div class="mui-input-row">
+    		    <label >关键词：</label>
+    		    <input id="input" type="text" placeholder="输入框" />
+    		</div>
+        	<button id="btn" type="button" class="mui-btn mui-btn-blue mui-btn-block">天气</button>
+        	
+        	<div >
+        		<ul id="output" class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right" onclick="tocontent()">
+							<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
+							<div class="mui-media-body">Item 1<p class="mui-ellipsis">...</p></div>
+						</a></li>
+				</ul>
+        	</div>
+    	</div>
+		<script src="js/jquery-1.11.0.js"></script>
+        
+        <script type="text/javascript" >
+        /*
+         * url = "http://api.map.baidu.com/telematics/v3/weather?location=深圳&output=json&ak=11ffd27d38deda622f51c9d314d46b17"+"&callback=show"
+         * */
+        var url1 = "http://api.map.baidu.com/telematics/v3/weather?location="
+
+        var url2 = "&output=json&ak=11ffd27d38deda622f51c9d314d46b17&callback=show";
+            document.getElementById("btn").addEventListener('click',function () {
+            	var input = document.getElementById("input").value; 
+            	url = url1 + input + url2;
+            	//mui.toast(url);
+            	var script = document.createElement("script");
+        		//script.src = "https://api.douban.com/v2/book/search?q=javascript&count=1&callback=handleResponse";
+        		script.src = url;
+        		document.body.insertBefore(script, document.body.firstChild);
+        		//url = "http://fanyi.youdao.com/openapi.do?keyfrom=cdkking&key=633575105&type=data&doctype=jsonp&callback=show&version=1.1&q=";
+            });
+        
+        </script>
+		<script type="text/javascript" >
+				var out = '';
+				function show(data){
+					
+					for(var i = 0 ;i<data['results'][0].weather_data.length;i++){
+					out = out +	
+					'<li class="mui-table-view-cell mui-media">'+
+				'<a class="mui-navigate-right" onclick="">'+
+        		'<img  id="img" class="mui-media-object mui-pull-left" src="'+data['results'][0].weather_data[i].dayPictureUrl+'" style="margin-right: 20px;">'+
+				'<div id="city" class="mui-media-body">'+data['results'][0].currentCity+'  '+data['results'][0].weather_data[i].weather+'   '+data['results'][0].weather_data[i].temperature+'</div>'+
+				'<div id="date"  class="mui-media-body">'+data['results'][0].weather_data[i].date+'</div>'+
+				//'<div id="tmp"  class="mui-media-body">'+data['results'][0].weather_data[i].temperature+'</div>'+
+				'<p  class="mui-ellipsis"></p>'+
+        		'</a></li>';
+					}
+					document.getElementById("output").innerHTML = out;
+					out="";
+//					document.getElementById("city").innerHTML =data['results'][0].currentCity+' '+data['results'][0].weather_data[0].weather ;
+//					document.getElementById("img").src =data['results'][0].weather_data[0].dayPictureUrl;
+//					document.getElementById("date").innerHTML =data['results'][0].weather_data[0].date;
+//					document.getElementById("tmp").innerHTML =data['results'][0].weather_data[0].temperature;
+				}
+		</script>
+		<script type="text/javascript">
+			    function handleResponse(data){
+			            console.log(JSON.stringify(data));
+			            document.getElementById("output").innerHTML = JSON.stringify(data);
+			            document.getElementById("show").innerHTML = data['result'];
+			    }
+		</script>
+	</body>
+
+</html>

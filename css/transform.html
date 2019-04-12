@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>菜鸟教程(runoob.com)</title> 
+<style> 
+div
+{
+	top: 0;
+	left:0;
+	width:100px;
+	height:75px;
+	background-color:red;
+	border:1px solid black;
+	position: relative;
+}
+div#div2:hover
+{
+	-webkit-transition: all 1.5s ease;
+				-o-transition: all 1.5s ease;
+				transition: all 1.5s ease;
+	transform:rotateX(360deg);
+	-webkit-transform:rotateX(360deg); /* Safari and Chrome */
+}
+div#div3:hover
+{
+	-webkit-transition: all 1.5s ease;
+				-o-transition: all 1.5s ease;
+				transition: all 1.5s ease;
+	transform:rotateY(360deg);
+	-webkit-transform:rotateY(360deg); /* Safari and Chrome */
+}
+div#div4:hover
+{
+
+	animation:a 5s infinite;
+-webkit-animation:a 5s infinite; /* Safari and Chrome */
+
+	
+}
+div#div5:hover
+{
+
+	animation:b 5s infinite;
+-webkit-animation:b 5s infinite; /* Safari and Chrome */
+
+	
+}
+div#div6:hover
+{
+	transform:translate(200px,0px);
+	-ms-transform:translate(200px,0px); /* IE 9 */
+	-webkit-transform:translate(200px,0px); /* Safari and Chrome */
+	-webkit-transition: all 1.5s ease;
+				-o-transition: all 1.5s ease;
+				transition: all 1.5s ease;
+}
+div#div7:hover
+{
+	
+	transform: rotate(360deg);
+-ms-transform: rotate(360deg); /* IE 9 */
+-webkit-transform: rotate(360deg); /* Safari and Chrome */
+	-webkit-transition: all 1.5s ease;
+				-o-transition: all 1.5s ease;
+				transition: all 1.5s ease;
+}
+div#div8:hover
+{
+	left: 200px;
+	-ms-transform: scale(2,3); /* IE 9 */
+    -webkit-transform: scale(2,3); /* Safari */
+    transform: scale(2,3); /* 标准语法 */
+	-webkit-transition: all 1.5s ease;
+				-o-transition: all 1.5s ease;
+				transition: all 1.5s ease;
+}
+@-webkit-keyframes a{
+0%   {
+	left:0px;
+	}
+
+50%  {
+	left:220px;
+	width: 200px;
+	height: 150px;
+transform:rotateY(360deg);
+	-webkit-transform:rotateY(360deg);
+	background:dodgerblue;
+}
+
+100% {left:0px;
+
+}
+}
+@keyframes a{
+0%   {
+	left:0px;
+	}
+
+50%  {
+	left:220px;
+	width: 200px;
+	height: 150px;
+transform:rotateY(360deg);
+	-webkit-transform:rotateY(360deg);
+	background:dodgerblue;
+}
+
+100% {left:0px;
+
+}
+}
+
+@-webkit-keyframes b /* Safari and Chrome */
+{
+0%   {top:0px; left:0px; background:red;}
+25%  {top:0px; left:100px; background:blue;}
+50%  {top:100px; left:100px; background:yellow;}
+75%  {top:100px; left:0px; background:green;}
+100% {top:0px; left:0px; background:red;}
+}
+
+@keyframes b /* Safari and Chrome */
+{
+0%   {top:0px; left:0px; background:red;}
+25%  {top:0px; left:100px; background:blue;}
+50%  {top:100px; left:100px; background:yellow;}
+75%  {top:100px; left:0px; background:green;}
+100% {top:0px; left:0px; background:red;}
+}
+</style>
+</head>
+<body>
+
+<p><b>注意:</b> Internet Explorer 9 (以及更早版本的浏览器) 和 Opera 不支持 rotate 方法.</p>
+
+<div>Hello. This is a DIV element.</div>
+
+<div id="div2">Hello. This is a DIV element.</div>
+<div id="div3">Hello. This is a DIV element.</div>
+<div id="div4">Hello. This is a DIV element.</div>
+<div id="div5">Hello. This is a DIV element.</div>
+<div id="div6">Hello. This is a DIV element.</div>
+<div id="div7">Hello. This is a DIV element.</div>
+<div id="div8">Hello. This is a DIV element.</div>
+</body>
+</html>

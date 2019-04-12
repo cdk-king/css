@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>contentEditable</title>
+	</head>
+	<body>
+		<script>
+
+function img(){
+
+var location1 = prompt("请输入图片的地址：","http://");
+
+if(location1){
+
+selImg(location1);
+
+}
+
+}
+
+function selImg(s){
+
+if(!s){return false;}
+
+var h=s.substr(s.lastIndexOf(".")+1,3);
+
+if(h=="gif"||h=="jpg" ||h=="png" || h=="GIF" || h=="JPG"){
+
+Edit=document.getElementById("idEdit")
+
+Edit.innerHTML+='<img src='+s+'>'
+
+}
+
+else{
+
+}
+
+}
+
+</script>
+<div style="border: 1px solid red;">
+<div NAME=EditCtrl id=idEdit contentEditable=true style="width:100%;height:100px;"> <b>Yuzi.me</b></div>
+</div>
+<input type="button" name="Submit" value="插入图片" onclick="img()">
+
+妙哉，如果想使用更多效果，需要自己写js代码了。望各位攻城（功臣）们发挥极致，盼分享！
+	</body>
+</html>

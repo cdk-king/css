@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="keywords" content="白菜编辑部">
+		<title>白菜编辑部</title>
+		<link rel="stylesheet" href="css/amazeui.min.css" />
+		<style>
+			html,
+			body {
+			  height: 100%;
+			  overflow: hidden;
+			}
+			.admin-sidebar {
+				width: 250px;
+				border: 1px solid red;
+				min-height: 100%;
+				height: 100%;
+			    overflow-x: hidden;
+			    overflow-y: scroll;
+			    position: relative;			    
+			    float: left;
+			    border-right: 1px solid #cecece;
+			}
+			.content-page{
+				border: 1px solid blue;
+				overflow: auto;
+			    /* height: 700px; */
+			    /* padding-left: 260px; */
+			}
+			.img-circle{
+				width:240px;
+				border-radius: 50%;
+			}
+			ul{				
+				padding-left: 0px;
+				margin-left: 0px;
+			}
+			ul i{
+				padding: 5px;
+				padding-left: 15px;
+				margin: 0px;
+				display: block;
+				width: 100%;
+				font-size: 20px;
+				color:#007AFF;
+				border: 1px solid #dedede;					
+			}
+			ul i:hover{
+				background: #ccc;
+			}
+			ul li {				
+				padding: 0px;
+			    background-color: #fff;
+			    border: 1px solid #dedede;
+				list-style:none;
+				cursor: pointer;
+			}
+			ul > li > ul >li:hover {				
+			    background: #ccc;
+			}
+			ul > li > ul >li{
+				padding: 5px;
+				padding-left: 30px;
+				margin: 0px;
+				display: block;
+				color:#007AFF;
+			}
+		</style>
+		<style>
+			.cdk_active{
+				background: #ccc;
+			}
+			.cdk_hidden{
+				background: #fff;
+			}
+			.cdk_nav_item{
+				
+			}
+		</style>
+		<script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+		<script type="text/javascript" src="js/amazeui.min.js" ></script>
+
+	</head>
+
+	<body>
+		<div class="admin-sidebar" id="admin-offcanvas">
+			<div class="">
+				<!-- User -->
+				<div class="user-box ">
+					<div class="user-img">
+						<img src="img/b1.png" alt="user-img" title="Mat Helme" class="img-circle">						
+					</div>
+				</div>
+				<!-- End User -->
+<ul>
+	<i>首页</i>
+	<li class="cdk_nav_item">
+		<i class="cdk_active">栏目1</i>
+		<ul>
+			<li>子栏目1</li>
+			<li>子栏目2</li>
+			<li>子栏目3</li>
+			<li>子栏目4</li>
+		</ul>
+	</li>
+	<li class="cdk_nav_item">
+		<i class="cdk_active">栏目2</i>
+		<ul>
+			<li>子栏目1</li>
+			<li>子栏目2</li>
+			<li>子栏目3</li>
+			<li>子栏目4</li>
+		</ul>
+	</li>
+	<li class="cdk_nav_item">
+		<i class="cdk_active">栏目3</i>
+		<ul>
+			<li>子栏目1</li>
+			<li>子栏目2</li>
+			<li>子栏目3</li>
+			<li>子栏目4</li>
+		</ul>
+	</li>
+	<li class="cdk_nav_item">
+		<i class="cdk_active">栏目4</i>
+		<ul>
+			<li>子栏目1</li>
+			<li>子栏目2</li>
+			<li>子栏目3</li>
+			<li>子栏目4</li>
+		</ul>
+	</li>
+</ul>
+			</div>
+		</div>
+	
+		<div class="content-page">
+			<!-- Start content -->
+			<h1>内容</h1>
+		</div>	
+	</body>
+			<script type="text/javascript">
+			var ps = document.querySelectorAll('.cdk_nav_item');
+			for (var i = 0; i < ps.length; i++) {
+			        ps[i].addEventListener('click', function(event){
+			        	//alert(event.target.className);
+			        	//parentElement.className多个空格都不行-_-''
+			        	//alert(event.target.parentElement.className);
+			            if(this.getElementsByTagName('i')[0].className=='cdk_active' && event.target.parentNode.className== "cdk_nav_item"){
+			            	//不能用initial
+			            	this.getElementsByTagName('i')[0].className='cdk_hidden';
+			            	this.getElementsByTagName('ul')[0].style.display = "none";
+			            	
+			            }else if(event.target.parentNode.className== "cdk_nav_item"){
+			            	this.getElementsByTagName('i')[0].className='cdk_active';
+			            	this.getElementsByTagName('ul')[0].style.display = "inherit";
+			            }
+			    	})
+			}
+		</script>
+</html>

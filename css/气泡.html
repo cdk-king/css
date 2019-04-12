@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,html{
+			background: #ccc;
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			overflow-x: hidden;  
+    		overflow-y: hidden;
+    		
+		}
+		.bubble{
+			position: absolute;
+			top: 100px;
+			left: 0px;
+			width: 100px;
+			height: 100px;
+			border-radius: 50px;
+			border: 1px solid #007AFF; 
+
+		}
+		#div6{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100px;
+			height: 100px;
+			background: #fff;
+			-webkit-transition: all 5s ease;
+						-o-transition: all 5s ease;
+						transition: all 5s ease;
+		}
+		#div6:hover
+		{
+			transform:translate(200px,0px);
+			-ms-transform:translate(200px,0px); /* IE 9 */
+			-webkit-transform:translate(200px,0px); /* Safari and Chrome */
+			
+		}
+	</style>
+	<body>
+		<div id="a" class="bubble">
+			
+		</div>
+		<div id="div6"></div>
+	</body>
+	<script>
+		move("#a");
+		function move(el){
+			this.el = typeof(el) === "string" ? document.querySelector(el) : el;
+			var directionX = 1;
+			var directionY = 1;
+			var bubble = this.el;
+			var div6 = document.getElementById("div6");
+			
+			div6.style.webkitTransform='translate('+(document.body.clientWidth-div6.clientWidth)+'px,0px)'; 	
+			if(div6.offsetLeft >= document.body.clientWidth - div6.clientWidth){
+				//translate不会改变offsetLeft和offsetTop的值，而left会改变。
+				div6.style.webkitTransform='translate(0px,0px)';	
+				}
+
+			var loop2 = setInterval(function (){
+				//console.log(div6.translateX);
+				//console.log(document.getElementById("div6").style.left);
+				if(div6.offsetLeft >= document.body.clientWidth - div6.clientWidth){
+				div6.style.webkitTransform='translate(0px,0px)';	
+				}
+				if(div6.offsetLeft = 0){
+				div6.style.webkitTransform='translate('+(document.body.clientWidth-div6.clientWidth)+'px,0px)'; 	
+				}
+			},5000)
+			
+			var loop = setInterval(function (){
+				if(directionX == 1){
+					bubble.style.left = bubble.offsetLeft +1+ "px";
+					
+					
+					//bubble.style.top = bubble.offsetTop +5+ "px";
+				}
+				if(directionX == 2){
+					bubble.style.left = bubble.offsetLeft -1 + "px";
+					//bubble.style.top = bubble.offsetTop +5+ "px";
+				}
+				if(directionY == 1){
+					//bubble.style.left = bubble.offsetLeft +2+ "px";
+					bubble.style.top = bubble.offsetTop + 1 + "px";
+				}
+				if(directionY == 2){
+					//bubble.style.left = bubble.offsetLeft -2+ "px";
+					bubble.style.top = bubble.offsetTop - 1+ "px";
+				}
+				//console.log(document.body.clientHeight);
+				//console.log(bubble.clientWidth);
+				if(bubble.offsetLeft >= document.body.clientWidth - bubble.clientWidth){
+					//clearInterval(loop);
+					
+					directionX = 2;
+				}
+				if(bubble.offsetLeft <= 0){
+					
+					
+					directionX = 1;
+				}
+				if(bubble.offsetTop >= document.body.clientHeight - bubble.clientHeight){
+					//clearInterval(loop);
+					
+					directionY = 2;
+				}
+				if(bubble.offsetTop <= 0){
+					
+					
+					directionY= 1;
+				}
+			},32)
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #21333C;
+		}
+		
+		#background-color {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			/*border: 1px solid red;*/
+		}
+		
+		.c-a {
+			background: #fff;
+		}
+		
+		.c-b {
+			background: #BFBFBF;
+		}
+		
+		.c-c {
+			background: #CD3333;
+		}
+		
+		.c-d {
+			background: #419641;
+		}
+		
+		.c-e {
+			background: #006699;
+		}
+		
+		.c-f {
+			background: #555555;
+		}
+		
+		.c-g {
+			background: #21333C;
+		}
+		
+		.c-h {
+			background: #000;
+		}
+		
+		.btn {
+			display: block;
+			width: 30px;
+			height: 30px;
+			border: thin solid #ccc;
+			border-radius: 30px;
+			margin-top: 10px;
+		}
+		
+		#other-bg-color {
+			-webkit-transition: all 0.8s;
+			-moz-transition: all 0.8s;
+			-o-transition: all 0.8s;
+			transition: all 0.8s;
+			height: 0px;
+			/*border: thin solid #ccc;*/
+			overflow: hidden;
+		}
+		
+		#other-font-color {
+			-webkit-transition: all 0.8s;
+			-moz-transition: all 0.8s;
+			-o-transition: all 0.8s;
+			transition: all 0.8s;
+			height: 0px;
+			/*border: thin solid #ccc;*/
+			overflow: hidden;
+		}
+		
+		#font-color {
+			position: absolute;
+			top: 20px;
+			right: 60px;
+		}
+		
+		.font-color {
+			font-size: 40px;
+			color: #fff;
+			-webkit-transition: all 0.8s;
+			-moz-transition: all 0.8s;
+			-o-transition: all 0.8s;
+			transition: all 0.8s;
+		}
+	</style>
+
+	<body>
+		<div id="color-box">
+			<div id="background-color">
+				<div id="now-bg-color" class="btn "></div>
+				<div id="other-bg-color">
+					<div class="btn c-a"></div>
+					<div class="btn c-b"></div>
+					<div class="btn c-c"></div>
+					<div class="btn c-d"></div>
+					<div class="btn c-e"></div>
+					<div class="btn c-f"></div>
+					<div class="btn c-g"></div>
+					<div class="btn c-h"></div>
+				</div>
+			</div>
+			<div id="font-color">
+				<div id="now-font-color" class="btn "></div>
+				<div id="other-font-color">
+					<div class="btn c-a"></div>
+					<div class="btn c-b"></div>
+					<div class="btn c-c"></div>
+					<div class="btn c-d"></div>
+					<div class="btn c-e"></div>
+					<div class="btn c-f"></div>
+					<div class="btn c-g"></div>
+					<div class="btn c-h"></div>
+				</div>
+			</div>
+		</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script>
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+
+		var balls = [];
+		var numBalls = 50;
+		if(width > 800) {
+			numBalls = 100;
+		}
+		var friction = 0.05;
+		var gravity = 0.2;
+		var bounce = -1.0; //定义反弹系数
+		var disX = 0;
+		var disY = 0;
+		var ballColor = "#fff";
+
+		document.addEventListener('mousemove', function(e) {
+			disX = e.clientX;
+			disY = e.clientY;
+		})
+
+		var Ball = function(r, color) {
+			this.r = r;
+			this.color = color;
+			this.active = true;
+			this.x = 100;
+			this.y = 100;
+			this.t = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.nx = 0;
+			this.ny = 0;
+			this.vis = true;
+			this.mass = 10;
+			//球的体积公式
+			this.mass = (4 / 3) * Math.PI * this.r * this.r * this.r;
+		}
+		Ball.prototype = {
+			draw: function(ctx) {
+
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+				ctx.fillStyle = this.color;
+				if(this.vis == true) {
+					ctx.fill();
+				}
+				//ctx.fill();
+				//				ctx.moveTo(this.x,this.y); 
+				//				ctx.lineTo(disX,disY); 
+				//				ctx.strokeStyle = "#fff";
+				//				ctx.stroke(); 
+			}
+		}
+		createBall();
+
+		function createBall() {
+			for(var i = 0; i < numBalls; i++) {
+				var radius = Math.random() * 2 + 2;
+				//var color = Math.random()*(0xffffff);
+				var ball = new Ball(radius, ballColor);
+				//ball.mass = Math.random()*5 + 2;
+				ball.x = Math.random() * canvas.width;
+				ball.y = Math.random() * canvas.height;
+				ball.vx = Math.random() * 2 - 1;
+				ball.vy = Math.random() * 2 - 1;
+				balls.push(ball);
+			}
+		};
+
+		var intersects = function(rectA, rectB) {
+			return Math.sqrt((Math.pow(rectA.x - rectB.x, 2) + Math.pow(rectA.y - rectB.y, 2))) <= (rectA.r + rectB.r);
+		}
+
+		function collisionDetection(ball1, index) {
+			for(var i = index; i < balls.length; i++) {
+				var ball2 = balls[i];
+				if(ball2 != ball1) {
+					var isCollision = intersects(ball1, ball2);
+					if(isCollision) {
+						//这里不能直接改变速度,否则会直接影响其他小球
+						ball1.nx = ((ball1.mass - ball2.mass) * ball1.vx + 2 * ball2.mass * ball2.vx) / (ball1.mass + ball2.mass);
+						ball2.nx = ((ball2.mass - ball1.mass) * ball2.vx + 2 * ball1.mass * ball1.vx) / (ball1.mass + ball2.mass);
+						ball1.ny = ((ball1.mass - ball2.mass) * ball1.vy + 2 * ball2.mass * ball2.vy) / (ball1.mass + ball2.mass);
+						ball2.ny = ((ball2.mass - ball1.mass) * ball2.vy + 2 * ball1.mass * ball1.vy) / (ball1.mass + ball2.mass);
+						ball1.vx = ball1.nx;
+						ball2.vx = ball2.nx;
+						ball1.vy = ball1.ny;
+						ball2.vy = ball2.ny;
+						//console.log(ball2.vx,ball2.vx);
+
+						isCollision = false;
+					}
+				}
+			}
+		}
+		//边界碰撞处理
+		function checkWalls(ball) {
+			if(ball.x + ball.r > canvas.width) {
+				ball.x = canvas.width - ball.r;
+				ball.vx *= bounce;
+			} else if(ball.x - ball.r < 0) {
+				ball.x = ball.r;
+				ball.vx *= bounce;
+			}
+
+			if(ball.y + ball.r > canvas.height) {
+				ball.y = canvas.height - ball.r;
+				ball.vy *= bounce;
+			} else if(ball.y - ball.r < 0) {
+				ball.y = ball.r;
+				ball.vy *= bounce;
+			}
+		}
+		//边界碰撞处理
+		function border() {
+			for(var i = 0; i < balls.length; i++) {
+				var ball = balls[i];
+				if((ball.x + ball.r + ball.vx) > width || (ball.x - ball.r + ball.vx) < 0) {
+					ball.vx = -1 * ball.vx;
+				}
+				if((ball.y + ball.r + ball.vy) > height || (ball.y - ball.r + ball.vy) < 0) {
+					ball.vy = -1 * ball.vy;
+				}
+			}
+
+		}
+
+		function gravityHandle(ball1) {
+			if(ball1.y + ball1.r > height) {
+				ball1.vy = ball1.vy;
+			} else {
+				ball1.vy = ball1.vy + gravity;
+			}
+
+		}
+
+		function frictionHandle(ball1) {
+			if(Math.abs(ball1.vx) - friction <= 0) {
+				ball1.vx = 0;
+			} else if(ball1.vx > 0) {
+				ball1.vx = ball1.vx - friction;
+			} else if(ball1.vx < 0) {
+				ball1.vx = ball1.vx + friction;
+			}
+
+			if(Math.abs(ball1.vy) - friction <= 0) {
+				ball1.vy = 0;
+			} else if(ball1.vy > 0) {
+				ball1.vy = ball1.vy - friction;
+			} else if(ball1.vy < 0) {
+				ball1.vy = ball1.vy + friction;
+			}
+		}
+
+		function drawBall(ball1, index) {
+
+			//gravityHandle(ball1);
+
+			//frictionHandle(ball1);
+
+			ball1.x += ball1.vx;
+
+			ball1.y += ball1.vy;
+
+			ball1.draw(context);
+
+		}
+
+		function drawLine(ball0, index) {
+			for(var i = index; i < balls.length; i++) {
+				var ball1 = balls[i];
+				if(ball0 != ball1) {
+					var dx = ball1.x - ball0.x,
+						dy = ball1.y - ball0.y,
+						dist = Math.sqrt(dx * dx + dy * dy);
+					if(ball0 == balls[0] || ball1 == balls[0]) {
+						if(dist < 200) {
+							context.save();
+							context.strokeStyle = "rgba(255,255,255,0.5)";
+							context.beginPath();
+							context.lineWidth = (1.0 - dist / 200) * 2.5;
+							context.globalAlpha = 1.0 - dist / 200;
+							context.moveTo(ball0.x, ball0.y);
+							context.lineTo(ball1.x, ball1.y);
+							context.closePath();
+							context.stroke();
+							context.restore();
+						}
+					} else {
+						if(dist < 100) {
+							context.save();
+							context.strokeStyle = "rgba(255,255,255,0.5)";
+							context.beginPath();
+							context.lineWidth = (1.0 - dist / 100) * 2.5;
+							context.globalAlpha = 1.0 - dist / 100;
+							context.moveTo(ball0.x, ball0.y);
+							context.lineTo(ball1.x, ball1.y);
+							context.closePath()
+							context.stroke()
+							context.restore();
+						}
+					}
+
+				}
+			}
+		}
+
+		drawFrame();
+
+		function drawFrame() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			//球体碰撞处理
+			//balls.forEach(collisionDetection);
+
+			//边界碰撞处理
+			//border();
+			balls.forEach(checkWalls);
+
+			//绘制小球
+			balls.forEach(drawBall);
+
+			balls.forEach(drawLine);
+
+			window.requestAnimationFrame(drawFrame, canvas);
+		}
+		document.addEventListener('mousemove', function(e) {
+			disX = e.clientX;
+			disY = e.clientY;
+			balls[0].x = disX;
+			balls[0].y = disY;
+			balls[0].vx = 0;
+			balls[0].vy = 0;
+			balls[0].vis = false;
+		})
+	</script>
+	<script>
+		var bgcolor = document.getElementById('now-bg-color');
+		var otherBgcolor = document.getElementById('other-bg-color');
+		var fontcolor = document.getElementById('now-font-color');
+		var otherFontcolor = document.getElementById('other-font-color');
+		bgcolor.addEventListener('click', function(e) {
+			if(otherBgcolor.style.height === "0px" || otherBgcolor.style.height === "") {
+				otherBgcolor.style.height = "350px";
+			} else {
+				otherBgcolor.style.height = "0px";
+			}
+
+		});
+		fontcolor.addEventListener('click', function(e) {
+			//console.log(otherFontcolor.style.height);
+			if(otherFontcolor.style.height === "0px" || otherFontcolor.style.height === "") {
+				otherFontcolor.style.height = "350px";
+			} else {
+				otherFontcolor.style.height = "0px";
+			}
+		});
+		var color = bgcolor.getElementsByTagName('div');
+		var bgbtns = otherBgcolor.getElementsByClassName('btn');
+		var fontbtns = otherFontcolor.getElementsByClassName('btn');
+		for(var i = 0; i < bgbtns.length; i++) {
+			bgbtns[i].addEventListener('click', function(e) {
+				document.body.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				bgcolor.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+			});
+		}
+		for(var i = 0; i < fontbtns.length; i++) {
+			fontbtns[i].addEventListener('click', function(e) {
+				var fontColors = document.getElementsByClassName('font-color');
+				fontcolor.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				ballColor = window.getComputedStyle(this, null).backgroundColor;
+				for(var i = 0; i < balls.length; i++) {
+					balls[i].color = window.getComputedStyle(this, null).backgroundColor;
+				}
+			});
+		}
+	</script>
+
+</html>

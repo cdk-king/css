@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,html{
+			overflow: hidden;
+		    width: 100%;
+		    height:100%;
+		    margin: 0;
+		    padding: 0;
+		    background: #21333C;
+		}
+		#canvas{
+			
+		}
+		#background-color{
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			/*border: 1px solid red;*/
+		}
+		.c-a{
+			background: #fff;
+		}
+		.c-b{
+			background: #708090;
+		}
+		.c-c{
+			background: #CD3333;	
+		}
+		.c-d{	
+			background: #419641;
+		}	
+		.c-e{
+			background: #006699;		
+		}
+		.c-f{
+			background: #555555;
+		}
+		.c-g{		
+			background: #21333C;
+		}
+		.c-h{
+			background: #000;			
+		}
+		.btn{			
+			display: block;
+			width: 30px;
+			height: 30px;
+			border: thin solid #ccc;
+			border-radius: 30px;
+			margin-top:10px;
+		}
+		#other-bg-color{
+			-webkit-transition: all 0.8s;
+			-moz-transition: all 0.8s;
+			-o-transition: all 0.8s;
+			transition: all 0.8s;
+			height: 0px;
+			/*border: thin solid #ccc;*/
+			overflow: hidden;
+		}
+	</style>
+	<body>
+		<div id="color-box">
+			<div id="background-color">
+				<div id="now-bg-color" class="btn "></div>
+				<div id="other-bg-color">
+					<div class="btn c-a"></div>				
+					<div class="btn c-b"></div>				
+					<div class="btn c-c"></div>
+					<div class="btn c-d"></div>
+					<div class="btn c-e"></div>
+					<div class="btn c-f"></div>
+					<div class="btn c-g"></div>
+					<div class="btn c-h"></div>			
+				</div>
+			</div>
+		</div>
+		<canvas id="canvas" >	
+		</canvas>
+	</body>
+	<script>
+		var c = document.getElementById('canvas');
+		var ctx = c.getContext('2d');
+		var body =  document.body;
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		c.setAttribute('width',width);
+		c.setAttribute('height',height);
+		draw();
+		function draw(){
+			ctx.clearRect(0,0,width,width);		
+			ctx.translate(width*0.5,height*0.5);
+			
+			ctx.beginPath();
+			ctx.arc(0,0,100,0,Math.PI*2,false);
+			ctx.strokeStyle = "#000";	
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.arc(0,0,100,Math.PI*1.5,Math.PI*2.5,false);
+			ctx.fillStyle = "#000";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(0,0,100,Math.PI*0.5,Math.PI*1.5,false);
+			ctx.fillStyle = "#fff";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(0,-50,50,Math.PI*0,Math.PI*2,false);
+			ctx.fillStyle = "#fff";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(0,50,50,Math.PI*0,Math.PI*1.5,false);
+			ctx.fillStyle = "#000";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(0,-50,10,0,Math.PI*2,false);
+			ctx.fillStyle = "#000";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(0,50,10,0,Math.PI*2,false); 
+			ctx.fillStyle = "#fff";
+        	ctx.fill(); //填充 
+
+			ctx.rotate(Math.PI/180);
+			ctx.translate(-width*0.5,-height*0.5);
+			requestAnimationFrame(draw);
+		}
+		var bgcolor = document.getElementById('now-bg-color');
+		var otherBgcolor = document.getElementById('other-bg-color');
+		bgcolor.addEventListener('click',function(e){
+			if(otherBgcolor.style.height === "0px" || otherBgcolor.style.height ===""){
+				otherBgcolor.style.height = "350px";
+			}else{
+				otherBgcolor.style.height = "0px";
+			}
+			
+		});
+		var color = bgcolor.getElementsByTagName('div');
+		var bgbtns =  otherBgcolor.getElementsByClassName('btn');
+
+		for(var i= 0;i< bgbtns.length;i++){
+			bgbtns[i].addEventListener('click',function(e){
+				//console.log(document.body.style.backgroundColor);
+				document.body.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				bgcolor.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				//body.style.background = e.style.background;
+			});
+		}
+	</script>
+</html>

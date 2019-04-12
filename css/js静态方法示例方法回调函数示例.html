@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>回调函数</title>
+	</head>
+	<script type="text/template">
+		var cdk = function(callback) { return callback(); }; cdk(function() { alert('123'); }); var cdk1 = function(callback) { return callback(); }; cdk1(function() { alert('456'); }); var cdk2 = function() { return function(callback){ callback(); }; }(); cdk2(function() { alert('789'); }); var fn = function(callback) { callback('callback'); }; fn(function(value) { alert(value); });
+	</script>
+
+	<body>
+		<input id="input" />
+		<button id="button1">cdk_onclick1</button>
+		<button id="button2">cdk_onclick2</button>
+	</body>
+	<script>
+		var Person = function() {};
+		Person.say = function() {
+			alert('I am a Person,I can say.')
+		};
+		//Person.say();
+
+		////////////////////////
+		
+		var input = document.getElementById('input');
+		var button1 = document.getElementById('button1');
+		var cdk_btn = function(el) {
+			var a = document.querySelector(el);
+			this.cdk_alert = function(callback) {
+				callback();
+			}
+		}
+		//同上等价
+		//	cdk_btn.prototype.cdk_alert = function(callback){
+		//				callback();
+		//	}
+
+		cdk_btn.cdk_alert1 = function() {
+			alert('cdk_alert1我是静态方法')
+		}
+		
+		//{}是Object的字面量
+		//var my = {};
+		//相当于
+		//var my = new Object()
+		var cdk_btn1 = {
+			cdk_alert1: function() {
+				alert('cdk_alert1我是静态方法')
+			},
+			cdk_alert2: function() {
+				alert('cdk_alert2我是静态方法')
+			}
+		}
+
+		cdk_btn1.cdk_alert1();
+		//cdk_btn('#button').cdk_alert1();
+		cdk_btn1.cdk_alert2();
+		var a = new cdk_btn('#button');
+		a.cdk_alert(function() { alert('cdk_alert我是实例方法+回调函数') });
+
+		//////////////////////
+		
+		// 保留数字 
+		String.prototype.GetNum = function() {
+			var regEx = /[^\d]/g;
+			return this.replace(regEx, '');
+		};
+		var str = "cdk12345";
+		alert(str.GetNum() + "我是String拓展方法");
+
+		/////////////////////
+		
+		var set = function(el) {
+			this.el = typeof(el) === "string" ? document.querySelector(el) : el;
+		};
+		set.prototype = {
+			set_backgroup: function(bg) {
+				this.el.style.background = bg;
+			}
+		}
+		var mo = new set('button');
+		mo.set_backgroup("#00cccc");
+
+		//实现button.cdk_onclick
+		HTMLElement.prototype.cdk_onclick = function() {
+			if(window.addEventListener) {
+				this.addEventListener('click', function() {
+					alert(input.value);
+				});
+			} else if(window.attachEvent) {
+				this.attachEvent("onclick" , function() {
+					alert("HTMLElement.cdk_onclick1");
+				});
+			}
+		};
+		document.getElementById("button1").cdk_onclick();
+		//加强版
+		HTMLElement.prototype.cdk_addEvent = function(type,fn) {
+			if(window.addEventListener) {
+				this.addEventListener(type, fn);
+			} else if(window.attachEvent) {
+				this.attachEvent("onclick", fn);
+			}
+		};
+		document.getElementById("button2").cdk_addEvent('click',function() {
+					alert("HTMLElement.cdk_onclick2");
+				});
+				
+		//实现document.querySelector(el).cdk_setbackgroup("red");
+		//实现点击alert输入内容
+	</script>
+
+</html>

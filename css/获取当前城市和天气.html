@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+	</body>
+	<script>
+		//获取当前城市
+		function locationCity() {
+
+		}
+		
+		function ajax(url) {
+			//1.创建
+			var oAjax = null;
+			if(window.XMLHttpRequest) {
+				oAjax = new XMLHttpRequest(); //ie6以上
+			} else {
+				oAjax = new ActiveXObject("Microsoft.XMLHTTP"); //ie6
+			}
+			if(oAjax != null) {
+
+				//2.连接服务器，open(方法，url，是否异步)
+				//oAjax.open('GET'，url，true);
+				oAjax.open('POST',
+					url, true);
+				//3.发送请求
+				oAjax.send();
+				//4.接收返回 OnReadyStateChange
+				oAjax.onreadystatechange = function() { //onreadystatechange事件
+					if(oAjax.readyState == 4) { //readyState属性：请求状态 4是完成（完成不代表成功）
+						if(oAjax.status == 200) { //status属性：请求结果 200代表成功
+							console.log("成功");
+							console.log(oAjax.responseText); //responseText属性：服务器发回给我们的内容
+						} else {
+							console.log("失败");
+						}
+					}
+				}
+			}
+		}
+	</script>
+
+</html>

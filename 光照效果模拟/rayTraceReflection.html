@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        p {
+            margin: 0 100px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="640" height="640"></canvas>
+</body>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var w = canvas.attributes.width.value;
+    var h = canvas.attributes.height.value;
+    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillRect(0, 0, w, h);
+    var imgdata = ctx.getImageData(0, 0, w, h);
+    var pixels = imgdata.data;
+    var i = 0;
+    for (var y = 0; y < h; y++)
+        for (var x = 0; x < w; x++)
+        {
+            pixels[i++] = x / w * 255;
+            pixels[i++] = y / h * 255;
+            pixels[i++] = 0;
+            pixels[i++] = 255;
+        }
+    ctx.putImageData(imgdata, 0, 0);
+
+    //三维向量
+    //构造函数模式
+    var Vector3 = function(x, y, z) { 
+        this.x = x; 
+        this.y = y; 
+        this.z = z;
+    };
+
+    Vector3.prototype = {
+        copy:function(){
+            return new Vector3(this.x, this.y, this.z);
+        },
+        length:function(){
+            return Math.pow(this.x * this.x + this.y * this.y + this.z * this.z,0.5);
+        },
+        sqrLength:function(){
+            return this.x * this.x + this.y * this.y + this.z * this.z;
+        },
+        normalize:function(){
+            //单位向量
+            var inv = 1/this.length(); 
+            return new Vector3(this.x * inv, this.y * inv, this.z * inv);
+        },
+        negate:function(){
+            //反向量
+            return new Vector3(-this.x, -this.y, -this.z);
+        },
+        add:function(v){
+            return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
+        },
+        subtract:function(v){
+            return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
+        },
+        multiply:function(f){
+            //乘
+            return new Vector3(this.x * f, this.y * f, this.z * f);
+        },
+        divide:function(f){
+            //除
+            var invf = 1/f;
+             return new Vector3(this.x * invf, this.y * invf, this.z * invf);
+        },
+        dot:function(v){
+            //点积
+            return this.x * v.x + this.y * v.y + this.z * v.z;
+        },
+        cross:function(v){
+            //叉积
+            //向量积，数学中又称外积、叉积，物理中称矢积、叉乘，是一种在向量空间中向量的二元运算。与点积不同，它的运算结果是一个向量而不是一个标量。并且两个向量的叉积与这两个向量和垂直。
+            return new Vector3(-this.z * v.y + this.y * v.z, this.z * v.x - this.x * v.z, -this.y * v.x + this.x * v.y);
+        } 
+    }
+    Vector3.zero = new Vector3(0, 0, 0);
+
+    var Ray3 = function(origin, direction) { 
+        this.origin = origin;
+        this.direction = direction; 
+    }
+
+    Ray3.prototype = {
+        getPoint : function(t) { 
+            return this.origin.add(this.direction.multiply(t)); 
+        }
+    };
+
+    var Sphere = function(center, radius) {
+        this.center = center;
+        this.radius = radius; 
+    };
+
+    Sphere.prototype = {
+        copy : function() { 
+            return new Sphere(this.center.copy(), this.radius.copy()); 
+        },
+        initialize : function() {
+            this.sqrRadius = this.radius * this.radius;
+        },
+        intersect:function(ray){
+            //ray 光线
+            //o即发谢起点(origin)，d为方向。在本文的例子里，都假设d为单位向量(unit vector)，因此t为距离
+            //|x-c|=r,x=r(t)=o+td
+            //v=o-c
+            //t=-d*v+Math.sqrt((d*v)*(d*v)-(v*v-r*r))
+            var v = ray.origin.subtract(this.center);
+            //(v*v-r*r)
+            var a0 = v.sqrLength() - this.sqrRadius;
+            //dv,点积的结果不是向量
+            var DdotV = ray.direction.dot(v);
+
+            if (DdotV <= 0) {
+                //(d*v)*(d*v)-(v*v-r*r) 
+                var discr = DdotV * DdotV - a0;
+                if (discr >= 0) {
+                    var result = new IntersectResult();
+                    result.geometry = this;
+                    //t
+                    result.distance = -DdotV - Math.pow(discr,0.5);
+                    //
+                    result.position = ray.getPoint(result.distance);
+                    result.normal = result.position.subtract(this.center).normalize();
+                    return result;
+                }
+            }
+            return IntersectResult.noHit;
+        }
+    }
+
+    IntersectResult = function() {
+        this.geometry = null;
+        this.distance = 0;
+        this.position = Vector3.zero;
+        this.normal = Vector3.zero;
+    };
+    
+    IntersectResult.noHit = new IntersectResult();
+
+    var PerspectiveCamera = function(eye, front, up, fov) { 
+        this.eye = eye; 
+        this.front = front; 
+        this.refUp = up; 
+        this.fov = fov; 
+    };
+    PerspectiveCamera.prototype = {
+        initialize:function(){
+            this.right = this.front.cross(this.refUp);//叉积
+            this.up = this.right.cross(this.front);
+            this.fovScale = Math.tan(this.fov * 0.5 * Math.PI / 180);
+        },
+        generateRay : function(x, y) {
+            var r = this.right.multiply((x - 0.5) * 2 * this.fovScale);
+            var u = this.up.multiply((y - 0.5) * 2 * this.fovScale);
+            //因之后的计算需要，最后把d变成单位向
+            return new Ray3(this.eye, this.front.add(r).add(u).normalize());
+        }
+    }
+
+function renderDepth(canvas, scene, camera, maxDepth) {
+    // 从canvas取得imgdata和pixels，跟之前的代码一样
+    // ...
+ 
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;            
+            var ray = camera.generateRay(sx, sy);
+            var result = scene.intersect(ray);
+            if (result.geometry) {
+                var depth = 255 - Math.min((result.distance / maxDepth) * 255, 255);
+                pixels[i    ] = depth;
+                pixels[i + 1] = depth;
+                pixels[i + 2] = depth;
+                pixels[i + 3] = 255;
+            }
+            i += 4;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+}
+
+function renderNormal(canvas, scene, camera) {
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;            
+            var ray = camera.generateRay(sx, sy);
+            var result = scene.intersect(ray);
+            if (result.geometry) {
+                pixels[i    ] = (result.normal.x + 1) * 128;
+                pixels[i + 1] = (result.normal.y + 1) * 128;
+                pixels[i + 2] = (result.normal.z + 1) * 128;
+                pixels[i + 3] = 255;
+            }
+            i += 4;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+}
+
+var r = 10;
+// renderDepth(
+//     document.getElementById('canvas'),
+//     new Sphere(new Vector3(0, 0, -10), r),
+//     new PerspectiveCamera(new Vector3(0, 0, 10),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
+//     20);
+
+var animate = function(){
+    draw();
+    window.requestAnimationFrame(animate,canvas);
+}
+draw = function(){
+    ctx.clearRect(0, 0, w, h);
+    renderDepth(
+    document.getElementById('canvas'),
+    new Sphere(new Vector3(0, 0, -10), r),
+    new PerspectiveCamera(new Vector3(0, 0, 10),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90),
+    20);
+}
+
+//animate();
+document.addEventListener( 'wheel', function( e ) {
+    if(r>=0){
+        r += e.deltaY * 0.01;
+    }else{
+        r =0;
+    }
+    
+}, false )
+
+var Color = function(r, g, b) { this.r = r; this.g = g; this.b = b };
+ 
+ Color.prototype = {
+     copy : function() { return new Color(this.r, this.g, this.b); },
+     add : function(c) { return new Color(this.r + c.r, this.g + c.g, this.b + c.b); },
+     multiply : function(s) { return new Color(this.r * s, this.g * s, this.b * s); },
+     modulate : function(c) { return new Color(this.r * c.r, this.g * c.g, this.b * c.b); }
+ };
+  
+ Color.black = new Color(0, 0, 0);
+ Color.white = new Color(1, 1, 1);
+ Color.red = new Color(1, 0, 0);
+ Color.green = new Color(0, 1, 0);
+ Color.blue = new Color(0, 0, 1);
+
+ //方格材料
+ var CheckerMaterial = function(scale, reflectiveness) { 
+     //scale的意义为1坐标单位有多少个格子
+     this.scale = scale; 
+     this.reflectiveness = reflectiveness; 
+    };
+ 
+ CheckerMaterial.prototype = {
+     sample : function(ray, position, normal) {
+         return Math.abs((Math.floor(position.x * 0.1) + Math.floor(position.z * this.scale)) % 2) < 1 ? Color.black : Color.white;
+     }
+ };
+
+
+//Phong和Blinn-Phong是计算镜面反射光的两种光照模型
+var PhongMaterial = function(diffuse, specular, shininess, reflectiveness) {
+    //漫射(diffuse)和镜射(specular)
+    this.diffuse = diffuse;
+    this.specular = specular;
+    this.shininess = shininess;
+    this.reflectiveness = reflectiveness;
+};
+ 
+// global temp
+var lightDir = new Vector3(1, 1, 1).normalize();
+var lightColor = Color.white;
+
+PhongMaterial.prototype = {
+    sample: function(ray, position, normal) {
+        var NdotL = normal.dot(lightDir);
+        var H = (lightDir.subtract(ray.direction)).normalize();
+        var NdotH = normal.dot(H);
+        var diffuseTerm = this.diffuse.multiply(Math.max(NdotL, 0));
+        var specularTerm = this.specular.multiply(Math.pow(Math.max(NdotH, 0), this.shininess));
+        return lightColor.modulate(diffuseTerm.add(specularTerm));
+    }
+};
+
+// rayTrace.htm
+function rayTrace(canvas, scene, camera) {
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;            
+            var ray = camera.generateRay(sx, sy);
+            var result = scene.intersect(ray);
+            if (result.geometry) {
+                var color = result.geometry.material.sample(ray, result.position, result.normal);
+                pixels[i] = color.r * 255;
+                pixels[i + 1] = color.g * 255;
+                pixels[i + 2] = color.b * 255;
+                pixels[i + 3] = 255;
+            }
+            i += 4;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+} 
+
+var Plane = function(normal, d) { 
+    this.normal = normal; 
+    this.d = d; 
+};
+ 
+Plane.prototype = {
+    copy : function() { return new plane(this.normal.copy(), this.d); },
+ 
+    initialize : function() {
+        this.position = this.normal.multiply(this.d);
+    },
+     
+    intersect : function(ray) {
+        var a = ray.direction.dot(this.normal);
+        if (a >= 0)
+            return IntersectResult.noHit;
+ 
+        //var b = this.normal.dot(ray.origin.subtract(this.position));
+        //上一个是原来的，没看懂
+        //下面这个是我自己推导出来的
+        //公式n*x=p(this.d),x=o+td
+        var b = this.d-(ray.origin.dot(this.normal));
+        var result = new IntersectResult();
+        result.geometry = this;
+        result.distance = b / a;
+        result.position = ray.getPoint(result.distance);
+        result.normal = this.normal;
+        return result;
+    }
+};
+
+Union = function(geometries) { this.geometries = geometries; };
+ 
+Union.prototype = {
+    initialize: function() {
+        for (var i in this.geometries)
+            this.geometries[i].initialize();
+    },
+     
+    intersect: function(ray) {
+        var minDistance = Infinity;
+        var minResult = IntersectResult.noHit;
+        for (var i in this.geometries) {
+            var result = this.geometries[i].intersect(ray);
+            if (result.geometry && result.distance < minDistance) {
+                minDistance = result.distance;
+                minResult = result;
+            }
+        }
+        return minResult;
+    }
+};
+
+function rayTraceRecursive(scene, ray, maxReflect) {
+    var result = scene.intersect(ray);
+     
+    if (result.geometry) {
+        var reflectiveness = result.geometry.material.reflectiveness;
+        var color = result.geometry.material.sample(ray, result.position, result.normal);
+        color = color.multiply(1 - reflectiveness);
+         
+        if (reflectiveness > 0 && maxReflect > 0) {
+            var r = result.normal.multiply(-2 * result.normal.dot(ray.direction)).add(ray.direction);
+            ray = new Ray3(result.position, r);
+            var reflectedColor = rayTraceRecursive(scene, ray, maxReflect - 1);
+            color = color.add(reflectedColor.multiply(reflectiveness));
+        }
+        return color;
+    }
+    else
+        return Color.black;
+}
+
+function rayTraceReflection(canvas, scene, camera, maxReflect) {
+    // 从canvas取得imgdata和pixels，跟之前的代码一样
+    // ...
+ 
+    scene.initialize();
+    camera.initialize();
+ 
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;
+            var ray = camera.generateRay(sx, sy);
+            var color = rayTraceRecursive(scene, ray, maxReflect);
+            pixels[i++] = color.r * 255;
+            pixels[i++] = color.g * 255;
+            pixels[i++] = color.b * 255;
+            pixels[i++] = 255;
+        }
+    }
+ 
+    ctx.putImageData(imgdata, 0, 0);
+}
+
+// var plane = new Plane(new Vector3(0, 1, 0), 0);
+// var sphere1 = new Sphere(new Vector3(-10, 10, -10), 10);
+// var sphere2 = new Sphere(new Vector3(10, 10, -10), 10);
+// plane.material = new CheckerMaterial(0.1);
+// sphere1.material = new PhongMaterial(Color.red, Color.white, 16);
+// sphere2.material = new PhongMaterial(Color.blue, Color.white, 16);
+// rayTrace(
+//     document.getElementById('rayTraceCanvas'), 
+//     new Union([plane, sphere1, sphere2]),
+//     new PerspectiveCamera(new Vector3(0, 5, 30), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
+//     //new PerspectiveCamera(new Vector3(0, 0, 50),new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90));
+
+//向量OA=(x,y),绕其起点O沿逆时针方向旋转α角得到向量OB=(xcosα-ysinα,xsiaα+ycosα)
+
+var eye = {
+    x:0,
+    y:5,
+    z:30
+};
+var front = {
+    x:0,
+    y:0,
+    z:-1
+}
+var up = {
+    x:0,
+    y:1,
+    z:0
+}
+var fov = 60;
+
+var plane = new Plane(new Vector3(0, 1, 0), 0);
+var sphere1 = new Sphere(new Vector3(-10, 10, -10), 10);
+var sphere2 = new Sphere(new Vector3(10, 10, -10), 10);
+plane.material = new CheckerMaterial(0.1, 0.5);
+sphere1.material = new PhongMaterial(Color.red, Color.white, 16, 0.25);
+sphere2.material = new PhongMaterial(Color.blue, Color.white, 16, 0.25);
+rayTraceReflection(
+    document.getElementById('rayTraceReflectionCanvas'), 
+    new Union([plane, sphere1, sphere2]),
+    new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+    1);
+
+
+    document.onkeydown=function(event){
+            
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            var currKey=e.keyCode||e.which||e.charCode;
+            //console.log("按下键盘");
+            if(e){ 
+                //console.log(currKey.toString());
+                switch (currKey.toString()){
+                    case "87":
+                        //keyCode 87 = w
+                        eye.y++;
+                        break;
+                    case "68":
+                        //keyCode 68 = d
+                        eye.x++;
+                        break;
+                    case "65":
+                        //keyCode 65 = a A
+                        eye.x--;
+                        break;
+                    case "83":
+                        //keyCode 83 = s S
+                        eye.y--;
+                        break;
+                    case "37":
+                        //左箭头
+                        //console.log("按 左箭头");
+                        var q = -10 * Math.PI/180;
+                        var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                        front.x = x;
+                        front.z = z;
+                        break;
+                    case "38":
+                        //上箭头
+                        console.log("按 上箭头");
+                        var q = 10 * Math.PI/180;
+                        var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                        var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                        var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                        front.y = y;
+                        front.z = z;
+                        up.y = y2;
+                        up.z = z2;
+                        break;
+                    case "39":
+                        //右箭头
+                        //console.log("按 右箭头");
+                        //OB=(xcosα-ysinα,xsiaα+ycosα)
+                        var q = 10 * Math.PI/180;
+                        var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                        front.x = x;
+                        front.z = z;
+                        break;
+                    case "40":
+                        //下箭头
+                        console.log("按 下箭头");
+                        var q = -10 * Math.PI/180;
+                        var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                        var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                        var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                        var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                        front.y = y;
+                        front.z = z;
+                        up.y = y2;
+                        up.z = z2;
+                        break;
+                }
+
+                rayTraceReflection(
+                document.getElementById('rayTraceReflectionCanvas'), 
+                new Union([plane, sphere1, sphere2]),
+                new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+                1);
+            }
+        }
+        var mouse = {
+            x:0,
+            y:0,
+            isdown:false,
+            mousemovehandler:function(e){
+                //console.log("move");
+                if(this.isdown){
+                    if(this.x && this.y){
+                            var q = (e.clientX-this.x)*0.1 * Math.PI/180;
+                            var x = front.x*Math.cos(q)-front.z*Math.sin(q);
+                            var z = front.x*Math.sin(q)+front.z*Math.cos(q);
+                            front.x = x;
+                            front.z = z;
+
+                            var q = -(e.clientY-this.y)*0.1 * Math.PI/180;
+                            var y = front.y*Math.cos(q)-front.z*Math.sin(q);
+                            var z = front.y*Math.sin(q)+front.z*Math.cos(q);
+                            var y2 = up.y*Math.cos(q)-up.z*Math.sin(q);
+                            var z2 = up.y*Math.sin(q)+up.z*Math.cos(q);
+                            front.y = y;
+                            front.z = z;
+                            up.y = y2;
+                            up.z = z2;
+                    }else{
+                        this.x=e.clientX;
+                        this.y=e.clientY;
+                    }
+                    
+
+                    rayTraceReflection(
+                    document.getElementById('rayTraceReflectionCanvas'), 
+                    new Union([plane, sphere1, sphere2]),
+                    new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
+                    1);
+                }
+                this.x=e.clientX;
+                this.y=e.clientY;
+            },
+            mousedownhandler:function(){
+                console.log("down");
+                this.isdown=true;
+            },
+            mouseuphandler:function(){
+                console.log("up");
+                this.isdown=false;
+            }
+
+        }
+        canvas.addEventListener("mousemove", mouse.mousemovehandler, false);
+        canvas.addEventListener("mousedown", mouse.mousedownhandler, false);
+        canvas.addEventListener("mouseup", mouse.mouseuphandler, false);
+
+</script>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>菜鸟教程(runoob.com)</title>
+		<style>
+			/*.button {
+				position: relative;
+				background-color: #4CAF50;
+				border: none;
+				font-size: 30px;
+				color: #FFFFFF;
+				margin: 0;
+				width: 200px;
+				height: 75px;
+				text-align: center;
+				-webkit-transition-duration: 0.4s;
+				
+				transition-duration: 0.4s;
+				text-decoration: none;
+				overflow: hidden;
+				cursor: pointer;
+					
+			}*/
+			
+			/*.button:after {
+				content: "";
+				
+				background: #90EE90;
+				display: block;
+				position: absolute;
+			   padding-top: 300px;
+				padding-left: 300px;
+				margin-left: -25%;
+				margin-top: -75%;
+				opacity: 0; 
+				border-radius: 10000px;
+				transition: all 1s;
+			}
+			
+			.button:active:after {
+				padding: 0;
+				margin-left: 50%;
+				margin-top: -10%;
+				opacity: 1;
+				transition: 0s
+			}*/
+		</style>
+		<style>
+			/*.button {
+				font-size: 30px;
+				color: #FFF;
+				display: inline-block;
+				vertical-align: middle;
+				-webkit-transform: perspective(1px) translateZ(0);
+				transform: perspective(1px) translateZ(0);
+				box-shadow: 0 0 1px transparent;
+				position: relative;
+				
+			}*/
+			
+			/*.button:before {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				left: 50%;
+				right: 50%;
+				bottom: 0;
+				background: #ccc;
+				height: 8px;
+				-webkit-transition-property: left, right;
+				transition-property: left, right;
+				-webkit-transition-duration: 0.3s;
+				transition-duration: 0.3s;
+				-webkit-transition-timing-function: ease-out;
+				transition-timing-function: ease-out;
+				
+			}
+			
+			.button:hover:before {
+				left: 0;
+				right: 0;
+			}*/
+		</style>
+	</head>
+
+	<body>
+
+		<h2>按钮动画 - 波纹效果</h2>
+
+		<button class="buttonRipple">Click Me</button>
+
+	</body>
+<script>
+   
+function addNewStyle(newStyle) {
+            var styleElement = document.getElementById('styles_js');
+
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.type = 'text/css';
+                styleElement.id = 'styles_js';
+                document.getElementsByTagName('head')[0].appendChild(styleElement);
+            }
+            
+            styleElement.appendChild(document.createTextNode(newStyle));
+        }
+
+        addNewStyle(".buttonRipple {position: relative;"+
+				"background-color: #4CAF50;"+
+				"border: none;"+
+				"font-size: 30px;"+
+				"color: #FFFFFF;"+
+				"margin: 0;"+
+				"width: 200px;"+
+				"height: 75px;"+
+				"text-align: center;"+
+				"-webkit-transform: perspective(1px) translateZ(0);"+
+				"transform: perspective(1px) translateZ(0);"+
+				"-webkit-transition-duration: 0.4s;"+
+				"transition-duration: 0.4s;"+
+				"text-decoration: none;"+
+				"overflow: hidden;"+
+				"cursor: pointer;}"+ 
+
+				'.buttonRipple:after {'+
+				'content: "";'+
+				'background: #90EE90;'+
+				'display: block;'+
+				'position: absolute;'+
+			    'padding-top: 300px;'+
+				'padding-left: 300px;'+
+				'margin-left: -25%;'+
+				'margin-top: -75%;'+
+				'opacity: 0; '+
+				'border-radius: 10000px;'+
+				'transition: all 1s;}'+
+			
+				'.buttonRipple:active:after {'+
+				'padding: 0;'+
+				'margin-left: 50%;'+
+				'margin-top: -10%;'+
+				'opacity: 1;'+
+				'transition: 0s}'+
+				
+				'.buttonRipple:before {'+
+				'content: "";'+
+				'position: absolute;'+
+				'z-index: -1;'+
+				'left: 50%;'+
+				'right: 50%;'+
+				'bottom: 0;'+
+				'background: #ccc;'+
+				'height: 8px;'+
+				'-webkit-transition-property: left, right;'+
+				'transition-property: left, right;'+
+				'-webkit-transition-duration: 0.3s;'+
+				'transition-duration: 0.3s;'+
+				'-webkit-transition-timing-function: ease-out;'+
+				'transition-timing-function: ease-out;}'+
+			
+				'.buttonRipple:hover:before {'+
+				'left: 0;right: 0;}');
+</script>
+</html>

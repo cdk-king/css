@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Test0901</title>
+</head>
+<style type="text/css">
+	html,body {
+	overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+	background-color: #fff;
+	/*background: -webkit-gradient(linear, 0 0, 0 bottom, from(#261300), to(#21333C)); */
+}
+	#canvas{
+		/*border: 1px solid red;*/
+    	width: 100%;
+		
+		margin: 0;
+    	padding: 0;
+	}
+	#box{
+		width: 100%;
+    	height: 100%;
+	    margin: 0;
+	    padding: 0;
+	}
+</style>
+<body>
+	<div id="box">
+		<canvas id="canvas" width="1000px" height="800px">
+				浏览器不支持canvas
+		</canvas>
+	</div>
+			
+</body>
+<script src='js/dat.gui.min.js'></script>
+<script type="text/javascript">
+		var canvas = document.getElementById('canvas');
+		var box = document.getElementById('box');
+		var width = box.offsetWidth;
+		var height = box.offsetHeight;
+		canvas.setAttribute('width',width);
+		canvas.setAttribute('height',height);
+		var context = canvas.getContext('2d');
+		var th = 0;
+		var movedir = 1;
+		var centerX = width/2;
+		var centerY = height/2;
+		var mouseX = 0;
+		var mouseY = 0;
+		var rotationX = 6/360;
+		var rotationY = 6/360;
+		var rotationSpeed = 1;
+		var transparent = 0.3;
+		var grad1 = 'rgba(0, 0, 0,'+ transparent +')';
+		var grad2 = 'rgba(0, 0, 0,'+ transparent +')';
+		
+		var COLOR = 'hsl(hue%, 100%, 70%)';
+		var Particle = function(){
+			this.x = 0;
+			this.y = 0;
+			this.z = 0; 
+			this.color = 'hsl(hue%, 100%, 70%)';
+		}
+		var particles = [];
+		
+		for(var i = 0;i<500;i++){
+				var particle = new Particle();
+
+				particles.push(particle);
+		}
+		
+		creatSphere();
+		function creatSphere(){
+			for(var i = 0;i<500;i++){
+				// -1 | 1
+				var cosTheta = Math.random() * 2 - 1,
+					sinTheta = Math.sqrt(1 - cosTheta * cosTheta),
+					phi = Math.random() * 2 * Math.PI;
+				
+				//球
+				particles[i].x = 140 * sinTheta * Math.cos(phi);
+				particles[i].y = 140 * sinTheta * Math.sin(phi);
+				particles[i].z = 140 * cosTheta;
+				particles[i].r = 1;
+				particles[i].phi = phi;
+				particles[i].hue = phi*100;
+				
+		}
+		}
+		function creatCube(){
+			for(var i = 0;i<500;i++){
+				var cosTheta = Math.random() * 2 - 1,
+					sinTheta = Math.sqrt(1 - cosTheta * cosTheta),
+					phi = Math.random() * 2 * Math.PI;
+				
+				//正方体
+				particles[i].x = 40 * Math.floor((Math.random() * 5) - 2) ;
+				particles[i].y = 40 * Math.floor((Math.random() * 5) - 2) ;
+				particles[i].z = 40 * Math.floor((Math.random() * 5) - 2) ;
+				particles[i].phi = phi;
+				particles[i].hue = phi*100;
+
+		}
+		}
+		
+		function rotateX(angle,particle){
+				//console.log(particle.x);
+				var sin = Math.sin(angle);
+				var cos = Math.cos(angle);
+				var r2 = Math.pow(particle.y,2)+Math.pow(particle.z,2);
+				var r = Math.sqrt(r2);
+				
+				//var tan = particle.y/particle.z;
+				//var sinTheta = particle.y/r;
+				//var cosTheta = particle.z/r;
+				
+				
+				var y = particle.y * cos - particle.z * sin;
+				var z = particle.z * cos + particle.y * sin;
+				
+				particle.y = y;
+				particle.z = z;
+				
+		}
+		
+		function rotateY(angle,particle){
+				//console.log(particle.x);
+				var sin = Math.sin(angle);
+				var cos = Math.cos(angle);
+				var r2 = Math.pow(particle.y,2)+Math.pow(particle.z,2);
+				var r = Math.sqrt(r2);
+				
+				x = particle.x * cos - particle.z * sin,
+				z = particle.z * cos + particle.x * sin;
+				
+				particle.x = x;
+				particle.z = z;
+				
+			}
+		
+		function rotateZ(angle,particle){
+				
+				//console.log(particle.x);
+				var sin = Math.sin(angle);
+				var cos = Math.cos(angle);
+				var r2 = Math.pow(particle.y,2)+Math.pow(particle.x,2);
+				var r = Math.sqrt(r2);
+				
+				//Math.cos(angle+particle.phi)			
+				//var y = Math.sin(angle+particle.phi)*r;
+				//var x = Math.cos(angle+particle.phi)*r;
+				
+				var x = particle.x * cos - particle.y * sin;
+				var y = particle.y * cos + particle.x * sin;
+				
+				particle.y = y;
+				particle.x = x;
+				
+		}
+		
+		
+		function draw(){
+			//context.clearRect(0,0,2000,2000);  
+			//console.log(2*Math.PI*th/360);
+			if(mouseX!=0){
+				//旋转角度大小
+				rotationX = rotationSpeed*(mouseX*10/centerX)/360;
+				rotationY = rotationSpeed*(mouseY*10/centerY)/360;
+			}
+			//设置透明度产生拖动轨迹
+			var grad = context.createLinearGradient(0, 0,0, height);
+					/* 指定几个颜色 */
+					grad.addColorStop(0, grad1); //
+					grad.addColorStop(1, grad2); //
+			context.fillStyle = grad;
+			context.fillRect(0, 0, this.width, this.height);
+			for(var i = 0;i<500;i++){
+				var hue = (100*th/360);
+				var color = COLOR.replace('hue%',particles[i].hue+th);
+
+				//rotateZ(rotationX,particles[i]);
+				rotateY(rotationX,particles[i]);
+				rotateX(rotationY,particles[i]);
+				//远小近大
+			
+				var scale = 350 / (350 + particles[i].z); //缩放比列 
+				context.beginPath();
+				context.fillStyle = particles[i].color;
+				particles[i].r = 1*Math.abs(scale);
+				var scan = 200/(particles[i].z+200);
+				//var scan = 150/(particles[i].z+150);
+				context.arc(particles[i].x*scan+centerX,particles[i].y*scan+centerY,particles[i].r,0,2*Math.PI);
+				context.fill();
+				particles[i].color = color;
+				//console.log(particles[i].color);
+				//context.stroke();
+			}
+			th++;
+			th %= 360;
+			requestAnimationFrame(draw);
+			
+			
+		}
+		draw();
+		document.addEventListener('mousemove',function(e){
+			var x = centerX - e.clientX;
+			var y = centerY - e.clientY;
+			mouseX = x;
+			mouseY = y;
+			console.log()
+		})
+		document.addEventListener('click',function(e){ 
+				
+				if(movedir==1){
+					//creatCube();
+					movedir=2;
+					 
+				}else{
+					//creatSphere();
+					movedir=1;
+				}
+		})
+		
+		var params = {
+			exposure: 0.68,
+			速度1:1,
+			透明度1:transparent,
+			名字:"粒子球",
+			颜色1:"rgba(0, 0, 0,0)", 
+			颜色2:"rgba(0, 0, 0,0)",
+			形状:0
+		};
+		
+		var gui = new dat.GUI();
+		var nameController1 = gui.add(params, '名字');
+		var speedController1 = gui.add(params, '速度1', 0, 5);
+		var transparentController1 = gui.add(params, '透明度1', 0, 1);
+		var colorController1 = gui.addColor(params, '颜色1');
+		var colorController2 = gui.addColor(params, '颜色2');
+		var shapeController1 = gui.add(params, '形状', { 球体: 0, 正方体: 1 } );
+		gui.open();
+		
+		speedController1.onChange(function(value) {
+		    console.log("速度1:" + params.速度1);		   
+		     rotationSpeed = params.速度1;
+		});
+		transparentController1.onChange(function(value) {
+		    console.log("透明度1:" + params.透明度1);		   
+		    transparent = params.透明度1.toFixed(2); 
+		    grad1 = params.颜色1.substring(0,params.颜色1.length-3)+","+transparent+")";
+		    grad2 = params.颜色2.substring(0,params.颜色2.length-3)+","+transparent+")";
+		});
+		
+		colorController1.onChange(function(value) {
+		    console.log("颜色1:" + params.颜色1.substring(0,params.颜色1.length-3)+","+transparent+")");
+		    grad1 = params.颜色1.substring(0,params.颜色1.length-3)+","+transparent+")";
+		    
+		});
+		colorController2.onChange(function(value) {
+		    console.log("颜色2:" + params.颜色2.substring(0,params.颜色2.length-3)+","+transparent+")");
+		   	grad2 = params.颜色2.substring(0,params.颜色2.length-3)+","+transparent+")";
+		});
+		shapeController1.onChange(function(value) {
+		    console.log("颜色2:" + params.形状);
+		   	if(params.形状 == 0){
+		   		creatSphere();
+		   	}
+		   	if(params.形状 == 1){
+		   		creatCube();
+		   	}
+		});
+    </script>
+</html>

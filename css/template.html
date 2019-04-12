@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>JavaScript模板引擎简单示例</title>
+	</head>
+
+	<body>
+		<div class="result"></div>
+
+		<script type="template" id="template">
+			<h2>
+				
+		      <a href="{{href}}">
+		        {{title}}
+		      </a>
+		    </h2>
+			<img src="{{imgSrc}}" alt="{{title}}" style="width: 100px;">
+			
+		</script>
+	</body>
+	<script>
+		var data = [{
+				title: "标题1",
+				href: "元素拖动.html",
+				imgSrc: "img/cdk.png"
+			},
+			{
+				title: "标题2",
+				href: "元素拖动.html",
+				imgSrc: "img/cdk.png"
+			},
+			{
+				title: "标题3",
+				href: "元素拖动.html",
+				imgSrc: "img/cdk.png"
+			}
+		];
+		template = document.querySelector('#template').innerHTML,
+			result = document.querySelector('.result'),
+			i = 0, len = data.length,
+			fragment = '';
+
+		for(; i < len; i++) {
+			fragment += template
+				.replace("\{\{title\}\}", data[i].title)
+				.replace(/\{\{href\}\}/, data[i].href)
+				.replace(/\{\{imgSrc\}\}/, data[i].imgSrc);
+		}
+
+		result.innerHTML = fragment;
+	</script>
+
+</html>

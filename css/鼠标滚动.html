@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>鼠标滚动</title>
+	</head>
+
+	<body>
+		<h1>示例说明</h1>
+		<h2>滑动鼠标滚轮即可出发Alert事件</h2>
+		<h2>键盘的上下键和空格键也能触发Alert事件</h2>
+		<span>具体调用方法代码：</span><br />
+		<span>cdk_mousewheel("1",function(){alert("cdk1")});</span><br />
+		<span>cdk_mousewheel("2",function(){alert("cdk2")});</span><br />
+		<span>cdk_mousewheel(事件标识（"1"为下，"2"为上）,触发的事件(回调方法));</span>
+	</body>
+	<script type="text/javascript" src="js/cdk_plugin_onMouseWheel.js" ></script>
+	<script>
+		cdk_mousewheel("1",function(){alert("cdk1")});
+		cdk_mousewheel("2",function(){alert("cdk2")});
+	</script>
+
+</html>

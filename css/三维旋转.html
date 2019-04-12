@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			/*background: #21333C;*/
+			background: #000;
+		}
+		
+		#snailbait-fps {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			/*border: 1px solid red;*/
+			display: none;
+			opacity: 0;
+		}
+		
+		#snailbait-score {
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			font: 46px fantasy;
+			text-align: center;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			-webkit-transition: opacity 5s;
+			-moz-transition: opacity 5s;
+			-o-transition: opacity 5s;
+			transition: opacity 5s;
+			display: none;
+			opacity: 0;
+		}
+	</style>
+
+	<body>
+		<div id="snailbait-fps"></div>
+		<div id="snailbait-score">0</div>
+		<div id="snailbait-reset">R</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script src='js/dat.gui.min.js'></script>
+	<script>
+		var fpsElement = document.getElementById("snailbait-fps");
+		var scoreElement = document.getElementById("snailbait-score");
+		var lastFpsUpdateTime = 0;
+		var lastAnimationFrameTime = 0;
+		var fps = 0;
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+
+		var balls = [];
+		var numBalls = 100;
+		var centerX = width / 2;
+		var centerY = height / 2;
+		var mouseX = centerX;
+		var mouseY = centerY;
+		var angleX = 0;
+		var angleY = 0;
+		var speed = 2;
+		var direction = 1;
+		var ballColor = "rgba(0,0,100,255)";
+
+		var Ball = function(r, color) {
+			this.r = r;
+			this.color = color;
+			this.active = true;
+			//物体的 2D坐标
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			//物体的 3D坐标
+			this.xpos = 0;
+			this.ypos = 0;
+			this.zpos = 0;
+			this.realr = r;
+			this.randomx = 0;
+			this.randomy = 0;
+			this.t = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+			this.mass = 10;
+			//球的体积公式
+			this.mass = (4 / 3) * Math.PI * this.r * this.r * this.r;
+		}
+		Ball.prototype = {
+			draw: function(ctx) {
+				context.save();
+				ctx.translate(this.x,this.y);
+				var gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.r );
+			        gradient.addColorStop(0,"rgba(255,255,255,1)");
+			        gradient.addColorStop(0.2,"rgba(0,255,255,1)");
+			        gradient.addColorStop(0.3,ballColor);
+			        gradient.addColorStop(1,"rgba(0,0,0,0.1)");
+			        
+			    	ctx.fillStyle = gradient;
+			    	ctx.beginPath();
+			    	ctx.arc(0, 0, this.r, 0, Math.PI * 2, false);
+				//ctx.fillStyle = this.color;
+				ctx.fill();
+				context.restore();
+			}
+		}
+
+		for(var i = 0; i < numBalls; i++) {
+			var size = 15,
+				ball = new Ball(size, 'red');
+
+//				ball.xpos = Math.random()*1000 - 500;
+//              ball.ypos = Math.random()*1000 - 500;
+//              ball.zpos = Math.random()*1000 - 500;
+			ball.xpos = Math.random() * height - centerY;
+			ball.ypos = Math.random() * height - centerY;
+		 	ball.zpos = Math.random() * height - centerY;
+
+			balls.push(ball);
+
+		}
+
+		function calculateFps(now) {
+			fps = 1 / (now - lastAnimationFrameTime) * 1000 * 1;
+			//console.log(now - this.lastAnimationFrameTime);
+			if(now - lastFpsUpdateTime > 1000) {
+				lastFpsUpdateTime = now;
+				fpsElement.innerHTML = fps.toFixed(0) + ' fps';
+				//console.log(fps.toFixed(0));
+			}
+			lastAnimationFrameTime = now;
+
+			return fps;
+		}
+
+		function rotateY(ball, angle) {
+			var cos = Math.cos(angle),
+				sin = Math.sin(angle),
+				x1 = ball.xpos * cos - ball.zpos * sin,
+				z1 = ball.zpos * cos + ball.xpos * sin;
+			
+			ball.xpos = x1;
+			//console.log(ball.xpos);
+			ball.zpos =  z1;
+
+		}
+
+		function rotateX(ball, angle) {
+			var cos = Math.cos(angle),
+				sin = Math.sin(angle),
+				y1 = ball.ypos * cos - ball.zpos * sin,
+				z1 = ball.zpos * cos + ball.ypos * sin;
+
+			ball.ypos =  y1;
+			ball.zpos =  z1;
+		}
+
+		function drawBall(ball1, index) {
+			var fl = 400;
+			if(ball1.zpos > -fl ){
+			var scale = fl/ (fl + ball1.zpos); //缩放比列
+			ball1.x = ball1.xpos*scale;//新坐标 
+
+			ball1.y = ball1.ypos*scale;
+			ball1.r = ball1.realr*scale;
+			//ball1.z--;
+			ball1.draw(context);
+			}else{
+				var scale = height*0.5 / (height*0.5 + ball1.zpos); //缩放比列
+			ball1.x = ball1.xpos*scale;//新坐标 
+
+			ball1.y = ball1.ypos*scale;
+			ball1.r = ball1.realr*scale;
+			}
+			
+
+		}
+
+		function move(ball, index) {
+			rotateY(ball, angleX);
+			rotateX(ball, angleY);
+		}
+		
+		function drawLine(ball0, index) {
+			for(var i = index; i < balls.length; i++) {
+				var ball1 = balls[i];
+				if(ball0 != ball1) {
+					var dx = ball1.x - ball0.x,
+						dy = ball1.y - ball0.y,
+						dist = Math.sqrt(dx * dx + dy * dy);
+
+					if(dist < 100) {
+						context.save();
+						context.strokeStyle = "rgba(255,255,255,0.5)";
+						context.beginPath();
+						context.lineWidth = (1.0 - dist / 100) * 2.5;
+						context.globalAlpha = 1.0 - dist / 50;
+						context.moveTo(ball0.x, ball0.y);
+						context.lineTo(ball1.x, ball1.y);
+						context.closePath()
+						context.stroke()
+						context.restore();
+					}
+				}
+			}
+		}
+		
+		drawFrame();
+
+		function drawFrame(now) {
+			//calculateFps(now);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			angleX = (mouseX * 1 / centerX) / 360*speed;
+			angleY = (mouseY * 1 / centerY) / 360*speed;
+			angleX = angleX*direction;
+			angleY = angleY*direction;
+			balls.forEach(move);
+			//绘制小球
+			context.translate(centerX,centerY);
+			balls.forEach(drawBall);
+			//绘制连线
+			//balls.forEach(drawLine);
+			context.translate(-centerX,-centerY);
+			
+
+			window.requestAnimationFrame(drawFrame, canvas);
+		}
+		document.addEventListener('mousemove', function(e) {
+			var x = centerX - e.clientX;
+			var y = centerY - e.clientY;
+			mouseX = x;
+			mouseY = y;
+			//console.log(mouseX);
+		})
+		
+		var params = {
+			方向: false,
+			exposure: 0.68,
+			速度:2,
+			名字:"cdk",
+			颜色:"rgba(0,0,100,255)", 
+			背景颜色:"#261300"
+		};
+
+		var gui = new dat.GUI();
+		//gui.add(params, '名字');
+		var speedController1 = gui.add(params, '速度', 0, 5);
+		var directionController = gui.add(params, '方向');
+		var colorController1 = gui.addColor(params, '颜色');
+		var colorController2 = gui.addColor(params, '背景颜色');
+		gui.open();
+		
+		speedController1.onChange(function(value) {
+		    console.log("速度:" + params.速度);		   
+			speed = params.速度;
+		});
+		directionController.onChange(function(value) {
+		    console.log("方向:" + params.方向);		   
+		    	direction =direction* -1;
+		});
+		colorController1.onChange(function(value) {
+		    console.log("颜色:" + params.颜色);
+			ballColor = params.颜色;
+		});
+		colorController2.onChange(function(value) {
+		    console.log("背景颜色:" + params.背景颜色);
+		   	document.body.style.background = "-webkit-gradient(linear, 0 0, 0 bottom, from("+params.背景颜色+"), to(#000000))";
+		});
+	</script>
+
+</html>

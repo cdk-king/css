@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>cdk的画板</title>
+	</head>
+	<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+	<style>
+		#myCanvas {
+			background-color: #ECECEC;
+			border: 1px solid #BFBFBF;
+		}
+	</style>
+
+	<body>
+		<canvas id="myCanvas"></canvas>
+		<div>
+			<button onclick="clean();">清 空</button>
+			<button onclick="save();">生成图片</button>
+		</div>
+		<img id='img' />
+		<script type="text/javascript">
+			var canvas;
+			var board;
+			var onpush = false;
+			var last = {};
+			var img = document.getElementById('img');
+			canvas = document.getElementById('myCanvas');
+			canvas.height = 300;
+			canvas.width = 500;
+			board = canvas.getContext('2d');
+			board.lineWidth = 2;
+			board.strokeStyle = "#0000ff";
+			canvas.onmousedown = function() {
+				onpush = false;
+				canvas.onmousemove = test1;
+
+				function test1(event) {
+					event.preventDefault();
+					var type = event.type;
+					var btnNum = event.button;
+					if(btnNum == 0) {
+						if(!onpush) {
+							var x = event.offsetX;
+							var y = event.offsetY;
+							//fillRect() 方法绘制“已填色”的矩形。默认的填充颜色是黑色。
+							//提示：请使用 fillStyle 属性来设置用于填充绘图的颜色、渐变或模式。
+							//board.fillRect(x, y, 1, 1);
+							//board.fillRect(xy.x, xy.y,2 ,2 );
+							//board.fillRect(45, 40, xy.x, xy.y);
+							if(last != null) {
+								board.beginPath();
+								board.moveTo(last.x, last.y);
+								board.lineTo(x, y);
+								board.stroke();
+							}
+							last = { x: x, y: y };
+
+						}
+
+					};
+				}
+				canvas.onmouseup = test2;
+
+				function test2(event) {
+					onpush = true;
+					last = null;
+				}
+			}
+
+			function clean() {
+				board.clearRect(0, 0, canvas.width, canvas.height);
+
+			}
+
+			function save() {
+				//base64//生成base64图片数据  
+				var dataUrl = canvas.toDataURL();
+				//document.getElementById('textId').innerText(dataUrl);
+				//document.getElementById("textId").innerHTML = dataUrl; 
+				dataUrl = dataUrl.replace("img/png", "img/octet-stream");
+				img.src = dataUrl;
+			}
+		</script>
+	</body>
+
+</html>

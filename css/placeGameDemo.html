@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<style type="text/css">
+		body,
+		html {
+			background: #ccc;
+		}
+		
+		#moster {
+			resize: both;
+			overflow: auto;
+			height: 200px;
+			width: 100px;
+			margin: 0 auto;
+			border: 5px outset dodgerblue;
+			margin-bottom: 10px;
+			background: linear-gradient(red, white);
+		}
+		
+		#moster:active {
+			height: 196px;
+			width: 98px;
+			margin: 0 auto;
+			border: 5px outset dodgerblue;
+			margin-bottom: 10px;
+		}
+		
+		.blood {
+			height: 40px;
+			width: 400px;
+			padding: 0px 0px;
+			margin: 0 auto;
+			border: 5px outset dodgerblue;
+			background-image: url();
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+		
+		#blood {
+			height: 40px;
+			width: 300px;
+			background: linear-gradient(to right, red, #ff6633);
+		}
+		
+		.move {
+			-webkit-animation-name: snow;
+			animation-name: snow;
+			/*动画持续时间*/
+			-webkit-animation-duration: 2000ms;
+			animation-duration: 2000ms;
+			transition-timing-function: linear;
+			-webkit-transition-timing-function: linear;
+			opacity: 1;
+		}
+		
+		@-webkit-keyframes snow {
+			10% {
+				opacity: 1
+			}
+			40% {
+				opacity: 0;
+				-webkit-transform: translate(-25vh, 3vh) scale(0.8);
+				transform: translate(-25vh, 3vh) scale(0.8);
+			}
+			60% {
+				opacity: 0;
+				-webkit-transform: translate(15vh, 3vh) scale(0.8);
+				transform: translate(15vh, 3vh) scale(0.8);
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+		
+		@keyframes snow {
+			10% {
+				opacity: 1
+			}
+			40% {
+				opacity: 0;
+				-webkit-transform: translate(-25vh, 3vh) scale(0.8);
+				transform: translate(-25vh, 3vh) scale(0.8);
+			}
+			60% {
+				opacity: 0;
+				-webkit-transform: translate(15vh, 3vh) scale(0.8);
+				transform: translate(15vh, 3vh) scale(0.8);
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+		
+		#panel {
+			width: 90%;
+			height: 500px;
+			border: 2px solid #000;
+			margin: 0 auto;
+			margin-top: 20px;
+		}
+		
+		#hero {
+			float: left;
+			width: 50%;
+			height: 100%;
+		}
+		
+		#hero ul {
+			list-style: none;
+			padding: 0;
+		}
+		
+		#hero ul li {
+			padding: 10px;
+			height: 50px;
+			
+			border: 2px solid #000;
+			margin: 10px;
+		}
+		
+		#box {
+			float: left;
+			width: 50%;
+			height: 100%;
+		}
+		
+		#msg {
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			top: 100px;
+			left: 60%;
+			margin-left: 70px;
+		}
+		
+		.reduct {
+			font-size: 22px;
+			color: red;
+		}
+		
+		#count {
+			font-size: 22px;
+			color: red;
+			line-height: 10px;
+		}
+		
+		#box ul {
+			list-style: none;
+			padding: 0;
+		}
+		
+		#box ul li {
+			padding: 10px;
+			height: 50px;
+			border: 2px solid #000;
+			margin: 10px;
+		}
+		#top{
+			width: 90%;
+			height: 30px;
+			border: 2px solid #FF6633; 
+			margin: 0 auto;
+			margin-bottom: 20px; 
+			font-size: 22px;
+			color: red;
+		}
+		#hp{
+			text-align: center;
+			margin: 0 auto;
+		}
+		.btn{
+			height: 50px;
+			width: 30%;
+		}
+	</style>
+
+	<body>
+		<div id="top"></div>
+		<div id="msg"></div>
+		<div id="moster">
+
+		</div>
+		<div id="hp"></div>
+		<div class="blood">
+			<div id="blood">
+
+			</div>
+		</div>
+		
+		<div id="panel">
+			<div id="hero">
+				<ul>
+					<li>
+						<div>
+							<button class="btn" >
+								<div>等级0</div>
+							</button>
+							<div id="">
+								
+							</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<button class="btn" >
+								<div>等级0</div>
+							</button>
+							<div id="">
+								
+							</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<button class="btn" >
+								<div>等级0</div>
+							</button>
+							<div id="">
+								
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div id="box">
+				<ul>
+					<li>
+						<div id="">
+							击杀数:
+							<a id="count"></a>
+						</div>
+					</li>
+					<li>
+						<div>
+							每秒伤害：<a id="hurt"></a>
+						</div>
+					</li>
+					<li>
+						<div>
+							点击伤害：<a id="clickhurt"></a>
+						</div>
+					</li>
+					<li>
+						<div>
+							时间：<a id="time"></a>
+						</div>
+					</li>
+				</ul>
+
+			</div>
+
+		</div>
+	</body>
+
+	<script>
+		
+		var level = new Array();
+		var hp = 100;
+		var progress = 100;
+		var con = 0;
+		var hurt = 10;
+		var clickHurt = 10;
+		var detailtime = 0;
+		var top1 = document.getElementById("top");
+		var time = document.getElementById("time");
+		var hpmsg = document.getElementById("hp");
+		var count = document.getElementById("count");
+		var hurtmsg = document.getElementById("hurt");
+		var clickhurtmsg = document.getElementById("clickhurt");
+		var msg = document.getElementById("msg");
+		var blood = document.getElementById("blood");
+		blood.style.width = progress + "%";
+		
+		var moster = document.getElementById("moster");
+		moster.addEventListener('click', function() {
+			reduce(blood, clickHurt);
+			//alert(progress);
+			msg.innerHTML = "<div class='reduct'>-" + clickHurt + "</div>";
+			setTimeout(function() {
+				msg.innerHTML = "";
+			}, 500)
+
+		})
+		var loop = setInterval(function() {
+			reduce(blood, hurt*(100/hp)/20); 
+			
+		}, 50)
+		var loop2 = setInterval(function() {
+			detailtime = detailtime + 1;
+ 			count.innerHTML = "<a>   " + con + "</a>";
+			hpmsg.innerHTML = "<a>   " + hp + "</a>";
+			top1.innerHTML = "<a>关卡：   " + (con+1) + "</a>";
+			hurtmsg.innerHTML = "<a>   " + hurt + "</a>";
+			clickhurtmsg.innerHTML = "<a>   " + clickHurt + "</a>";
+			time.innerHTML = "<a>   " + formatDuring(detailtime) + "</a>";
+		}, 1000)
+		function reduce(blood, i) {
+			progress = progress - i;
+			blood.style.width = progress + "%";
+			if(progress <= 0) {
+				progress = 100;
+				con++;
+				hp = hp + 100;
+				moster.className = "move";
+				setTimeout(function() {
+					moster.className = "";
+				}, 2000)
+			}
+
+		}
+		var confirmBtn = document.getElementsByClassName("btn");
+		for(var i = 0;i<confirmBtn.length;i++){
+			confirmBtn[i].setAttribute("data-index",i);
+			level[i] = 0;
+			confirmBtn[i].addEventListener('click', function() {
+				var i = parseInt(this.getAttribute("data-index"));
+				hurt = hurt + (i+1)*10; 
+				level[i] = level[i] + 1;
+				this.innerHTML = "<div>等级"+level[i]+"</div>"
+				//alert(i+1);
+			})
+		}
+		
+		function formatDuring(mss) {
+		    var days = parseInt(mss / (60 * 60 * 24));
+		    var hours = parseInt((mss % (60 * 60 * 24)) / (60 * 60));
+		    var minutes = parseInt((mss % (60 * 60)) / (60));
+		    var seconds = (mss % 60);
+		    return days + " 天 " + hours + " 小时 " + minutes + " 分钟 " + seconds + " 秒 ";
+		}
+	</script>
+
+</html>

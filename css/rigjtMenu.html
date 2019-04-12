@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>右键菜单示例</title>
+	</head>
+	<style>
+        ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        #myMenu{
+            list-style: none;
+            width: 150px;
+            border: 1px solid #e9ecf3;
+            position: absolute;
+            display: none;
+            box-shadow: 0px 0px 15px -4px rgba(0, 0, 0, 0.5);
+        }
+
+        #myMenu li{
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: "微软雅黑";
+        }
+
+        #myMenu li:hover{
+            background-color: #e9ecf3;
+        }
+    </style>
+	<body>
+		<ul id="myMenu">
+		    <li>右键想干什么？</li>
+		    <li>想看源代码？</li>
+		    <li>还是想审查元素？</li>
+		</ul>
+	</body>
+	<script>
+		var myMenu = document.getElementById("myMenu");
+		document.addEventListener("contextmenu", function(event){
+		    event.preventDefault();
+		    myMenu.style.display = "block";
+		    //获取鼠标视口位置
+		    myMenu.style.top = event.clientY + "px";
+		    myMenu.style.left = event.clientX + "px";
+		});
+		document.addEventListener("click", function(event){
+		    myMenu.style.display = "none";
+		});
+	</script>
+	
+</html>

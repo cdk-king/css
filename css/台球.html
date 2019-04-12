@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		#canvas{
+			border: 1px solid blue;
+		}
+	</style>
+	<body>
+		
+		<canvas id="canvas" >
+			
+		</canvas>
+	</body>
+	<script>
+		var c = document.getElementById('canvas');
+		var ctx = c.getContext('2d');
+		var r = 20;
+		var line = 5;
+		var arcWidth = Math.sqrt(Math.pow(2*(line-1)*r,2)-Math.pow((line-1)*r,2))*2/3;
+		var width = 400;
+		var height = 400;
+		var th = 0;
+		var startTime = new Date().getTime();
+		c.width = width;
+		c.height = height;
+		for(var i= 0;i<line;i++){
+			for(var j = 0;j<i+1;j++){
+				//console.log(j);
+				ctx.beginPath();
+				//ctx.rotate(th*Math.PI/180);
+				ctx.arc(width/2+i*Math.sqrt(Math.pow(2*r,2)-Math.pow(r,2))-arcWidth,200-i*r+j*r*2,r,0,Math.PI*2,false);
+				ctx.stroke();
+			}
+		}
+		var particles = [];
+		var particlesold = [];
+		var imageData = ctx.getImageData(0, 0, width, height).data;
+		//console.log(imageData);
+		
+		var Particle = function(){
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+			this.startX = 0;
+			this.startY = 0;
+			this.startZ = 0;
+			this.orX = 0;
+			this.orY = 0;
+			this.orZ = 0;
+		}
+		
+		getParticles(imageData,width);
+		function getParticles(imageData,width){
+			for(var i = 0;i<imageData.length;i=i+4){
+				var x = (i/4)%width;
+				var y = (i/4-x)/width;
+				if(imageData[i+3]>0 ){
+						var particle = new Particle;
+						particle.x = x;
+						particle.y = y;
+						particle.startX = x;
+						particle.startY = y;
+						particle.orX = x;
+						particle.orY = y;
+						particles.push(particle);
+						particlesold.push(particle);
+				}else{
+				
+				}
+			}
+		}
+		//console.log(particles[3213].x);
+		function rotateZ(angle,particle){
+			//console.log(particle.x);
+			var sin = Math.sin(angle);
+			var cos = Math.cos(angle);
+			//坐标转换
+			var x1 = particle.x - width/2;
+			var y1 = particle.y - height/2;
+			//console.log("x1:"+x1);
+			//var y = Math.sin(angle+y1)*r;
+			//var x = Math.cos(angle+x1)*r;
+			
+			var newX = x1 * cos - y1 * sin;
+			var newY = y1 * cos + x1 * sin;
+			//console.log(newX);
+			//console.log(newX + width/2); 
+			//imageData里像素坐标必须是整数，会导致失真
+			particle.x = (newX + width/2);
+			particle.y = (newY + height/2);
+			
+		}
+		function explode(particle) {
+			
+		    particle.vx = Math.round((Math.random() * 5) - 2.5);
+		    particle.vy = Math.round((Math.random() * 5) - 2.5);
+		    //particle.vz = Math.floor((Math.random() * 10) - 5);
+		    //this.vx = (Math.floor((Math.random() * 30) - 15)* Math.cos(phi)*sinTheta);
+			//this.vy = (Math.floor((Math.random() * 30) - 15)* Math.sin(phi)*sinTheta);
+			//this.vz = (Math.floor((Math.random() * 10) - 5)* cosTheta);
+		}
+		for(var j = 0;j<particles.length;j++){
+		    	if(particles[j]){
+		    		//explode(particles[j]);
+		    	}
+		}
+		draw();
+		
+		function draw(){
+			if (new Date().getTime() > startTime + 2000) { 
+		        startTime = new Date().getTime();
+		        //间隔执行
+		        for(var j = 0;j<particles.length;j++){
+		    	if(particles[j]){
+		    		//rotateZ(0.05,particles[j]);
+		    		//console.log(startTime);
+//		    		particles[j].startX = particlesold[j].orX;
+//				    particles[j].startY = particlesold[j].orY;
+//		    		particles[j].x = particlesold[j].orX;
+//		    		particles[j].y = particlesold[j].orY;
+		    	}
+			}
+		    }
+			ctx.clearRect(0, 0,width,height); 
+			var imgData = ctx.createImageData(width, height);
+		    var data = imgData.data;
+		    var partLen = particles.length;
+		    //console.log(th*Math.PI/180);
+		    //ctx.rotate(th*Math.PI/180);
+		    for(var j = 0;j<partLen;j++){
+		    	if(particles[j]){
+		    		//console.log(th);
+		    		rotateZ(Math.PI/180,particles[j]);
+//		    		particles[j].startX += particles[j].vx;
+//				    particles[j].startY += particles[j].vy;
+//				    particles[j].startZ -= particles[j].vz;
+//					particles[j].x = particles[j].startX;
+//				    particles[j].y = particles[j].startY;
+//				    particles[j].z = particles[j].startZ;
+		    	}
+		    }
+		    
+		    for(var i = 0;i<partLen;i++){
+		    	if(particles[i]){
+		    		var x = particles[i].x;
+		    		var y = particles[i].y;
+		    		var index = (Math.round(y)*width + Math.round(x))*4; 
+		    		data[index] = '255'; 
+		    		data[index+1] = '0';
+		    		data[index+2] = '0';
+		    		data[index+3] = '255';
+		    	}
+		    }
+		    ctx.putImageData(imgData, 0, 0);
+		    th++;
+			th %= 360;
+			requestAnimationFrame(draw);
+		}
+	</script>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,html{
+			overflow: hidden;
+		    width: 100%;
+		    height:100%;
+		    margin: 0;
+		    padding: 0;
+		    background: #21333C;
+		}
+		#background-color{
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			/*border: 1px solid red;*/
+		}
+		.c-a{
+			background: #fff;
+		}
+		.c-b{
+			background: #BFBFBF;
+		}
+		.c-c{
+			background: #CD3333;	
+		}
+		.c-d{	
+			background: #419641;
+		}	
+		.c-e{
+			background: #006699;		
+		}
+		.c-f{
+			background: #555555;
+		}
+		.c-g{		
+			background: #21333C;
+		}
+		.c-h{
+			background: #000;			
+		}
+		.btn{			
+			display: block;
+			width: 30px;
+			height: 30px;
+			border: thin solid #ccc;
+			border-radius: 30px;
+			margin-top:10px;
+		}
+		#other-bg-color{
+			-webkit-transition: all 0.8s;
+			-moz-transition: all 0.8s;
+			-o-transition: all 0.8s;
+			transition: all 0.8s;
+			height: 0px;
+			/*border: thin solid #ccc;*/
+			overflow: hidden;
+		}
+	</style>
+	<body>
+		<div id="color-box">
+			<div id="background-color">
+				<div id="now-bg-color" class="btn "></div>
+				<div id="other-bg-color">
+					<div class="btn c-a"></div>				
+					<div class="btn c-b"></div>				
+					<div class="btn c-c"></div>
+					<div class="btn c-d"></div>
+					<div class="btn c-e"></div>
+					<div class="btn c-f"></div>
+					<div class="btn c-g"></div>
+					<div class="btn c-h"></div>			
+				</div>
+			</div>
+		</div>		
+		<canvas id="canvas" >
+			
+		</canvas>
+	</body>
+	<script>
+		(function() {
+			var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			window.requestAnimationFrame = requestAnimationFrame;
+		})();
+		
+		var c = document.getElementById('canvas');
+		var ctx = c.getContext('2d');
+		var body =  document.body;
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		var activeBox;
+		var pause = false;
+		c.setAttribute('width',width);
+		c.setAttribute('height',height);
+		
+		var boxs = [];
+		
+		function createBox(){
+			var color = bg3();
+			var width = Math.random()*150+20;
+			var height = Math.random()*150+20;
+			var box = new Box(width,height,color);
+			boxs.push(box);
+			return box;
+		}
+		function bg1(){
+             return '#'+Math.floor(Math.random()*256).toString(10);
+         }
+         function bg2(){
+             return '#'+Math.floor(Math.random()*0xffffff).toString(16);
+         }
+         function bg3(){
+             var r=Math.floor(Math.random()*256);
+             var g=Math.floor(Math.random()*256);
+             var b=Math.floor(Math.random()*256);
+             return "rgb("+r+','+g+','+b+")";//所有方法的拼接都可以用ES6新特性`其他字符串{$变量名}`替换
+        }
+         
+        var Box = function(width,height,color){
+        	//原型属性?
+        	this.width = width;
+        	this.height = height;
+        	this.color = color;
+        	this.active = true;
+        	this.x = Math.random()*body.offsetWidth;
+        	this.y = 0;
+        	this.t = 0;
+        }
+        Box.prototype = {
+        	draw:function(ctx){
+        		
+        		ctx.beginPath();
+				ctx.fillRect(this.x,this.y,this.width,this.height);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeRect(this.x,this.y,this.width,this.height);
+				ctx.strokeStyle = "#fff";
+				ctx.stroke();
+        	}
+        }
+        function drawBox(box,index){ 
+        	if(activeBox !== box && !pause){
+  		      	if(!(activeBox.y+activeBox.height <= box.y || activeBox.x >= box.x+box.width || activeBox.x + activeBox.width <box.x || activeBox.y >= box.y + box.height) ){
+	        		activeBox.y = box.y - activeBox.height;
+	        		if(activeBox.y > 0 ){
+	        			console.log("0");
+	        			activeBox = createBox();
+	        		}else{
+	        			console.log("1");
+	        			pause = true;
+	        			
+	        			setTimeout(function(e){
+	        				ctx.clearRect(0, 0, width, height);
+	        				boxs = [];
+	        				pause = false;
+	        				activeBox = createBox();
+	        			},5000)
+	        			
+	        		}
+	        		
+	        	}
+        	}
+
+        	if(activeBox.y+activeBox.height >= body.offsetHeight){
+        		console.log("2");
+        		activeBox.y = body.offsetHeight-activeBox.height;
+        		activeBox = createBox(); 
+        	}
+            //console.log(activeBox.color);
+            //activeBox.draw(ctx); 
+            box.draw(ctx); 
+        } 
+        activeBox = createBox();
+        draw();
+        function draw(){
+        	ctx.clearRect(0, 0, width, height); 
+        	//drawBox();
+        	if(!pause){
+        		activeBox.y +=Math.pow((activeBox.t),2);
+        		activeBox.t = activeBox.t + 15/1000;
+        	}
+        	
+        	boxs.forEach(drawBox);
+        	requestAnimationFrame(draw);
+        } 
+        var bgcolor = document.getElementById('now-bg-color');
+		var otherBgcolor = document.getElementById('other-bg-color');
+		bgcolor.addEventListener('click',function(e){
+			if(otherBgcolor.style.height === "0px" || otherBgcolor.style.height ===""){
+				otherBgcolor.style.height = "350px";
+			}else{
+				otherBgcolor.style.height = "0px";
+			}
+			
+		});
+		var color = bgcolor.getElementsByTagName('div');
+		var bgbtns =  otherBgcolor.getElementsByClassName('btn');
+
+		for(var i= 0;i< bgbtns.length;i++){
+			bgbtns[i].addEventListener('click',function(e){
+				//console.log(document.body.style.backgroundColor);
+				document.body.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				bgcolor.style.backgroundColor = window.getComputedStyle(this, null).backgroundColor;
+				//body.style.background = e.style.background;
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #21333C;
+		}
+		
+		#snailbait-fps {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			/*border: 1px solid red;*/
+		}
+		#snailbait-score{
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			font: 46px fantasy;
+			text-align: center;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0,0,80,1.0);
+			
+			-webkit-transition: opacity 5s;
+			-moz-transition: opacity 5s;
+			-o-transition: opacity 5s;
+			transition: opacity 5s;
+			
+			/*display: none;
+			opacity: 0;*/
+		}
+		#snailbait-reset{
+			position: absolute;
+			top: 80px;
+			right: 20px;
+			width:30px;
+			height:30px;
+			background: #FFF;
+			border-radius: 30px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 1px 1px 5px rgba(0,0,80,1.0);
+			text-align: center;
+			line-height: 30px;
+			cursor: pointer;
+		}
+	</style>
+
+	<body>
+		<div id="snailbait-fps"></div>
+		<div id="snailbait-score">0</div>
+		<div id="snailbait-reset">R</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script>
+		var fpsElement = document.getElementById("snailbait-fps");
+		var scoreElement = document.getElementById("snailbait-score");
+		var snailbaitReset = document.getElementById("snailbait-reset");
+		var lastFpsUpdateTime = 0;
+		var lastAnimationFrameTime = 0;
+		var fps = 0;
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+
+		snailbaitReset.addEventListener('click',function(e){
+			balls = [];
+			createBall();
+			inHoldBalls=0;
+			scoreElement.innerHTML = inHoldBalls;
+		})
+
+
+		var balls = [];
+		var numBalls = 50;
+		var inHoldBalls = 0;
+		if(width > 1000) {
+			console.log(width);
+			numBalls = 100;
+		}
+		var friction = 0.1;
+		//var friction = 0.98;
+		var gravity = 0.2;
+		var bounce = -1.0; //定义反弹系数
+		var disX = 0;
+		var disY = 0;
+		var dislX = 0;
+		var dislY = 0;
+		var r = 20;
+		var movedown = false;
+
+		var Ball = function(r, color) {
+			this.r = r;
+			this.color = color;
+			this.active = true;
+			this.x = 100;
+			this.y = 100;
+			this.lastX = 100;
+			this.lastY = 100;
+			this.t = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.nVx = 0;
+			this.nVy = 0;
+			this.mass = 10;
+			this.vis = true;
+			//球的体积公式
+			this.mass = (4 / 3) * Math.PI * this.r * this.r * this.r;
+		}
+		Ball.prototype = {
+			draw: function(ctx) {
+
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+			}
+		}
+		createBall();
+
+		function createBall() {
+			//for(var i=0; i<numBalls; i++){
+			//var radius = Math.random()*5 + 10;
+			//var ball = new Ball(radius, "#fff");
+			//ball.x = Math.random()*canvas.width;
+			//ball.y = Math.random()*canvas.height;
+			//ball.vx = Math.random()*6 - 3;
+			//ball.vy = Math.random()*6 - 3;
+			//} 	
+			var ball = new Ball(r, "red");
+			ball.x = r;
+			ball.y = r;
+			balls.push(ball);
+			var arcWidth = Math.sqrt(Math.pow(2 * (5 - 1) * r, 2) - Math.pow((5 - 1) * r, 2)) * 2 / 3;
+			for(var i = 0; i < 5; i++) {
+				for(var j = 0; j < i + 1; j++) {
+					var ball = new Ball(r, "#fff");
+					ball.x = width / 4 - i * Math.sqrt(Math.pow(2 * (r+2), 2) - Math.pow((r+2), 2)) + arcWidth;
+					ball.y = (height / 2) - i * (r+2) + j * (r+2) * 2;
+					balls.push(ball);
+				}
+			}
+		};
+
+		var dotLine = function(disX, disY, dislX, dislY) {
+			this.disX = disX;
+			this.disY = disY;
+			this.dislX = dislX;
+			this.dislY = dislY;
+			this.dx = disX - dislX;
+			this.dy = disY - dislY;
+			this.vx = this.dx / 20;
+			this.vy = this.dy / 20;
+			this.x = dislX;
+			this.y = dislY;
+			this.ox = dislX;
+			this.oy = dislY;
+			this.con = 0;
+			this.length = 0;
+		}
+		dotLine.prototype = {
+			paint: function(context) {
+				var dx = disX - dislX,
+					dy = disY - dislY,
+					dist = Math.sqrt(dx * dx + dy * dy);
+				var dotNum = dist / 50;
+
+				//this.vx =dx/10; 
+				//this.vy =dy/10;
+				//console.log(this.vx);
+
+				context.save();
+				context.strokeStyle = "rgba(255,0,255,1)";
+				//for(var i = 0;i<=this.con;i++){
+				context.beginPath();
+				context.lineWidth = (1.0 - dist / 100) * 2.5;
+				context.globalAlpha = 1.0 - dist / 50;
+				context.moveTo(this.x, this.y);
+				this.ox = this.x;
+				this.oy = this.y;
+				this.vx = (disX - dislX) / 20;
+				this.vy = (disY - dislY) / 20;
+				//context.lineTo(this.x-this.vx*20, this.y-this.vy*20);
+				if(movedown) {
+					for(var i = 0; i < 260; i++) {
+						//if(i%fps ==0){
+						frictionHandle(this);
+						//}
+
+						context.beginPath();
+						context.lineWidth = 1;
+						context.moveTo(this.ox, this.oy);
+						context.lineTo(this.ox - this.vx, this.oy - this.vy);
+						
+						context.stroke();
+						this.ox = this.ox - this.vx;
+						this.oy = this.oy - this.vy;
+
+						var check1 = this.checkWalls(this.ox, this.oy);
+						var check2 = this.checkBall(this.ox, this.oy);
+						if(check2) {
+							break;
+							//console.log("rrr")
+						}
+					}
+					this.length += Math.sqrt(Math.pow(this.vx, 2) + Math.pow(this.vy, 2));
+				}
+				context.closePath();
+				context.stroke()
+
+				context.beginPath();
+				context.strokeStyle = "rgba(255,255,255,0.5)";
+				context.lineWidth = 10;
+				context.globalAlpha = 1.0 - dist / 50;
+				context.moveTo(disX, disY);
+				if(!movedown) {
+					context.lineTo(dislX, dislY);
+				} else {
+					context.lineTo(dislX + dx / 10, dislY + dy / 10);
+				}
+
+				context.stroke()
+				context.restore();
+			},
+			checkWalls: function(x, y) {
+				if(x > width - r || x < 0 + r) {
+					this.vx = -1 * this.vx;
+					this.con++;
+					return true;
+				}
+				if(y > height - r || y < 0 + r) {
+					this.vy = -1 * this.vy;
+					this.con++;
+					return true;
+				}
+				return false;
+			},
+			checkBall: function(x, y) {
+				for(var i = 1; i < balls.length; i++) {
+					var rectA = balls[i];
+					var isCollision = Math.sqrt((Math.pow(rectA.x - x, 2) + Math.pow(rectA.y - y, 2))) <= (rectA.r + r);
+					if(isCollision) {
+						return isCollision;
+						if(false) {
+							var dx = rectA.x - x;
+							var dy = rectA.y - y;
+							var dist = Math.sqrt(dx * dx + dy * dy);
+							var angle = Math.atan2(dy, dx);
+							var sin = Math.sin(angle);
+							var cos = Math.cos(angle);
+
+							//旋转球0位置
+							var pos0 = {
+								x: 0,
+								y: 0
+							}
+							//旋转球1位置
+							var pos1 = rotate(dx, dy, sin, cos, true);
+
+							//旋转速度 ball1
+							var vel0 = rotate(rectA.vx, rectA.vy, sin, cos, true);
+
+							//旋转速度 ball2
+							var vel1 = rotate(this.vx, this.vy, sin, cos, true);
+
+							var vxTotal = vel0.x - vel1.x;
+
+							vel0.x = (2 * rectA.mass * vel1.x) / (rectA.mass * 2);
+							vel1.x = vxTotal + vel0.x;
+
+							//旋转一切
+							var pos0F = rotate(pos0.x, pos0.y, sin, cos, false);
+							var pos1F = rotate(pos1.x, pos1.y, sin, cos, false);
+
+							//将位置调整到实际屏幕位置
+							this.x = x + pos0F.x;
+							this.y = y + pos0F.y;
+
+							//转速反向
+							var vel0F = rotate(vel0.x, vel0.y, sin, cos, false);
+							var vel1F = rotate(vel1.x, vel1.y, sin, cos, false);
+
+							this.vx = vel0F.x;
+							this.vy = vel0F.y;
+						}
+
+					}
+					
+				}
+				return false;
+			}
+		}
+		//reverse旋转方向
+		function rotate(x, y, sin, cos, reverse) {
+			return {
+				x: (reverse) ? (x * cos + y * sin) : (x * cos - y * sin),
+				y: (reverse) ? (y * cos - x * sin) : (y * cos + x * sin)
+			}
+		}
+
+		var intersects = function(rectA, rectB) {
+			return Math.sqrt((Math.pow(rectA.x - rectB.x, 2) + Math.pow(rectA.y - rectB.y, 2))) <= (rectA.r + rectB.r);
+		}
+
+		function collisionDetection(ball1, index) {
+			for(var i = index; i < balls.length; i++) {
+				var ball2 = balls[i];
+				if(ball2 != ball1) {
+					var dx = ball2.x - ball1.x;
+					var dy = ball2.y - ball1.y;
+					var dist = Math.sqrt(dx * dx + dy * dy);
+					var isCollision = intersects(ball1, ball2);
+					if(isCollision) {
+						//相对角度
+						var angle = Math.atan2(dy, dx);
+						var sin = Math.sin(angle);
+						var cos = Math.cos(angle);
+						//旋转球0位置
+						var pos0 = {
+							x: 0,
+							y: 0
+						}
+						var pos1 = rotate(dx, dy, sin, cos, true);
+						//旋转速度 ball1
+						var vel0 = rotate(ball1.vx, ball1.vy, sin, cos, true);
+
+						//旋转速度 ball2
+						var vel1 = rotate(ball2.vx, ball2.vy, sin, cos, true);
+
+						var vxTotal = vel0.x - vel1.x;
+
+						vel0.x = ((ball1.mass - ball2.mass) * vel0.x + 2 * ball2.mass * vel1.x) / (ball1.mass + ball2.mass);
+						vel1.x = vxTotal + vel0.x;
+
+						//这里不能直接改变速度,否则会直接影响其他小球
+						//ball1.nVx =  ((ball1.mass - ball2.mass)*ball1.vx + 2*ball2.mass*ball2.vx) / (ball1.mass +ball2.mass);
+						//ball2.nVx =  ((ball2.mass - ball1.mass)*ball2.vx + 2*ball1.mass*ball1.vx) / (ball1.mass +ball2.mass);
+						//ball1.nVy =  ((ball1.mass - ball2.mass)*ball1.vy + 2*ball2.mass*ball2.vy) / (ball1.mass +ball2.mass);
+						//ball2.nVy =  ((ball2.mass - ball1.mass)*ball2.vy + 2*ball1.mass*ball1.vy) / (ball1.mass +ball2.mass);
+						//ball1.vx = ball1.nVx;
+						//ball2.vx = ball2.nVx;
+						//ball1.vy = ball1.nVy;
+						//ball2.vy = ball2.nVy;
+
+						//if(overlap>0){
+						//if(ball2.x-ball1.x>0){
+						//ball1.x -=1;
+						//ball2.x +=1;
+						//}else{
+						//ball1.x +=1;
+						//ball2.x -=1;
+						//}
+						//if(ball2.y-ball1.y>0){
+						//ball1.y -=1;
+						//ball2.y +=1;
+						//}else{
+						//ball1.y +=1;
+						//ball2.y -=1;
+						//}
+						//}
+
+						//旋转一切
+						var pos0F = rotate(pos0.x, pos0.y, sin, cos, false);
+						var pos1F = rotate(pos1.x, pos1.y, sin, cos, false);
+
+						var overlap = (ball1.r + ball2.r) - Math.sqrt(Math.pow(ball1.x - ball2.x, 2) + Math.pow(ball1.y - ball2.y, 2));
+						var totalVx = Math.abs(ball1.vx) + Math.abs(ball2.vx);
+						var totalVy = Math.abs(ball1.vy) + Math.abs(ball2.vy);
+						var absV1x = Math.abs(ball1.vx);
+						var absV1y = Math.abs(ball1.vy);
+						var absV2x = Math.abs(ball2.vx);
+						var absV2y = Math.abs(ball2.vy);
+						var absV1x = 1;
+						var absV1y = 1;
+						var absV2x = 1;
+						var absV2y = 1;
+
+						if(overlap > 0) {
+							if(pos1.x - pos0.x > 0) {
+								pos0.x -= absV1x;
+								pos1.x += absV2x;
+							} else {
+								pos0.x += absV1x;
+								pos1.x -= absV2x;
+							}
+							if(pos1.y - pos0.y > 0) {
+								pos0.y -= absV1y;
+								pos1.y += absV2y;
+							} else {
+								pos0.y += absV1y;
+								pos1.y -= absV2y;
+							}
+						}
+
+						var pos0F = rotate(pos0.x, pos0.y, sin, cos, false);
+						var pos1F = rotate(pos1.x, pos1.y, sin, cos, false);
+
+						//将位置调整到实际屏幕位置
+						ball2.x = ball1.x + pos1F.x;
+						ball2.y = ball1.y + pos1F.y;
+						ball1.x = ball1.x + pos0F.x;
+						ball1.y = ball1.y + pos0F.y;
+
+						//转速反向
+						var vel0F = rotate(vel0.x, vel0.y, sin, cos, false);
+						var vel1F = rotate(vel1.x, vel1.y, sin, cos, false);
+
+						ball1.vx = vel0F.x;
+						ball1.vy = vel0F.y;
+						ball2.vx = vel1F.x;
+						ball2.vy = vel1F.y;
+
+						isCollision = false;
+					}
+				}
+			}
+		}
+		//边界碰撞处理
+		function checkWalls(ball) {
+			
+			if(ball.x + ball.r > canvas.width) {
+				ball.x = canvas.width - ball.r;
+				ball.vx *= bounce;
+			} else if(ball.x - ball.r < 0) {
+				ball.x = ball.r;
+				ball.vx *= bounce;
+			}
+
+			if(ball.y + ball.r > canvas.height) {
+				ball.y = canvas.height - ball.r;
+				ball.vy *= bounce;
+			} else if(ball.y - ball.r < 0) {
+				ball.y = ball.r;
+				ball.vy *= bounce;
+			}
+		}
+		
+		function HoldHandle(){
+			for(var i = 1; i < balls.length; i++) {
+				var ball = balls[i];
+				var x = Math.sqrt(r*r*0.5);
+				if(ball.x<50+x && ball.y<50+x && (ball.x-x+ball.y-x)<=50-10){
+					balls.splice(i,1);
+					inHoldBalls++;
+					scoreElement.innerHTML = inHoldBalls;
+				}
+			}
+			if(balls[0].x<50+x && balls[0].y<50+x && (balls[0].x-x+balls[0].y-x)<50-10){
+				//console.log('test');
+			}
+		}
+		
+		//边界碰撞处理
+		function border() {
+			for(var i = 0; i < balls.length; i++) {
+				var ball = balls[i];
+				if((ball.x + ball.r + ball.vx) > width || (ball.x - ball.r + ball.vx) < 0) {
+					ball.vx = -1 * ball.vx;
+				}
+				if((ball.y + ball.r + ball.vy) > height || (ball.y - ball.r + ball.vy) < 0) {
+					ball.vy = -1 * ball.vy;
+				}
+			}
+
+		}
+
+		function gravityHandle(ball1) {
+			if(ball1.y + ball1.r > height) {
+				ball1.vy = ball1.vy;
+			} else {
+				ball1.vy = ball1.vy + gravity;
+			}
+		}
+
+		function frictionHandle(ball1) {
+			//f=ma，分解摩檫力的时候需要计算xy轴的比例
+			//排除分母为0的情况
+			//但是还有无限小的情况
+
+			var angle = Math.atan2(ball1.vy, ball1.vx);
+			var speed = Math.sqrt(Math.pow(ball1.vx, 2) + Math.pow(ball1.vy, 2));
+
+			scaleX = Math.abs(Math.cos(angle));
+			scaleY = Math.abs(Math.sin(angle));
+
+			//			if(Math.abs(ball1.vx) == 0){
+			//				var scaleY= 1;
+			//			}else{
+			//				var scaleY = Math.abs(ball1.vy)/Math.abs(ball1.vx);
+			//			}
+
+			if(Math.abs(ball1.vx) - friction * scaleX <= 0) {
+				ball1.vx = 0;
+			} else if(ball1.vx > 0) {
+				ball1.vx = ball1.vx - friction * scaleX;
+			} else if(ball1.vx < 0) {
+				ball1.vx = ball1.vx + friction * scaleX;
+			}
+
+			if(Math.abs(ball1.vy) - friction * scaleY <= 0) {
+				ball1.vy = 0;
+			} else if(ball1.vy > 0) {
+				ball1.vy = ball1.vy - friction * scaleY;
+			} else if(ball1.vy < 0) {
+				ball1.vy = ball1.vy + friction * scaleY;
+			}
+
+			//简易摩檫力
+			//			ball1.vx = ball1.vx*0.99;
+			//			ball1.vy = ball1.vy*0.99;
+
+		}
+
+		function drawBall(ball1, index) {
+
+			//gravityHandle(ball1);
+
+			frictionHandle(ball1);
+
+			ball1.x += ball1.vx;
+
+			ball1.y += ball1.vy;
+
+			ball1.draw(context);
+
+		}
+
+		function drawLine(ball0, index) {
+			for(var i = index; i < balls.length; i++) {
+				var ball1 = balls[i];
+				if(ball0 != ball1) {
+					var dx = ball1.x - ball0.x,
+						dy = ball1.y - ball0.y,
+						dist = Math.sqrt(dx * dx + dy * dy);
+
+					if(dist < 100) {
+						context.save();
+						context.strokeStyle = "rgba(255,255,255,0.5)";
+						context.beginPath();
+						context.lineWidth = (1.0 - dist / 100) * 2.5;
+						context.globalAlpha = 1.0 - dist / 50;
+						context.moveTo(ball0.x, ball0.y);
+						context.lineTo(ball1.x, ball1.y);
+						context.closePath()
+						context.stroke()
+						context.restore();
+					}
+				}
+			}
+		}
+		var dotline = new dotLine(disX, disY, dislX, dislY);
+
+		function calculateFps(now) {
+			fps = 1 / (now - lastAnimationFrameTime) * 1000 * 1;
+			//console.log(now - this.lastAnimationFrameTime);
+			if(now - lastFpsUpdateTime > 1000) {
+				lastFpsUpdateTime = now;
+				fpsElement.innerHTML = fps.toFixed(0) + ' fps';
+				//console.log(fps.toFixed(0));
+			}
+			lastAnimationFrameTime = now;
+
+			return fps;
+		}
+		
+		function drawBallHole(){
+			context.save();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.beginPath();
+			context.moveTo(0, 0);
+			context.lineTo(0, 50);
+			context.lineTo(50, 0);
+			context.moveTo(0, 0);
+
+			
+//			context.moveTo(width, 0);
+//			context.lineTo(width-50, 0);
+//			context.lineTo(width, 50);
+//			context.moveTo(width, 0);
+//			
+//			context.moveTo(0, height);
+//			context.lineTo(0, height-50);
+//			context.lineTo(50, height);
+//			context.moveTo(0, height);
+//			
+//			context.moveTo(width, height);
+//			context.lineTo(width-50, height);
+//			context.lineTo(width, height-50);
+//			context.moveTo(width, height);
+			
+			context.closePath()
+			context.stroke()
+			context.fillStyle="rgba(255,255,255,1)"; //以上面定义的渐变填充
+			context.fill(); //闭合形状并且以填充方式绘制出来
+			context.restore();
+		}
+
+		drawFrame();
+
+		function drawFrame(now) {
+			calculateFps(now);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			drawBallHole();
+			//球体碰撞处理
+			balls.forEach(collisionDetection);
+
+			//边界碰撞处理
+			//border();
+			balls.forEach(checkWalls);
+
+			//绘制小球
+			balls.forEach(drawBall);
+			HoldHandle();
+			//绘制连线
+			//balls.forEach(drawLine);
+
+			dotline.disX = disX;
+			dotline.disY = disY;
+			dotline.dislX = dislX;
+			dotline.dislY = dislY;
+			//			dotline.x = dislX;
+			//			dotline.y = dislY;
+			dotline.paint(context);
+			
+			
+			window.requestAnimationFrame(drawFrame, canvas);
+		}
+		document.addEventListener('click', function(e) {
+			var e = e || window.event;
+			//防止选中元素
+			e.preventDefault();
+
+		})
+		document.addEventListener('mousedown', function(e) {
+			var e = e || window.event;
+			//防止选中元素
+			e.preventDefault();
+
+			movedown = true;
+			disX = e.clientX;
+			disY = e.clientY;
+			dislX = e.clientX;
+			dislY = e.clientY;
+			balls[0].lastX = balls[0].x;
+			balls[0].lastY = balls[0].y;
+			//balls[0].vx = (balls[0].x - balls[0].lastX)/30;
+			//balls[0].vy =  (balls[0].y - balls[0].lastY)/30;
+			//balls[0].mass = 20000;
+			balls[0].vis = false;
+			balls[0].x = disX;
+			balls[0].y = disY;
+			balls[0].color = 'red';
+			balls[0].vx = 0;
+			balls[0].vy = 0;
+
+			dotline = new dotLine(disX, disY, dislX, dislY);
+
+		})
+		document.addEventListener('mousemove', function(e) {
+			var e = e || window.event;
+			//防止选中元素
+			e.preventDefault();
+
+			if(movedown) {
+				disX = e.clientX;
+				disY = e.clientY;
+				dotline.vx = (disX - dislX) / 20;
+				dotline.vy = (disY - dislY) / 20;
+			}
+
+		})
+		document.addEventListener('mouseup', function(e) {
+			var e = e || window.event;
+			//防止选中元素
+			e.preventDefault();
+
+			movedown = false;
+			balls[0].vx = (dislX - disX) / 20;
+			balls[0].vy = (dislY - disY) / 20;
+
+		})
+	</script>
+
+</html>

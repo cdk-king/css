@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			
+		}
+		.mediaplayer{
+			display: inline-block;
+			padding: 5px;
+			margin: 0;
+			border: 1px solid #007AFF;
+		}
+		.video{
+			/*border: 1px solid #007AFF;*/
+			
+		}
+		#player{
+			border: 1px solid #007AFF;
+			
+		}
+		#duration{
+			position: absolute;
+			right:1px;
+			top: 0px;
+			
+		}
+		#curtime{
+			/*border: 1px solid red;*/
+			
+			width: 0px;
+			display: block;
+		}
+		#ProgressBar{
+			position: relative;
+		}
+		#bar{
+			position: absolute;
+			top:8px;
+			left: 15%;
+			background: red;
+			display: block;
+			height: 5px;
+			width: 70%;
+		}
+		#barback{
+			position: absolute;
+			top:8px;
+			left: 15%;
+			background: #888888;
+			display: block;
+			height: 5px;
+			width: 70%;
+			z-index: -10;
+		}
+		#video-fullScreen{
+			float: right;
+		}
+	</style>
+	<body>
+		<div class="mediaplayer" id="mediaplayer">
+			<div class="video">
+				<video id="player" src="video/mov_bbb.mp4" poster="img/bg.png" width="300px" height="200"> 
+					视频播放器不可用
+				</video>
+			</div>
+			<div class="controls">
+				<div id="ProgressBar">
+					<span id="bar"></span>
+					<span id="barback"></span>
+					<span id="curtime">0</span>
+					<span id="duration">0</span>
+				</div>
+				
+				<input type="button" value="播放" id= "video-play" />
+				<input type="button" value="停止" id= "video-stop" />
+				<input type="button" value="全屏" id= "video-fullScreen" />
+			</div>
+		</div>
+	</body>
+	<script>
+		var mediaplayer = document.getElementById('mediaplayer');
+		var player = document.getElementById('player');
+		var btnPlay = document.getElementById('video-play');
+		var btnStop = document.getElementById('video-stop');
+		var btnFullscreen = document.getElementById('video-fullScreen');
+		var curtime = document.getElementById('curtime');
+		var duration = document.getElementById('duration');
+		var ProgressBar = document.getElementById('ProgressBar');
+		var bar = document.getElementById('bar');
+		var ProgressBarWidth = bar.offsetWidth;
+		player.load = function(){
+			
+		}
+		
+		btnFullscreen.addEventListener('click',function(event){
+			mediaplayer.style.position = "absolute";
+			
+		})
+		btnStop.addEventListener('click',function(event){
+			
+			player.currentTime = 0;
+			player.pause();
+		})
+		btnPlay.addEventListener('click',function(event){
+			if(player.paused){
+				player.play();
+				duration.innerHTML = player.duration.toFixed(0);
+				btnPlay.value = '暂停';
+			}else{
+				player.pause();
+				duration.innerHTML = player.duration.toFixed(0);
+				btnPlay.value = '播放';
+			}
+		})
+		
+		var loop  = setInterval(function(){
+			var duration = Math.round(player.duration);
+			var a = Math.round(player.currentTime)/Math.round(player.duration);
+			bar.style.width = ProgressBarWidth*a+2+"px";
+			curtime.innerHTML = player.currentTime.toFixed(0);
+			//console.log(player.currentTime);
+		},250);
+	</script>
+</html>

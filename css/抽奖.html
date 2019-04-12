@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+<style>
+.turntable-bg{
+position: absolute;
+  width: 240px;
+  height: 240px;
+  top: 50%;
+  left: 50%;
+  margin-left: -125px;
+  margin-top: 125px;
+  border: 1px solid red;
+  background: red;
+}
+.turntable-bg .pointer img {
+	border: 1px solid #1E90FF;
+	position: absolute;
+  width: 240px;
+  height: 240px;
+  top: 50%;
+  left: 50%;
+  margin-left: -125px;
+  margin-top: -125px;
+}
+.turntable-bg .rotate img {
+	border: 1px solid #1E90FF;
+	position: absolute;
+  width: 480px;
+  height: 480px;
+  top: 50%;
+  left: 50%;
+  margin-left: -240px;
+  margin-top: -240px;
+}
+.turntable-bg button {
+	border: 1px solid #1E90FF;
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15), 2px 2px 10px rgba(0, 0, 0, 0.4), -2px 2px 10px rgba(0, 0, 0, 0.4);
+	position: absolute;
+  width: 48px;
+  height: 36px;
+  border-radius: 0.3em;
+  top: 100%;
+  left: 50%;
+  margin-left: -24px;
+  margin-top: 124px;
+  width:60px;
+  padding:2px;
+  -webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.turntable-bg button:hover {
+				box-shadow:  0px -3px 10px rgba(0, 0, 0, 0.4); 
+			}
+
+</style>
+
+	<body>
+			<div class="couten" style="position:fixed; width:100%; margin:0 auto; text-align:center; padding-top:5%">
+        <div class="turntable-bg">
+            <!--<div class="mask"><img src="images/award_01.png"/></div>-->
+            <div class="pointer"><img src="img/pointer.png" style="z-index:1;" alt="pointer"/></div>
+            <div class="rotate" ><img id="rotate" src="img/turntable.png"  alt="turntable"/ ></div>
+            <button onclick="rotateFn()" style="">开始抽奖</button>
+        </div>
+	</div>
+<div style="text-align:center;">
+
+</div>
+<script type="text/javascript">
+	var rotateFn = function (){
+		var ob = document.getElementById("rotate");
+		ob.style.transition="-webkit-transform 8000ms ease";
+		document.getElementById("rotate").style.WebkitTransform="rotateZ("+(300+(Math.random()*3000))+"deg)";
+	};
+
+
+</script>
+	</body>
+</html>

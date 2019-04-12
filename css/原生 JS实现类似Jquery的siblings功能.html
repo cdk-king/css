@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<style>
+body{
+  background:#CCC;
+}
+a{
+  display:inline-block;
+  width:100px;
+  padding:5px 10px;
+  background:#666;
+  text-align:center;
+  color:#FFF;
+  border:solid 3px #333;
+  margin:1px;
+}
+a.active{
+  background-color:#FF0;
+  border-color:#C00;
+  color:#C00;
+}
+</style>
+<div id="parent">
+  <a href="javascript:;">连接一</a>
+  <a href="javascript:;">连接二</a>
+  <a href="javascript:;">连接三</a>
+  <a href="javascript:;">连接四</a>
+  <a href="javascript:;">连接五</a>
+  <a href="javascript:;">连接六</a>
+  <a href="javascript:;">连接七</a>
+  <a href="javascript:;">连接八</a>
+  <a href="javascript:;">连接九</a>
+</div>
+<script>
+document.getElementById("parent").addEventListener("click", function(event){
+    if( event.srcElement.tagName.toLowerCase() == "a" ){
+        if( this.lastClick != event.target){
+            event.target.className = "active";
+            if( !!this.lastClick){//!!o.flag等效于var test=o.flag||false;  
+                this.lastClick.className = "";//牛逼
+            }
+            this.lastClick = event.target;
+        } else {
+            console.log("重复点击不触发");
+        }
+    }
+});
+</script>
+	</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body,html{
+			width: 100%;
+			height:100%;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		#div{
+			position: absolute;
+			
+			left: 0;
+			bottom: 0;
+		width:100px;
+		height:100px;
+		background: #009999;
+		}
+		#map{
+			background: #ccc;
+			width: 100%;
+			height:100%;
+		}
+		
+	</style>
+	
+	<body>
+		<div id="map">
+			
+		
+		<div id="div">
+			
+		</div>
+		<div id="msg">
+			<table>
+				<tr>
+					<td><div>当前运行状态：</div></td>
+					<td><div id="state"></div></td>
+				</tr>
+				<tr>
+					<td><div>当前方向：</div></td>
+					<td><div id="dec"></div></td>
+				</tr>
+				<tr>
+					<td><div>当前运行标识：</div></td>
+					<td><div id="key"></div></td>
+				</tr>
+			</table>
+			
+		</div>
+		</div>
+	</body>
+	<script>
+		
+		var loop1;
+		var directionX = 0;
+		var directionY = 0;
+		var xPos = document.documentElement.clientWidth;
+		var yPos = document.documentElement.clientHeight
+		var tmpX = 0;
+		var tmpY = yPos;
+		var flag = false;
+		var ismove = 0;
+		document.onkeydown= function(e){
+			switch(e.keyCode){
+				case 83://up
+				alert("1");
+				clearInterval(loop1);
+				break;
+			}
+			}
+		function KeyboardControlDiv(el){
+		var div = typeof(el) === "string" ? document.getElementById(el) : el;
+		
+		function move(dic,ism){
+			
+			if(ismove == 1){
+				flag = false;
+				ismove = ism;
+			}else{
+				flag = true;
+				ismove = ism;
+			}
+			
+			if(ismove == 1){
+				if(dic == 1 || dic == 2){
+					
+					directionX = dic;
+				}else {
+					directionY = dic;
+				}
+			}
+			else if(ismove == 0){
+				if(dic == 1 || dic == 2){
+				
+						directionX = 0;
+					}else {
+						directionY = 0;
+				}
+			}
+			//只有一个方向就只能触发一个判断
+			if(flag){
+				//避免重复触发
+				clearInterval(loop1);
+				loop1 = setInterval(function (){
+				if(directionX == 1){
+					div.style.left = tmpX +10+ "px";
+					tmpX = div.offsetLeft;	
+				}
+				else if(directionX == 2){
+					div.style.left = tmpX -10+ "px";
+					tmpX = div.offsetLeft;	
+				}
+				if(directionY == 3){
+					div.style.top = tmpY +10+ "px";
+					tmpY = div.offsetTop;
+				}
+				else if(directionY == 4){
+					div.style.top = tmpY -10+ "px";
+					tmpY = div.offsetTop;
+				}
+				
+			},32)
+		}
+		}
+		document.onkeydown= function(e){
+			switch(e.keyCode){
+				case 32://up			
+				clearInterval(loop1);
+				break;
+				case 38://up
+				move(4,1);
+				break;
+				case 40://down
+				move(3,1);
+				break;
+				case 37://left
+				move(2,1);
+				break;
+				case 39://right
+				move(1,1);
+				break;
+			}
+		}
+		document.onkeyup = function(e){
+			switch(e.keyCode){				
+				case 38://up
+				move(4,0);
+				break;
+				case 40://down			
+				move(3,0);
+				break;
+				case 37://left		
+				move(2,0);
+				break;
+				case 39://right		
+				move(1,0); 
+				break;
+			}
+
+		}
+		}
+		KeyboardControlDiv('div');
+		var state = document.getElementById("state");
+		var dec = document.getElementById("dec");
+		var key = document.getElementById("key");
+		setInterval(function (){
+				state.innerHTML = ismove;
+				dec.innerHTML = directionX;
+			},32)
+	</script>
+</html>

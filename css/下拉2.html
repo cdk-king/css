@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+    $(function () {
+        var _this1 = null;
+        $('.second-nav').hover(function () {
+            _this1 = $(this);
+            _this1.find('.third-nav').show();
+            
+            var _this2 = null;
+                _this1.find('li').find('.third-nav').find('li').hover(function () {
+                    $(this).find('a').css("color", "blue");
+                }, function () {
+                    $(this).find('a').css("color", "red");
+                });
+            
+        }, function () {
+            _this1.find('.third-nav').hide();
+
+        });
+    });
+</script>
+	<body>
+		<div id="">
+			
+		
+		<ul class="second-nav" style="padding:0;list-style:none;margin:0 auto;text-align: center;width: 142px;height:30px;z-index:999;">
+					        <li style="text-align: center;margin:0 auto;padding:0;">
+						        <a>cdk</a>
+                                    <ul class="third-nav" style="display:none;list-style:none;padding:0;text-align: center;z-index:999;position:relative;">
+							        <li style="height: 1px;background:deepskyblue;" ></li>
+                                    <li style="background-image: url(../../App_Themes/Default/Images/Primacy/nav_bgd.gif);">
+								        <a href="/Integration/CompanyIntro.aspx?Master=0&ID=2" style="color:dodgerblue;height:35px;width:90px;">公司简介</a>
+							        </li>
+                                    <li style="height: 1px;background:deepskyblue;" ></li>
+							        <li style="background-image: url(../../App_Themes/Default/Images/Primacy/nav_bgd.gif);">
+								        <a href="/Integration/Framework.aspx" style="color:dodgerblue;height:35px;width:90px;">组织机构</a>
+							        </li>
+                                        <li style="height: 1px;background:deepskyblue;" ></li>
+                                    <li style="background-image: url(../../App_Themes/Default/Images/Primacy/nav_bgd.gif);">
+								        <a href="/Integration/CompanyIntro.aspx?Master=0&ID=1" style="color:dodgerblue;height:35px;width:90px;">项目概况</a>
+							        </li>
+                                        <li style="height: 1px;background:deepskyblue;" >
+							        </li>
+							        <li style="background-image: url(../../App_Themes/Default/Images/Primacy/nav_bgd.gif);">
+								        <a href="/Integration/ContactUs.aspx" style="color:dodgerblue;height:35px;width:90px;">联系我们</a>
+							        </li>
+                                    </ul>
+					        </li>
+                            </ul>
+                            </div>
+	</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+		
+		.filePicker {
+			width: 160px;
+			height: 44px;
+			line-height: 44px;
+			text-align: center;
+			color: #fff;
+			background: #00b7ee;
+		}
+			.filePicker input[type="file"] {
+			position: relative;
+			top: -44px;
+			left: 0px;
+			width: 160px;
+			height: 44px;
+			opacity: 0;
+			cursor: pointer;
+			overflow: hidden;
+			z-index: 0;
+		}
+		
+		.container {
+			width: 160px;
+			margin: 30px auto;
+			
+		}
+		.img-container {
+			
+			margin: 30px auto;
+			
+			text-align: center;
+		}
+		.img{
+			border: 1px solid #fff;
+			width: 160px;
+			min-height: 50px;
+			display:inline-block;
+			
+		}
+		.img-span{
+			display:inline-block;
+			white-space:nowrap;
+			
+		}
+	</style>
+
+	<body>
+		<div id="img-box" class="img-container">
+			<!--<input type="file"  />-->
+			<!--<img class="img" src="" />-->
+		</div>
+		<div class="container">
+			<div class="filePicker">
+				<label>点击选择文件</label>
+				<!--accept属性进行文件选择过滤-->
+				<input id="fileInput" type="file" name="file" multiple="multiple" >
+
+			</div>
+		</div>
+		<div class="container">
+			<button id="upload" class="filePicker">上传</button>
+		</div>
+	</body>
+	<script>
+		var imgbox = document.getElementById("img-box");
+		var imgs = document.getElementsByClassName('img');
+		var upload = document.getElementById("upload");
+		var fileInput = document.getElementById("fileInput");
+		//console.log(fileInput);
+		fileInput.addEventListener('change',function(e){
+			var length = fileInput.files.length;
+			console.log(length);
+			for(var i = 0;i<length;i++){
+				var file = fileInput.files[i];
+				var newdiv = document.createElement('span');
+				newdiv.className = "img-span";
+				var newimg = document.createElement('img');
+				newimg.className = "img";
+				newdiv.appendChild(newimg);
+				imgbox.appendChild(newdiv);
+				console.log(readFileSize(file));
+				//第一种 读取File对象中的内容，readAsDataURL方法
+	            var reader = new FileReader();
+	            reader.readAsDataURL(file);
+	            (function(i){
+	            reader.onload=function(){
+				//console.log(reader.result);
+					imgs[i].setAttribute("src",this.result);
+				}
+	            })(i)
+            
+			}
+			
+
+//第二种		createObjectURL方法
+//			var srcc=window.URL.createObjectURL(file);  
+//			img.setAttribute("src",srcc);
+								
+		});
+		
+		upload.addEventListener('click', function(event) {
+		    var file = fileInput.files[0];
+		    if (file) {
+		        var reader = new FileReader();  
+		        //ajax上传
+		        var xhr = new XMLHttpRequest();
+		        xhr.onprogress=function(e){
+		        	//Math.round四舍五入
+		            var percentage = Math.round((e.loaded * 100) / e.total);
+		            console.log("percentage:"+percentage);
+		        }
+		        xhr.onload=function(e){
+		            console.log("percentage:100");
+		        }
+		        xhr.open("POST", "这里填写服务器地址");  
+		        
+		        //readAsBinaryString()：开始读取指定的Blob对象或File对象中的内容. 
+		        //当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件处理程序,
+		        //则调用之.同时,result属性中将包含所读取文件的原始二进制数据.
+		        
+		        reader.readAsBinaryString(file);
+		        reader.onload = function(evt) {
+		            xhr.send(evt.target.result);
+		        };
+		    }
+		});  
+		
+		/**
+		 * 读文件大小
+		 * @param {Object} file
+		 */
+		function readFileSize(file) {
+			var size = file.size / 1024;
+			var aMultiples = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+			var fileSizeString = '';
+			for(var i = 0; size > 1; size /= 1024, i++) {
+				fileSizeString = size.toFixed(2) + " " + aMultiples[i];
+			}
+			return fileSizeString;
+		}
+	</script>
+
+</html>

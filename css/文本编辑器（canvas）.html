@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			/*background: #21333C;*/
+			/*background: -webkit-gradient(linear, 0 0, 0 bottom, from(#999), to(#21333C)); */
+		    /*background: -webkit-linear-gradient(top, #21333C 0%, #261300 100%);
+			background: linear-gradient(to bottom, #21333C 0%, #261300 100%);*/
+
+		}
+		
+		#snailbait-fps {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			/*border: 1px solid red;*/
+			display: none;
+			opacity: 0;
+		}
+		
+		#snailbait-score {
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			font: 46px fantasy;
+			text-align: center;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			-webkit-transition: opacity 5s;
+			-moz-transition: opacity 5s;
+			-o-transition: opacity 5s;
+			transition: opacity 5s;
+			display: none;
+			opacity: 0;
+		}
+	</style>
+	<body>
+		<div id="snailbait-fps"></div>
+		<div id="snailbait-score">0</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script src='js/dat.gui.min.js'></script>
+	<script>
+		var fpsElement = document.getElementById("snailbait-fps");
+		var scoreElement = document.getElementById("snailbait-score");
+		var lastFpsUpdateTime = 0;
+		var lastAnimationFrameTime = 0;
+		var fps = 0;
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+		context.font = "30px Arial";
+		var paragraph;
+		var line;
+		
+		var TextCursor = function(width,fillStyle){
+			this.fillStyle = fillStyle || 'rgba(0,0,0,0.5)';
+			this.width = width || 2;
+			this.left = 0;
+			this.top = 0;
+		}
+		
+		TextCursor.prototype = {
+			getHeight:function(context){
+				var h = context.measureText("W").width;
+				return h+h/6;
+			},
+			createPath:function(context){
+				context.beginPath();
+				context.rect(this.left,this.top,this.width,this.getHeight(context));
+				
+			},
+			draw:function(context,left,bottom){
+				context.save();
+				
+				this.left = left;
+				this.top = bottom-this.getHeight(context);
+				
+				this.createPath(context);
+				context.fillStyle = this.fillStyle;
+				
+				context.fill();
+				context.restore();
+			},
+			erase:function(context,imageData){
+				context.putImageData(imageData,0,0,this.left,this.top,this.width,this.getHeight(context));
+			}
+		}
+		//段落
+		var Paragraph = function(context,left,top,imageData,cursor){
+			this.context = context;
+			this.drawingSurface = imageData;
+			this.left = left;
+			this.top = top;
+			this.lines = [];
+			this.activeLine = undefined;
+			this.cursor = cursor;
+			this.blinkingInterval = undefined;
+			this.blinkTimeout = undefined;
+		}
+		Paragraph.prototype = {
+			addLine:function(line){
+				this.lines.push(line);
+				this.activeLine = line;
+				this.moveCursor(line.left,line.bottom);
+			},
+			moveCursor:function(x,y){
+				this.cursor.erase(this.context,this.drawingSurface);
+				
+				this.cursor.draw(this.context,x,y);
+				this.blinkCursor(x,y);
+			},
+			moveCursorCloseTo:function(x,y){
+				var line = this.getLine(y);
+			},
+			getLine:function(y){
+				var line;
+				for(var i = 0;i<this.lines.length;i++){
+					line = this.lines[i];
+					if(y>line.bottom-line.getHeight(context) && y<line.bottom){
+						return line;
+					}
+					return undefined;
+				}
+			},
+			insert:function(text){
+				
+				this.erase(this.context,this.drawingSurface);
+				this.activeLine.insert(text);
+				var t = this.activeLine.text.substring(0,this.activeLine.caret);
+				var w = this.context.measureText(t).width;
+				this.draw(this.context);
+				this.moveCursor(this.activeLine.left+w,this.activeLine.bottom);
+				
+			},
+			erase:function(context,imageData){
+				context.putImageData(imageData,0,0);
+			},
+			draw:function(){
+				for(var i = 0;i<this.lines.length;i++){
+					this.lines[i].draw(this.context);
+				}
+			},
+			newline:function(){//press enter
+				var textBeforeCursor = 
+				this.activeLine.text.substring(0,this.activeLine.caret);
+				var textAfterCursor = 
+				this.activeLine.text.substring(this.activeLine.caret);
+				var height = this.context.measureText("W").width*7/6;
+				var bottom = this.activeLine.bottom+height;
+				var activeIndex;
+				var line;
+				
+				this.erase(this.context,this.drawingSurface);
+				this.activeLine.text = textBeforeCursor;
+				
+				line = new TextLine(this.activeLine.left,bottom);
+				line.insert(textAfterCursor);
+				
+				activeIndex = this.lines.indexOf(this.activeLine);
+				
+				this.lines.splice(activeIndex+1,0,line);//添加新的line
+				this.activeLine = line;
+				this.activeLine.caret = 0;
+				//indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。
+				activeIndex = this.lines.indexOf(this.activeLine);
+				
+				for(var i = activeIndex+1;i<this.lines.length;i++){
+					line = this.lines[i];
+					line.bottom += height;
+				}
+				
+				this.draw();
+//				saveDrawingSurfaceImageData();
+//				this.drawingSurface = drawingSurfaceImageData;
+				this.cursor.draw(this.context,this.activeLine.left,this.activeLine.bottom);
+			},
+			blinkCursor:function(x,y){
+				var self = this;
+				//setInterval里的this指的不是Paragraph
+				clearInterval(self.blinkingInterval);
+				clearTimeout(self.blinkTimeout);
+				this.blinkingInterval = setInterval(function(e){
+					self.cursor.erase(self.context,self.drawingSurface);
+					self.blinkTimeout =  setTimeout(function(e){
+						self.cursor.draw(self.context,x,y);
+					},300);
+				},1000)
+			},
+			activeLineIsTopLine:function(){
+				return this.activeLine === this.lines[0];
+			},
+			backspace:function(){
+				
+				this.context.save();
+
+				if(this.activeLine.caret == 0 ){
+					//console.log(this.activeLine.caret);
+					if(!this.activeLineIsTopLine()){
+						this.erase(this.context,this.drawingSurface);
+						this.moveUpOneLine();
+						this.draw();
+						context.restore();
+					}
+					
+				}else{
+					this.erase(this.context,this.drawingSurface);
+					
+					this.activeLine.removeCharacterBeforeCaret();
+					
+					
+					this.moveCursor(this.activeLine.left+this.activeLine.getWidth(this.context),this.activeLine.bottom);
+					//this.blinkCursor(this.activeLine.left+this.activeLine.getWidth(this.context),this.activeLine.bottom);
+					this.draw();
+					//this.activeLine.draw(this.context);
+					
+					context.restore();
+				}
+			},
+			moveUpOneLine:function(){
+				var lastActiveText;
+				var lastActiveLine;
+				var activeIndex;
+				var line;
+				var before;
+				var after;
+				
+				lastActiveLine = this.activeLine;
+				lastActiveText = ""+this.activeLine.text;
+				activeIndex = this.lines.indexOf(this.activeLine);
+				console.log(activeIndex);
+				this.activeLine = this.lines[activeIndex-1];
+				this.activeLine.caret = this.activeLine.text.length;
+				
+				this.lines.splice(activeIndex,1);
+				
+				this.moveCursor(this.activeLine.left+this.activeLine.getWidth(this.context),this.activeLine.bottom);
+				
+				this.activeLine.text +=lastActiveText;
+				
+				for(var i = activeIndex;i<this.lines.length;i++){
+					line = this.lines[i];
+					line.bottom -= line.getHeight(this.context); 
+				}
+			}
+		}
+		function windowToCanvas(e) {
+		   var x = e.x || e.clientX,
+		       y = e.y || e.clientY,
+		       bbox = canvas.getBoundingClientRect();
+		
+		   return { x: x - bbox.left * (canvas.width  / bbox.width),
+		            y: y - bbox.top  * (canvas.height / bbox.height)
+		          };
+		}
+		drawGrid(context,50,canvas.width);
+		var drawingSurfaceImageData;
+		saveDrawingSurfaceImageData();
+		var cursor = new TextCursor();
+		function saveDrawingSurfaceImageData(){
+			drawingSurfaceImageData = context.getImageData(0,0,canvas.width,canvas.height);
+		}
+		
+		function drawGrid(context,height,width){
+			context.beginPath();
+			var i= 1;
+			while(i*height<canvas.height){
+				context.moveTo(0,height*i);
+				context.lineTo(width,height*i); 
+				i++;
+			}
+			context.strokeStyle = 'rgba(0,0,0,0.5)';
+			context.stroke();
+		}
+
+		
+		var TextLine = function(x,y){
+			this.text = "";
+			this.left = x;
+			this.bottom = y;
+			this.caret = 0;
+		}
+		TextLine.prototype = {
+			insert:function(text){
+				this.text = this.text.substring(0,this.caret) + text + this.text.substring(this.caret);//如果省略该参数，那么返回的子串会一直到字符串的结尾
+				this.caret += text.length;
+			},
+			removeCharacterBeforeCaret:function(){
+				if(this.caret === 0){
+					return;
+				}
+				this.text = this.text.substring(0,this.caret-1) + this.text.substring(this.caret);
+				this.caret --;
+			},
+			getHeight:function(context){
+				var h = context.measureText("W").width;
+				return h+h/6;
+			},
+			getWidth:function(context){
+				return context.measureText(this.text).width;
+			},
+			draw:function(context){
+				context.save();
+				context.textAlign = 'start';
+				context.textBaseline = 'bottom';
+				context.strokeText(this.text,this.left,this.bottom);
+				context.fillText(this.text,this.left,this.bottom);
+				context.restore();
+			},
+			erase:function(context,imageData){
+				context.putImageData(imageData,0,0);
+			}
+		}
+		
+		canvas.onmousedown = function(e){
+			
+			cursor.erase(context,drawingSurfaceImageData);
+			saveDrawingSurfaceImageData();
+			var loc = windowToCanvas(e);
+			
+			line = new TextLine(loc.x,loc.y);
+			
+			if(paragraph){
+				clearInterval(paragraph.blinkingInterval);
+				clearTimeout(paragraph.blinkTimeout);
+			}
+			var height = context.measureText("W").width*6/6;
+				paragraph = new Paragraph(context,loc.x,loc.y-height,drawingSurfaceImageData,cursor);
+				paragraph.addLine(line);
+		}
+		
+		document.onkeydown = function(e){
+			if(e.keyCode === 8 || e.keyCode === 13){
+				e.preventDefault();
+			}
+			if(e.keyCode === 8){
+				paragraph.backspace();
+			}
+			if(e.keyCode === 13){
+				paragraph.newline();
+			}
+		}
+		document.onkeypress = function(e){
+			var key = String.fromCharCode(e.which);
+			if(e.keyCode !== 8 && !e.ctrlKey && !e.metaKey){
+				e.preventDefault();
+				paragraph.insert(key);
+			}
+		}
+	</script>
+	
+</html>

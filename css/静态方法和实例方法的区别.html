@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.box {
+				width: 300px;
+				height: 200px;
+				border: 1px solid #CCC;
+				float: left;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="a" class="box">
+			<button onclick="a()">执行</button>
+			<div class="info"></div>
+		</div>
+		<div id="b" class="box">
+			<button onclick="b()">执行</button>
+			<div class="info"></div>
+		</div>
+		<div id="c" class="box">
+			<button onclick="c()">执行</button>
+			<div class="info"></div>
+		</div>
+		<div id="d" class="box">
+			<button onclick="d()">执行</button>
+			<div class="info"></div>
+		</div>
+		<div id="e" class="box">
+			<button onclick="e()">执行</button>
+			<div class="info"></div>
+		</div>
+		<div id="f" class="box">
+			<button onclick="f()">执行</button>
+			<div class="info"></div>
+		</div>
+	</body>
+
+	<script>
+		function a(){
+		var Person = function() {};
+		Person.say = function() {
+			
+			var node=document.createElement("div"); //创建一个li节点
+               
+                var asd=document.createTextNode("cdk1")//定义创建文本节点
+                node.appendChild(asd); //把文本节点追加到li节点
+                document.getElementById("a").appendChild(node);//把li节点添加到ul中
+		};
+		Person.prototype.getName = function(name) {
+			var node=document.createElement("div"); //创建一个li节点
+               
+                var asd=document.createTextNode(name)//定义创建文本节点
+                node.appendChild(asd); //把文本节点追加到li节点
+                document.getElementById("a").appendChild(node);//把li节点添加到ul中
+		}
+
+		Person.say();
+		
+
+		var carl=new Person;
+		carl.getName('cdk2');
+		
+		}
+	</script>
+	<script>
+		function b(){
+		var a = function() {
+			var b = function() {
+				console.log('b');
+			}
+		}
+		a.c = function() {
+			console.log('c');
+		}
+		//a.b();
+		//a.c();
+		}
+	</script>
+	<script>
+		function c(){
+		
+		function Bar() {
+			this.foo = 123;
+		}
+		var temp = Bar; //没有实例，所以只是引用
+		temp.foo // undefined    这样是访问不到的，虽然temp指向了Bar的引用
+		temp.foo;
+
+		var bar = new Bar();
+		bar.foo // 123       因为bar是Bar的实例，所以可以理解为bar将Bar里的私有属性和方法都克隆到自己的身上，并且克隆过来的属性和方法和被克隆体(Bar)脱离干系。
+		bar.foo;
+			
+		}
+	</script>
+	<script>
+		function d(){
+		function Blog() {
+			this.title = 'blue sky';
+		}
+
+		var bar = new Blog();
+		bar.title // 'blue sky'
+
+		var foo = Blog;
+		foo.title = 'green sky' // 试图改写title属性
+		foo.title //   'green sky'    
+		bar.title //   'blue sky'    依旧是原来的值
+		}
+	</script>
+	<script>
+		function e(){
+		var F = function() {};
+		Object.prototype.a = function() {
+			console.log('a'); 
+			
+		};
+		Function.prototype.b = function() {
+			console.log('b');
+		};
+		var f = new F();
+		f.a(); // a
+		//f.b();// undefined
+		F.a(); // a
+		F.b(); // b
+		}
+	</script>
+	<script>
+		function f(){
+			
+		}
+	</script>
+	<script>
+		function cdk(){
+			
+			var cdk_obj1 = 	"cdk_obj11";//私有变量
+			this.cdk_obj2 = "cdk_obj2";
+			return cdk_obj1;
+		}
+		cdk.cdk_obj3 = "cdk_obj3"
+		cdk.prototype.cdk_obj4 = "cdk_obj4";
+		var cdk_son = new cdk;
+//		console.log("cdk type:"+typeof(cdk));
+//		console.log("cdk_son type:"+typeof(cdk_son));
+//		console.log(new cdk().cdk_obj2);
+//		
+//		console.log(cdk.cdk_obj2);
+//		console.log(new cdk().cdk_obj3);
+//		console.log(new cdk().cdk_obj4);
+//		console.log(cdk.cdk_obj3);
+//		console.log(cdk.cdk_obj4);
+//		console.log(cdk());
+
+
+	</script>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="600" height="600"></canvas>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.11.0.js" ></script>
+	<script>
+		(function(){
+			var canvas = document.getElementById('myCanvas');
+			var ctx = null;
+			var k = 1;
+			var cdks = [],y=[];
+			var particles = [];
+			if(canvas.getContext){
+				ctx = canvas.getContext('2d');
+				//设置画布大小为屏幕宽高
+                canvas.w = canvas.width = 600;
+                canvas.h = canvas.height = 600;
+			}
+
+			var image = new Image();
+			image.src = "img/cdklogo4.png";
+			image.onload = function(){
+				image.obj = image;
+                    image.w = 200;
+                    image.h = 200;
+                    image.x = 10;
+                    image.y = 10;
+				ctx.drawImage(image,10,10);
+				image.imageData = ctx.getImageData(10,10,200,200);
+				var ImageData = ctx.getImageData(10,10,200,200);
+				calculate();
+				var k = 1;
+				setInterval(function(){
+					
+				},1000)
+				draw();
+				
+			}
+			//image.src = 'img/cdklogo4.png';
+			function calculate() {
+				var len = image.imageData.length;
+				var cols = 50;
+				var rows = 50;
+				var s_width = parseInt(image.w/cols);
+				var s_height = parseInt(image.h/rows);
+				var pos = 0;
+				var data = image.imageData.data;
+				for(var i = 1;i<cols;i++){
+					for(var j = 1;j<rows;j++){
+						pos = (j*s_width*image.w + i*s_height)*4;
+						if(data[pos+1]>150){
+							var particle = {
+								x:image.x + i*s_width + (Math.random() - 0.5)*1,
+								y:image.y + j*s_height + (Math.random() - 0.5)*1,
+								fillStyle: '#006eff',
+								delay: 5,
+								count: 2
+							}
+							var cdk =  {
+								x:0,
+								y:0,
+								fillStyle: '#006eff',
+								delay: 5,
+								count: 2
+							}
+							particles.push(particle);
+							cdks.push(cdk);
+						}
+					}
+				}	
+				ctx.putImageData(image.imageData,0,210);
+			}
+
+			function draw() {
+                //清空画布                    
+                ctx.clearRect(10,10,200,200);
+
+                var len = particles.length;
+                var curr_particle = null;
+				var cur_x,cur_y;
+				var cur_time = 2,duration = 8,cur_delay = 0;
+                for(var i = 0; i < len; i++) {
+                    	curr_particle = particles[i];
+                		 //设置填充颜色
+                    	ctx.fillStyle = curr_particle.fillStyle;
+                    	cur_x = easeInOutExpo(cur_time,1,curr_particle.x,duration);
+                    	cur_y = easeInOutExpo(cur_time,1,curr_particle.y,duration);
+                    		 //绘粒子到画布上
+                    	ctx.fillRect(cur_x,cur_y,2,2);
+                    	//cdks[i].x = cur_x;
+                    	//cdks[i].y = cur_y;
+                }
+                //cur_time--;
+          	}
+			/*
+			 * t-时间，b-起始，c-位移值，d-持续时间
+			 */
+			function easeInOutExpo(t,b,c,d){
+				//t /= d/2;//  x/=y	x=x/y
+				t = (d*t)/2;
+				if(t<1) return c/2 * Math.pow(2, 10 * (t-1)) + b;
+				t--;
+				return c/2 * ( -Math.pow(2,-10 * t) + 2) + b;
+			}
+		}());
+		
+	</script>
+</html>

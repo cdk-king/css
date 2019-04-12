@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>树形菜单</title>
+	</head>
+	<style type="text/css">
+		
+		.TreeTriangle{
+			position: relative;
+			height: 0px;
+			width: 0px;
+			left:-25px;
+			top:-18px;
+			border-right: 10px solid transparent;
+			border-left: 10px solid transparent;
+			border-top: 15px solid red;
+			cursor: pointer;
+		}
+	</style>
+	<body>
+		
+	</body>
+	<script>
+		var TreeMenu = function(){
+			this.menuArry = [
+							{ id: 1, name: "办公管理", pid: 0 },
+							{ id: 2, name: "请假申请", pid: 1 },
+							{ id: 3, name: "出差申请", pid: 1 },
+							{ id: 4, name: "请假记录", pid: 2 },
+							{ id: 5, name: "系统设置", pid: 0 },
+							{ id: 6, name: "权限管理", pid: 5 },
+							{ id: 7, name: "用户角色", pid: 6 },
+							{ id: 8, name: "菜单设置", pid: 6 },
+							];
+							
+			this.menus = '';
+			this.divs = document.getElementsByClassName('TreeTriangle');
+			
+		};
+		TreeMenu.prototype = {
+			GetData: function(id,arry){
+	        	var childArry = this.GetParentArry(id, arry);
+	            if (childArry.length > 0) {
+	                this.menus += '<ul>';
+	                for (var i in childArry) {
+	                    this.menus += '<li class="li" >' + childArry[i].name;
+	                    this.menus += '<div class="TreeTriangle"></div>';
+	                    this.GetData(childArry[i].id, arry);
+	                    this.menus += '</li>';
+	                }
+	                this.menus += '</ul>';
+	            }
+	       },
+	       GetParentArry:function(id, arry) {
+	            var newArry = new Array();
+	            for (var i in arry) {
+	                if (arry[i].pid == id)
+	                    newArry.push(arry[i]);
+	            }
+	            return newArry;
+	       },
+	       turnDownTriangle:function(el){
+	       		el.style.borderTop = "15px solid red";
+        		el.style.borderLeft = "10px solid transparent";
+        		el.style.borderRight = "10px solid transparent";
+        		el.style.borderBottom = ""; 
+        		el.style.left = "-25px";
+				el.style.top = "-18px";
+	       },
+	       turnRightTriangle:function(el){
+	       		el.style.borderTop = "10px solid transparent";
+        		el.style.borderLeft = "15px solid red";
+        		el.style.borderBottom = "10px solid transparent";
+        		el.style.borderRight = "";
+        		el.style.left = "-22px";
+				el.style.top = "-20px";
+	       },
+	       addTreeTriangleListener:function(){
+	       	TreeMenu = this;
+	       		for(var i = 0;i<this.divs.length;++i){
+        			var div = this.divs[i];
+        			div.addEventListener('click',function(e){
+						if(this.nextSibling && this.nextSibling.style.display=="none"){
+			        		if(this.nextSibling){
+			        			this.nextSibling .style.display = "block";
+			        		}
+			        		TreeMenu.turnDownTriangle(this);
+			        	}else if(!this.nextSibling && this.style.borderLeft == "15px solid red"){
+			        		TreeMenu.turnDownTriangle(this);
+			        	}else
+			        	{
+			        		if(this.nextSibling){
+			        			this.nextSibling .style.display = "none";
+			        		}
+			        		TreeMenu.turnRightTriangle(this);
+			        	}
+        			})
+        		}
+	       }
+	       
+		};
+		var treeMenu = new TreeMenu();
+		treeMenu.GetData(0,treeMenu.menuArry);
+		
+		document.body.innerHTML = treeMenu.menus;
+		treeMenu.addTreeTriangleListener();
+	</script>
+</html>

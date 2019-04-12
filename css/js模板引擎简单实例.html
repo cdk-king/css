@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" language="javascript" src="js/jquery-1.11.0.js"></script>
+<script type="text/javascript" language="javascript" src="js/underscore.js"></script>
+<title></title>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    $(function(){
+        var data=[{name:'carl'},{name:'carl'},{name:'carl'}];
+        var t=_.template($("#tpl").text());
+        $("#container").html(t(data));
+    });
+</script>
+<script type="text/template" id="tpl">
+    <%_.each(obj,function(e,i){%>
+    <ul>
+        <li><%=e.name%></li>
+    </ul>
+    <%})%>
+</script>
+</html>

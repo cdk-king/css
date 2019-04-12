@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+<div id ='div'></div>
+<cdk>456</cdk><br/>
+<cdkBtn id ='cdkBtn'>123</cdkBtn><br/>
+<button id ='btn'></button><br/>
+<xx id ='xx'>xx</xx><br/>
+	<body>
+		<script type="text/javascript">
+			window.onload  = function(){
+				console.log("onload");
+				var nodes = document.documentElement;
+				console.log(document.documentElement.childNodes.length);
+				//console.log(document.documentElement.firstChild.innerHTML);
+				var body_element = document.getElementsByTagName("body")[0];
+    			var htl_element = document.getElementsByTagName("*");
+    			console.log(body_element.childNodes.length);      
+    			console.log(htl_element.length); 
+    			//设置<CDKBTN>标签的默认样式；
+    			(function initCDKBTN(){
+    				for(var i = 0;i<body_element.childNodes.length;++i){
+    				var childnode = body_element.childNodes[i];
+    				//console.log(childnode.tagName);
+    				//要大写
+    				if(childnode.tagName === "CDKBTN"){
+    					childnode.style.background = "blue";
+    					childnode.__proto__ = HTMLButtonElement.prototype;
+    					console.log(childnode.__proto__.constructor);
+    					childnode.style = HTMLButtonElement.style;
+    					
+    					var oldinner = childnode.innerHTML;
+    					childnode.outerHTML = childnode.outerHTML.replace("cdkbtn","button");
+    					console.log(childnode.outerHTML);
+    					//childnode.outerHTML = "<button></button>"
+    				}
+    			}
+    			})();
+    			//initCDKBTN();
+    			
+			}
+			var div = document.getElementById('div');
+			var btn = document.getElementById('btn');
+			
+			var xx = document.getElementById('xx');
+			var cdkElement = function(){
+				this.__proto__ = HTMLElement.prototype;
+				this.tagName = 'cdk';
+				this.localName = 'cdk';
+				this.nodeName = 'cdk';
+				this.nodeType = 1;
+				this.innerHTML = 'cdk';
+			}
+			var cdkButtonElement = function(){
+				this.__proto__ = HTMLButtonElement.prototype;
+				this.tagName = 'cdkBtn';
+				this.localName = 'cdkBtn';
+				this.nodeName = 'cdkBtn';
+				this.nodeType = 1;
+				this.innerHTML = 'cdkBtn';
+				
+			}
+			//var cdk = document.createElement('cdk');
+			var cdk = document.createElement('cdkBtn');
+			cdk.style.background = "red";
+			cdk.innerHTML = "cdkBtn";
+			//console.log(cdk);
+			div.appendChild(cdk);
+		</script>
+	</body>
+
+</html>

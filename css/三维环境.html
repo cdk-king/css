@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #21333C;
+		}
+		#snailbait-fps {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font: 30px fantasy;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0, 0, 80, 1.0);
+			/*border: 1px solid red;*/
+		}
+		#snailbait-score{
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			font: 46px fantasy;
+			text-align: center;
+			color: yellow;
+			text-shadow: 2px 2px 4px rgba(0,0,80,1.0);
+			
+			-webkit-transition: opacity 5s;
+			-moz-transition: opacity 5s;
+			-o-transition: opacity 5s;
+			transition: opacity 5s;
+			
+			/*display: none;
+			opacity: 0;*/
+		}
+	</style>
+	<body>
+		<div id="snailbait-fps"></div>
+		<div id="snailbait-score">0</div>
+		<canvas id="canvas">
+			
+		</canvas>
+	</body>
+	<script>
+		var fpsElement = document.getElementById("snailbait-fps");
+		var scoreElement = document.getElementById("snailbait-score");
+		var lastFpsUpdateTime = 0;
+		var lastAnimationFrameTime = 0;
+		var fps = 0;
+		
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var body = document.body;
+
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+		
+		var balls = [];
+		var numBalls = 6;
+		var fl = 50;
+		var zpos = 0
+		var roundR = 150;
+		var Ball = function(r, color) {
+			this.r = r;
+			this.color = color;
+			this.active = true;
+			//物体的 2D坐标
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			//物体的 3D坐标
+			this.xpos = 0;
+		    this.ypos = 0;
+		    this.zpos = 0;
+		    this.realr = r;
+		    this.randomx = 0;
+		    this.randomy = 0;
+			this.t = 0;
+			this.vx = 0;
+			this.vy = 0;
+			this.vz = 0;
+			this.mass = 10;
+			this.vis = true;
+			//球的体积公式
+			this.mass = (4 / 3) * Math.PI * this.r * this.r * this.r;
+		}
+		Ball.prototype = {
+			draw: function(ctx) {
+
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+			}
+		}
+		
+		createBall();
+
+		function createBall() {
+			for(var i=0; i<numBalls; i++){
+			var radius = 20;
+			var ball = new Ball(radius, "#fff");
+			//ball.x = Math.random()*canvas.width;
+			//ball.y = Math.random()*canvas.height;
+			//ball.randomx = Math.random()*100-50;
+			//ball.randomy = Math.random()*100-50;
+			ball.x = ball.xpos = ball.randomx+canvas.width/2;
+			ball.y = ball.ypos = ball.randomy+canvas.height/2;
+			ball.x = ball.xpos = ball.randomx+canvas.width/2+Math.cos(Math.PI*2*i/numBalls)*roundR;
+			ball.y = ball.ypos = ball.randomy+canvas.height/2+Math.sin(Math.PI*2*i/numBalls)*roundR;
+			//ball.z = Math.random()*50+200;
+			//ball.vx = Math.random()*6 - 3; 
+			//ball.vy = Math.random()*6 - 3;
+			ball.vx = 0;
+			ball.vy = 0;
+			balls.push(ball);
+			}
+		};
+		
+		function drawBall(ball1, index) {
+			ball1.zpos = zpos;
+			var scale = fl / (fl + ball1.zpos); //缩放比列 
+			
+			var xpos = ball1.xpos - width/2;
+        	var ypos = ball1.ypos - height/2;
+			
+			ball1.x = width/2 + xpos * scale; //新坐标 
+        	
+        	ball1.y = height/2 + ypos * scale;
+			if(scale<0){
+				ball1.r = ball1.realr*0;
+			}else{
+				ball1.r = ball1.realr*Math.abs(scale);
+				
+			}
+			if(zpos<-100){
+				zpos=500
+			}else
+			if(zpos>500){
+				zpos=-100
+			}
+			ball1.x += ball1.vx;
+
+			ball1.y += ball1.vy;
+			
+			
+			//ball1.z--;
+			ball1.draw(context);
+
+		}
+		
+		function calculateFps(now) {
+			fps = 1 / (now - lastAnimationFrameTime) * 1000 * 1;
+			//console.log(now - this.lastAnimationFrameTime);
+			if(now - lastFpsUpdateTime > 1000) {
+				lastFpsUpdateTime = now;
+				fpsElement.innerHTML = fps.toFixed(0) + ' fps';
+				//console.log(fps.toFixed(0));
+			}
+			lastAnimationFrameTime = now;
+
+			return fps;
+		}
+		
+		drawFrame();
+
+		function drawFrame(now) {
+			calculateFps(now);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			//绘制小球
+			balls.forEach(drawBall);
+			
+			//绘制连线
+			//balls.forEach(drawLine);
+			
+			
+			window.requestAnimationFrame(drawFrame, canvas);
+		}
+		window.addEventListener('keydown', function(e) {
+		    if (e.keyCode === 38) { //up
+		        zpos += 5;
+		    } else if (e.keyCode === 40) {
+		        zpos -= 5;
+		    }
+		    scoreElement.innerHTML = zpos;
+		    console.log(zpos);
+		}, false);
+		window.addEventListener('mousemove', function(e) {
+			for(var i = 0;i<balls.length;i++){
+				var ball = balls[i];
+				//balls[i].x = balls[i].xpos = balls[i].randomx+e.clientX;
+				//balls[i].y = balls[i].ypos = balls[i].randomy+e.clientY;
+				ball.x = ball.xpos = ball.randomx+e.clientX+Math.cos(Math.PI*2*i/numBalls)*roundR;
+				ball.y = ball.ypos = ball.randomy+e.clientY+Math.sin(Math.PI*2*i/numBalls)*roundR;
+			}
+		}, false);
+		var changeZpos = function(event) {
+			event = event || window.event;
+			if(event.wheelDelta < 0) {
+				zpos -= 5;
+			} else {
+				zpos += 5;
+			}
+			scoreElement.innerHTML = zpos;
+		    console.log(zpos);
+		};
+		//FF使用DOMMouseScroll，其他浏览器都是用mousewheel
+		if(document.addEventListener) {
+			document.addEventListener('DOMMouseScroll', changeZpos, false);
+		}
+		
+		//js滚轮事件
+		document.onmousewheel = changeZpos;
+	</script>
+</html>

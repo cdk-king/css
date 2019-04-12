@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>stop用法实例</title>
+    <style type="text/css">
+        body,
+        dl,
+        dt,
+        dd,
+        ul,
+        input,
+        form,
+        h3,
+        h4,
+        p {
+        	padding: 0;
+        	margin: 0;
+        	font-size: 12px;
+        	font-family: verdana, arial, tahoma;
+        }
+        
+        .hide {
+        	display: none;
+        }
+        
+        body.inbody {
+        	background: #000;
+        }
+        
+        .imain {
+        	width: 1000px;
+        	overflow: hidden;
+        	margin: 0 auto;
+        }
+        
+        .imain .mleft {
+        	width: 195px;
+        	background: #333;
+        	padding: 20px 0;
+        	float: left;
+        	position: relative;
+        }
+        
+        .imain .mleft .mllogo {
+        	width: 73px;
+        	height: 33px;
+        	margin: 0 auto;
+        }
+        
+        .mleft .mlnav {
+        	margin-top: 10px;
+        	height: 570px;
+        }
+        
+        .mleft .mlnav dl {
+        	padding-left: 15px;
+        	width: 180px;
+        	margin-bottom: 15px;
+        	opacity: 0.5;
+        }
+        
+        .mleft .mlnav dl dt {
+        	background: #232325;
+        	height: 30px;
+        	padding-left: 8px;
+        	border-left: 5px solid #e98d31;
+        	line-height: 30px;
+        	color: #fff;
+        	font-size: 14px;
+        	font-weight: bold;
+        	font-family: 'Microsoft YaHei';
+        }
+        
+        .mleft .mlnav dl dd {
+        	background: #494743;
+        	color: #adadae;
+        	font-size: 12px;
+        	font-family: STSong;
+        	height: 50px;
+        	padding: 5px;
+        	line-height: 180%;
+        }
+        
+        .mleft .mlnav dl.current dt {
+        	border: none;
+        	border-right: 1px solid #ee650a;
+        	background: none;
+        }
+        
+        .mleft .mlnav dl dt a {
+        	color: #fff;
+        }
+        
+        .mleft .mlnav dl dt span {
+        	font-size: 10px;
+        }
+        
+        .aproduct {
+        	overflow: hidden;
+        	cursor: pointer;
+        }
+        
+        .aproduct dt {
+        	background: #232325;
+        }
+        
+        .prolista {
+        	width: 500px;
+        	border-top: 1px solid #e69437;
+        	color: #fff;
+        	position: absolute;
+        	right: -500px;
+        	top: 0px;
+        	height: 300px;
+        	background: #4b4b4b;
+        	opacity: 0;
+        	z-index: 100;
+        }
+    </style>
+    <script type='text/javascript' src="js/jquery-1.11.0.js"></script>
+    <script>
+        $(function () {
+            var $aproduct=$(".aproduct");
+            var $dl=$("dl");
+        //    
+//      $("dl").hover(  
+//      function () {  
+//          $("dl").stop(true).animate({ height: "500" }, 5000).animate({ width: "500px" }, 5000);  
+//      },  
+//      function () {  
+//          $("dl").stop(true).animate({ }, 5000).animate({  },5000);  
+//      }  
+//		);
+
+            $("dl").each(function() {
+               $(this).hover(function() {
+               	$(this).stop(true).animate({opacity: '1'  }, 100);
+               	//$(this).find("dd").removeClass("hide");
+               	$(this).removeClass("current");
+				$(this).addClass("aproduct");
+                   //$(this).find(">div:first-child").hide();
+                   //$(this).find(">div:last-child").show();
+               },
+           function() {
+           	$(this).stop(true).animate({opacity: '0.8'  }, 100);
+           	//$(this).find("dd").addClass("hide");
+           	$(this).removeClass("aproduct");
+           	$(this).addClass("current");
+               //$(this).find(">div:first-child").show();
+               //$(this).find(">div:last-child").hide();
+           });
+           });
+
+//          $("dl").hover(function(){
+//          	$dl.removeClass("current");
+//          },function(){
+//          	$dl.addClass("current");
+//          });
+            //var $prolista=
+            $(".aproduct").each(function() {
+            $(this).hover(function () {
+                $(this).find(".prolista").show().stop(true).animate({
+                    top: '75px',
+                    opacity:'.8'
+                })
+            },function () {
+                $(this).find(".prolista").stop(true).animate({
+                   top: '0',
+                   opacity: '0'
+                },function(){
+                    $(this).hide();
+                });
+            });
+            });
+        })
+    </script>
+</head>
+<body class="inbody">
+    <div class="imain">
+        <div class="mleft">
+            <div class="mlnav">
+                <dl class="current">
+                    <dt>流行趋势 <span>Fashion trends</span></dt>
+                    <dd class="hide">欢迎来到hello素材网下载js特效和网站模板。</dd>
+                </dl>
+                <dl class="aproduct">
+                    <dt>所有产品 <span>All products</span></dt>
+                    <dd>欢迎来到hello素材网下载js特效和网站模板。</dd>
+                    <div class="prolista">你可以把stop中的参数修改一下观察一下效果!</div>
+                </dl>
+                <dl class="aproduct">
+                    <dt>公司简介 <span>Company profile</span></dt>
+                    <dd class="hide">欢迎来到hello素材网下载js特效和网站模板。</dd>
+                    <div class="prolista">cdk</div>
+                </dl>
+                <dl class="current">
+                    <dt>加入我们 <span>Join Us</span></dt>
+                    <dd class="hide">欢迎来到hello素材网下载js特效和网站模板。</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

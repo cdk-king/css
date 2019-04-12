@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.div1 {
+			width: 300px;
+			height: 50px;
+			background: #ccc;
+			
+			-webkit-transition: all 0.1s ease;
+			-o-transition: all 0.1s ease;
+			transition: all 0.1s ease;
+		}
+		.div2 {
+			width: 300px;
+			height: 50px;
+			background: blue;
+		    position: absolute;
+			top:8px;
+			z-index: -1;	
+			-webkit-transition: all 0.1s ease;
+			-o-transition: all 0.1s ease;
+			transition: all 0.1s ease;	    
+		}
+		.div3 {
+			width: 300px;
+			height: 50px;
+			background: red;
+		    position: absolute;
+			top:8px;
+			z-index: -2;	
+			-webkit-transition: all 0.1s ease;
+			-o-transition: all 0.1s ease;
+			transition: all 0.1s ease;	    
+		}
+		.btn{
+			line-height: 50px;
+			color: white;
+			font-size: 22px;
+			margin-left: 5px;
+		}
+	</style>
+
+	<body>
+		<div class="box">
+			<div Name="div1" class="div1">
+				<div class="btn">test</div>
+			</div>
+			<div Name="div1" class="div2">
+				<div class="btn">edit</div>
+			</div>
+			<div Name="div1" class="div3">
+				<div class="btn">del</div>
+			</div>
+		</div>
+	</body>
+	<script>
+
+			// 判断是否存在信息列表
+			var child = [1, 23, 3];
+			var child1 = document.getElementsByName('div1');
+			var k = 0;
+			
+			function a(element, index,array) {
+				var x, y, X, Y, swipeX, swipeY;
+				var xx = 0;
+				
+				// 监听touchstart
+				element.addEventListener('mousedown', function(e) {
+					//this.style.webkitTransform="translate(0px,100px) scale(1) translateZ(0px)";
+					e.preventDefault();
+					x = e.clientX + scrollX //changedTouches触摸点的列表;
+					y = e.clientY + scrollY
+					swipeX = true
+					swipeY = true
+					
+					element.addEventListener('mousemove', function(e) {
+					X = e.clientX + scrollX;
+					Y = e.clientY + scrollY;
+					if(swipeX) {
+						// 阻止默认事件
+						e.stopPropagation();
+						// 右滑
+						if(X - x > 0 && X - x<200) {
+							e.preventDefault()
+							
+							xx =(X-x);
+							k = xx;
+							this.style.webkitTransform="translate("+xx+"px,0px) scale(1) translateZ(0px)";
+							child1[1].style.webkitTransform="translate("+xx*0.5+"px,0px) scale(1) translateZ(0px)";
+							
+						}
+						//
+						if(X -x < 0 ) {
+							e.preventDefault();
+							
+							xx =k+ (X-x); 
+							
+							//console.log(xx);
+							if(xx>0){
+								this.style.webkitTransform="translate("+xx+"px,0px) scale(1) translateZ(0px)";
+								child1[1].style.webkitTransform="translate("+xx*0.5+"px,0px) scale(1) translateZ(0px)";
+							}
+						}
+						swipeY = false
+					}
+					if(swipeY && Math.abs(X - x) - Math.abs(Y - y) < 0) {
+						
+						swipeX = false
+					}
+				});
+				});
+				element.addEventListener('mouseup', function(e) {
+					e.stopPropagation()
+					if(xx< 150){
+						this.style.webkitTransform="translate(0px,0px) scale(1) translateZ(0px)";
+						child1[1].style.webkitTransform="translate(0px,0px) scale(1) translateZ(0px)";
+					}
+					
+					swipeX = false;
+					this.onmousemove = undefined;
+				});
+			};
+			for(var i = 0;i<child1.length;i++ ){
+				a(child1[i],i);
+			}
+	</script>
+
+</html>

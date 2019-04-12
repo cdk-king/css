@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+<style>
+	
+</style>
+<script type="text/javascript">
+	var a;
+	a = false;
+	function test1 () {
+		if(!a){
+			document.getElementById("a").style.transition="-webkit-transform 1000ms ease-out";
+			document.getElementById("a").style.WebkitTransform="translate(120px)";
+			a = true;
+		}else{
+			document.getElementById("a").style.transition="-webkit-transform 1000ms ease-out";
+			document.getElementById("a").style.WebkitTransform="translate(60px)";
+			a = false;
+		}
+	}
+</script>
+	<body>
+		<div id="test1" style="width: 400px; height: 150px; margin: 0px auto; text-align: center; background-color: #111111;" onclick="test1()">
+			<div id="a" style="font-size: 18px;background: red;">cdk</div>
+		</div>
+		  	<input type="button" value="往下" onclick="xia(100);"/>
+  	<input type="button" value="往上" onclick="shang(0);"/>
+    <div style="width:50px;height:50px;background:red;" id="webkfaid"></div>
+    <script type="text/javascript">
+    	function xia(sum){
+    		var obj=document.getElementById("webkfaid");
+    		obj.style.transition="-webkit-transform 500ms ease-out";
+			obj.style.webkitTransform="translate(0px,"+sum+"px) scale(1) translateZ(0px)";
+    	}
+    	function shang(sum){
+    		var obj=document.getElementById("webkfaid");
+    		obj.style.transition="-webkit-transform 500ms ease-out";
+			obj.style.webkitTransform="translate(0px,"+sum+"px) scale(1) translateZ(0px)";
+    	}
+    </script>
+	</body>
+</html>

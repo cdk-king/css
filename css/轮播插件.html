@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>这是一个js插件</title>
+    <script src="js/cdk_plugin.js"></script>
+	</head>
+	<style>
+	#b1{
+	position:relative;
+	transition: all 0.5s ease-in 0s;
+	
+	width:400%;
+	height:100%;
+	line-height: 100%;
+	text-align: center;
+	left: 0%;
+	}
+	#b1 div{
+		float:left;
+		text-align: center;
+	}
+	#b1 div img{
+		width:400px;
+	}
+	#warp{
+	transition: all 0.5s ease-in 0s;
+	width:400px;
+	min-height: 300px;
+	border: 1px solid blue;
+	margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding-top: 10px;
+	}
+	</style>
+	<body>
+    <div id="div1" style="margin: 0 auto;">这是一个js插件</div>
+    <div id="div2" style="margin: 0 auto;">这是另一个js插件</div>
+    <div id="div3" style="margin: 0 auto;text-align: center;">数据显示</div>
+	    <div id="warp">
+	    <div id="b1">
+			<div>
+				<img onclick="cdk2(4)" src="img/hzw.png">
+			</div>
+			<div>
+				<img onclick="cdk2(4)" src="img/sao.jpg">
+			</div>
+			<div>
+				<img onclick="cdk2(4)" src="img/dio4.bmp">
+			</div>
+			<div>
+				<img onclick="cdk2(4)" src="img/berserk.jpg">
+			</div>
+			
+		</div>
+		<div id="p1"></div>
+		</div>
+    <script>
+    	
+    //循环轮播	
+    //window.setInterval(cdk2, 3000);
+	//  for(var p = 1;p<10;p++){
+	//		setTimeout(cdk2,1000+2000*p);
+	//	}
+	setTimeout('Interval(4)',3000);
+    //setTimeout(cdk2, 1000);
+    //setTimeout(function(){console.log(2);},1000);
+    
+    
+	cdk1({
+    	id:"div1",
+    	width : 200,
+        height : 100,
+        background:'#33cccc'
+    });
+    
+    
+    var mObj = new cdk("#div2");
+    mObj.setBg("#f00");
+    mObj.setHeight("100px");
+    mObj.setWidth("200px");
+    </script>
+	</body>
+	</html>

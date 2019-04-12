@@ -1,0 +1,426 @@
+body {
+  overflow: hidden;
+  background: #fafafa;
+}
+#bg {
+
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  top: 50%;
+  left: 50%;
+  margin-left: -500px;
+  margin-top: -500px;
+}
+#bg div div {
+  position: absolute;
+  
+}
+#bg {
+  opacity: 1;
+}
+#bg .row1 div {
+	
+  -webkit-animation: orbmove 96s linear infinite;
+  animation: orbmove 96s linear infinite;
+  opacity:0.4;
+}
+#bg .row1 .orb1 {
+  
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  margin-left: -30px;
+  margin-top: -380px;
+}
+#bg .row1 .orb1 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 60px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+
+#bg .row1 .orb2 {
+	
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-left: 450px;
+  margin-top: 350px;
+  
+}
+#bg .row1 .orb2 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row1 .orb1c {
+	
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  margin-left: 1970px;
+  margin-top: -380px;
+}
+#bg .row1 .orb1c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 60px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row1 .orb2c {
+	
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-left: 2450px;
+  margin-top: 50px;
+}
+#bg .row1 .orb2c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row2 div {
+	
+  -webkit-animation: orbmove 48s linear infinite;
+  animation: orbmove 48s linear infinite;
+  opacity:0.6;
+}
+#bg .row2 .orb1 {
+	
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  margin-left: -500px;
+  margin-top: -300px;
+}
+#bg .row2 .orb1 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 200px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row2 .orb2 {
+	
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 50%;
+  margin-left: 175px;
+  margin-top: -125px;
+}
+#bg .row2 .orb2 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 250px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row2 .orb1c {
+	
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  margin-left: 1500px;
+  margin-top: -300px;
+}
+#bg .row2 .orb1c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 200px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row2 .orb2c {
+	
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  margin-left: 2100px;
+  margin-top: -200px;
+}
+#bg .row2 .orb2c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 400px;
+  background: -webkit-linear-gradient(top, #ffffff, #dedede);
+  background: linear-gradient(to bottom, #ffffff, #dedede);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row3 div {
+	
+  -webkit-animation: orbmove 24s linear infinite;
+  animation: orbmove 24s linear infinite;
+  opacity:0.7;
+}
+#bg .row3 .orb1 {
+	
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  margin-left: 850px;
+  margin-top: -300px;
+}
+#bg .row3 .orb1 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 300px;
+  background: -webkit-linear-gradient(top, #dedede, #ffffff);
+  background: linear-gradient(to bottom, #dedede, #ffffff);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row3 .orb2 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  margin-left: 0px;
+  margin-top: 0px;
+}
+#bg .row3 .orb2 div {
+  width: 100%;
+  height: 100%;
+  border-radius: 600px;
+  background: -webkit-linear-gradient(top, #dedede, #ffffff);
+  background: linear-gradient(to bottom, #dedede, #ffffff);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row3 .orb1c {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  margin-left: 2850px;
+  margin-top: -300px;
+}
+#bg .row3 .orb1c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 300px;
+  background: -webkit-linear-gradient(top, #dedede, #ffffff);
+  background: linear-gradient(to bottom, #dedede, #ffffff);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+#bg .row3 .orb2c {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  margin-left: 2000px;
+  margin-top: 0px;
+}
+#bg .row3 .orb2c div {
+  width: 100%;
+  height: 100%;
+  border-radius: 600px;
+  background: -webkit-linear-gradient(top, #dedede, #ffffff);
+  background: linear-gradient(to bottom, #dedede, #ffffff);
+  -webkit-animation: orbloop 6s linear infinite;
+  animation: orbloop 6s linear infinite;
+}
+@-webkit-keyframes orbloop {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes orbloop {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes orbmove {
+  from {
+    -webkit-transform: translateX(0px);
+  }
+  to {
+    -webkit-transform: translateX(-2000px);
+  }
+}
+@keyframes orbmove {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(-2000px);
+  }
+}
+/////////////////////
+#p0,
+#p1,
+#p2,
+#p3,
+#p3_point {
+  position: absolute;
+  width: 1024px;
+  height: 768px;
+  top: 50%;
+  left: 50%;
+  margin-left: -512px;
+  margin-top: -384px;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+#p0_t_2 {
+  perspective: 1000px;
+}
+#p1_t_2 {
+  position: absolute;
+  width: 514px;
+  height: 272px;
+  top: 50%;
+  left: 50%;
+  margin-left: -257px;
+  margin-top: 14px;
+  background-image: url('../images/p1t2.png');
+  background-repeat: no-repeat;
+}
+#p2_t_2 {
+  position: absolute;
+  width: 514px;
+  height: 136px;
+  top: 50%;
+  left: 50%;
+  margin-left: -257px;
+  margin-top: 52px;
+  background-image: url('../img/p2t2.png');
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+#p3_t_2 {
+  position: absolute;
+  width: 514px;
+  height: 136px;
+  top: 50%;
+  left: 50%;
+  margin-left: -257px;
+  margin-top: 62px;
+  background-image: url('../img/p3t2.png');
+  background-repeat: no-repeat;
+  opacity:0;
+}
+///////////////////
+#slogan_1 {
+  width: 840px;
+  height: 360px;
+  position: absolute;
+  background-image: url('../img/slider1.png');
+  background-repeat: no-repeat;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx) {
+  #slogan_1 {
+    background-image: url("../img/slider1@2x.png");
+    background-size: 840px 360px;
+    background-repeat: no-repeat;
+  }
+}
+#slogan_2 {
+  width: 840px;
+  height: 360px;
+  position: absolute;
+  background-image: url('../img/slider2.png');
+  background-repeat: no-repeat;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx) {
+  #slogan_2 {
+    background-image: url("../img/slider2@2x.png");
+    background-size: 840px 360px;
+    background-repeat: no-repeat;
+  }
+}
+#slogan_3 {
+  width: 840px;
+  height: 360px;
+  position: absolute;
+  background-image: url('../img/slider3.png');
+  background-repeat: no-repeat;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx) {
+  #slogan_3 {
+    background-image: url("../img/slider3@2x.png");
+    background-size: 840px 360px;
+    background-repeat: no-repeat;
+  }
+}
+#add_nav {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  margin-top: -80px;
+}
+#add_nav div {
+  width: 8px;
+  height: 8px;
+  background-image: url('../img/dot.png');
+  background-repeat: no-repeat;
+  margin-bottom: 30px;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx) {
+  #add_nav div {
+    background-image: url("../img/dot@2x.png");
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+  }
+}
+.on {
+  background-image: url('../img/dot_on.png') !important;
+  background-repeat: no-repeat !important;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx) {
+  .on {
+    background-image: url("../img/dot_on@2x.png");
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+  }
+}

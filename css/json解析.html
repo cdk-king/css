@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<h3>key：</h3>
+		<div id="key">
+			
+		</div>
+		<h3>value：</h3>
+		<div id="value">
+			
+		</div>
+	</body>
+	<script>
+		var jsontext = '{"firstname":"Jesper","surname":"Aaberg","phone":["555-0100","555-0120"]}';
+    	var contact = JSON.parse(jsontext);
+    	var key = eval("contact."+Object.keys(contact)[0]);
+    	
+    	document.getElementById('key').innerText= key;
+		//alert(contact.firstname);
+		//获取键值
+		document.getElementById('value').innerText= Object.keys(contact)[0];
+		//alert(Object.keys(contact)[0]);
+	</script>
+</html>

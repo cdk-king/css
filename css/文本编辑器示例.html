@@ -1,0 +1,65 @@
+<!DOCTYPE >
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.box {
+			width: 500px;
+		}
+		
+		.con {
+			overflow: hidden;
+			margin-bottom: 6px;
+		}
+		
+		.con button {
+			float: left;
+			padding: 2px;
+			border: 1px solid gray;
+			margin-right: 2px;
+			cursor: pointer;
+		}
+		
+		.show {
+			height: 200px;
+			border: 2px solid rgba(0, 0, 0, 0.3);
+		}
+	</style>
+
+	<body>
+		<div class="box">
+			<div class="con" id="con">
+				<button data-name="selectAll">全选</button>
+				<button data-name="2D-Position">2D-Position</button>
+				<button data-name="copy">复制</button>
+				<button data-name="paste">粘贴</button>
+				<button data-name="delete">删除</button>
+				<button data-name="undo">撤销</button>
+				<button data-name="print">打印</button>
+				<button data-name="bold">加粗</button>
+				<button data-name="italic">斜线</button>
+				<button data-name="underline">下划线</button>
+				<button data-name="fontsize" data-value="16px">大号字体</button>
+				<button data-name="forecolor" data-value="red">红色文本</button>
+				<button data-name="backcolor" data-value="gray">灰色背景</button>
+				<button data-name="removeFormat">清空格式</button>
+			</div>
+			<div class="show" id="show" contenteditable>我是测试文字</div>
+		</div>
+
+		<script>
+			var aCon = document.getElementById('con').getElementsByTagName('button');
+			for(var i = 0; i < aCon.length; i++) {
+				aCon[i].onclick = function() {
+					document.execCommand(this.dataset.name, false, this.dataset.value);
+				}
+			}
+		</script>
+	</body>
+	<script>
+	</script>
+
+</html>

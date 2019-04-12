@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="Bootstrap/css/bootstrap.css" />
+		<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+		<script type="text/javascript" src="Bootstrap/js/bootstrap.js"></script>
+		<script></script>
+		<style>
+			/*全局默认样式*/
+			
+			body,
+			html {
+				padding: 0;
+				margin: 0;
+				
+			}
+			
+			div {
+				padding: 0;
+				margin: 0;
+			}
+			
+			ul {
+				list-style-type: none;
+			}
+			
+			img {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.nav_ul li {
+				position: relative;
+				width: 100px;
+				height: 50px;
+				text-align: center;
+				line-height: 50px;
+				display: block;
+				float: left;
+				padding: 0 10px;
+			}
+			
+			.nav_ul li:before {
+				content: "";
+				position: absolute;
+				bottom: 0;
+				left: 50%;
+				right: 50%;
+				height: 3px;
+				background: red;
+				-webkit-transition-property: left, right;
+				transition-property: left, right;
+				-webkit-transition-duration: 0.2s;
+				transition-duration: 0.2s;
+				-webkit-transition-timing-function: ease-out;
+				transition-timing-function: ease-out;
+			}
+			
+			.nav_ul li:hover {
+				cursor: pointer;
+				color: red;
+			}
+			
+			.nav_ul li:hover:before {
+				left: 0;
+				right: 0;
+			}
+			
+			#container {
+				width: 100%;
+				text-align: center;
+				margin: 0 auto;
+			}
+			
+			.nav_ul {
+				padding: 0;
+			}
+			
+			.nav_img {
+				padding: 0;
+				margin: 0;
+				width: 150px;
+				height: 48px;
+			}
+			
+			#nav_img {}
+			
+			#nav_img_li {
+				width: 200px;
+			}
+			
+			#sup_logo {
+				float: left;
+				display: block;
+				width: 200px;
+			}
+			
+			.nav {
+				width: 100%;
+				text-align: center;
+			}
+			
+			#sup_global_nav {
+				width: 100%;
+				text-align: center;
+			}
+			
+			.global_content {
+				width: 100%;
+				/*padding-top: 4px;*/
+				text-align: center;
+				margin: 0 auto;
+			}
+			
+			#Carousel {
+				position: relative;
+				height: 300px;
+				left: 0;
+				text-align: center;
+				/*overflow: hidden;*/
+				transition: all 1s;
+				-webkit-transition: all 1s;
+			}
+			
+			#Carousel a img {
+				/*height: 200px;*/
+				width: 100%;
+				/*height: 300px;*/
+				position: absolute;
+				left: 0;
+				display: none;
+				top: 50%;
+				margin-top: -150px;
+				transition: all 1s;
+				-webkit-transition: all 1s;
+				
+			}
+			#Carousel a img:hover{
+				transform: scale(1.2, 1.2);
+				box-shadow: 0 0 10px #0000ff;
+				cursor: pointer;
+			}
+			
+			#sup_masthead {
+				padding-top: 20px;
+				box-shadow: 2px 2px 2px #888888;
+			}
+			
+			#CarouselBox {
+				width: 100%;
+				overflow: hidden;
+				box-shadow: 1px 1px 1px #888888;
+			}
+			
+			#turnRight {}
+			
+			.CarouselIcon {
+				width: 50px;
+				height: 50px;
+				background: rgba(0, 255, 255, 0.4);
+				border: 1px solid rgba(0, 0, 255, 0.2);
+				border-radius: 50px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 30px;
+				opacity: 0;
+				transition: all 0.5s;
+				-webkit-transition: all 0.5s;
+			}
+			
+			#turnRight {
+				position: absolute;
+				right: 60px;
+				top: 125px;
+				cursor: pointer;
+			}
+			
+			#turnLeft {
+				position: absolute;
+				left: 60px;
+				top: 125px;
+				cursor: pointer;
+			}
+			
+			.CarouselIndicators {
+				position: absolute;
+				width: 100%;
+				bottom: 0px;
+				text-align: center;
+			}
+			
+			.CarouselIndicators li {
+				list-style-type: none;
+				height: 15px;
+				width: 15px;
+				border: 1px solid #fff;
+				margin: 10px;
+				border-radius: 10px;
+				display: inline-block;
+			}
+			
+			.classImg {
+				width: 100%;
+				transition: all 0.5s;
+				-webkit-transition: all 0.5s;
+			}
+			
+			.classImg:hover {
+				transform: scale(1.2, 1.2);
+				box-shadow: 0 0 10px #0000ff;
+				cursor: pointer;
+			}
+			
+			.sapnBlock {
+				display: inline-block;
+				
+			}
+			.classImgBox{
+				width: 100%;
+				height: 100%;
+				
+				
+				border: 1px solid red;
+				overflow: hidden;
+			}
+			.leftFloat{
+				text-align: left;
+			}
+			.wid3{
+				width: 20%;
+				height: 20%;
+				margin-top: 5%;
+				margin-left: 3%;
+				margin-right: 3%;
+			}
+			.wid2{
+				width: 30%;
+				height: 30%;
+				margin-left: 6%;
+				margin-right: 6%;
+			}
+			.wid1{
+				
+				max-width: 73%;
+				height: 300px;
+			}
+			.show_float_box{
+				/*height: 300px;*/
+				width: 60px;
+				/*background: rgba(0,0,0,0.6);*/
+				position: fixed;
+				right: 0px;
+				top: 50%;
+			}
+			.small_float_box{
+				width: 50px;
+				height: 50px;
+				background: #CCCCCC;
+				opacity: 0.8;
+				margin: 5px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 20px;
+				color: #fff;
+			}
+			.small_float_box:hover{
+				background: #000;
+				cursor: pointer;
+			}
+			.footer-background{
+				width: 100%;
+				height: 300px;
+				background: rgba(0,0,0,0.8);
+			}
+			.footer-a{
+				width: 100%;
+				height: 250px;
+				border-bottom: 1px solid #fff;
+				text-align: center;
+				margin: auto;
+				padding: 2%;
+			}
+			.titleLink{
+				
+			}
+			.titleLink:hover{
+				color: red;
+				/*transform: scale(1.5);*/
+				font-size: 25px;
+				cursor: pointer;
+			}
+			.fl{
+				width: 16.6%;
+				border: 1px solid red;
+				height: auto;
+				float: left;
+				
+			}
+			.fl li{
+				
+				list-style-type: none;
+				color: #fff;
+			}
+			.fl li:hover{
+				color: red;
+				cursor: pointer;
+			}
+			.footer-b{
+				position: relative;
+				padding: 10px;
+				color: #fff;
+			}
+			.footer-b ul{
+				position: absolute;
+				right: 0;
+				top: 10px;
+			}
+			.footer-b ul li{
+				padding-right: 15px;
+				float: right;
+				
+			}
+			.footer-b ul li:hover{
+				color: red;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container">
+			<div id="sup_masthead">
+				<div id="sup_global_nav" class="global_content">
+					<nav class="nav">
+
+						<ul class="nav_ul">
+							<span><div id="sup_logo"><a href="#"><img id="nav_img" class="nav_img" src="img/line.png" /></a></div>
+							</span>
+							<li>网站首页</li>
+							<li>公司概况</li>
+							<li>公司业务</li>
+							<li>案例展示</li>
+							<li>创新论坛</li>
+							<li>联系方式</li>
+						</ul>
+
+					</nav>
+				</div>
+
+			</div>
+			<div class="global_content">
+				<div style="position: relative;">
+					<div id="CarouselBox">
+						<div id="Carousel">
+							<a><img class="CarouselImg" src="img/wallhaven-389431-1.png" /></a>
+							<a><img class="CarouselImg" src="img/berserk.jpg" /></a>
+							<a><img class="CarouselImg" src="img/hzw.png" /></a>
+						</div>
+					</div>
+					<div id="turnRight" class="CarouselIcon"></div>
+					<div id="turnLeft" class="CarouselIcon"></div>
+					<div class="CarouselIndicators">
+						<li style="background: #fff;"></li>
+						<li></li>
+						<li></li>
+					</div>
+				</div>
+			</div>
+			<div class="global_content">
+				<div style="margin: 0 auto;width: 100%;">
+					<div class="sapnBlock wid3">
+						<div class="classImgBox">
+							<img class="classImg" src="img/wallhaven-389431-1.png" />
+
+						</div>
+						<div class="">
+							<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>
+						</div>
+					</div>
+
+					<div class="sapnBlock wid3">
+						<div class="classImgBox">
+							<img class="classImg" src="img/berserk.jpg" />
+
+						</div>
+						<div class="">
+							<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>
+						</div>
+					</div>
+					<div class="sapnBlock wid3">
+						<div class="classImgBox">
+							<img class="classImg" src="img/hzw.png" />
+
+						</div>
+						<div class="">
+							<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="global_content">
+				<div style="margin: 0 auto;width: 100%;">
+					<div class="sapnBlock wid2">
+						<div class="classImgBox">
+							<img class="classImg" src="img/dio4.bmp" />
+
+						</div>
+						<div class="">
+							<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>
+						</div>
+					</div>
+					<div class="sapnBlock wid2">
+						<div class="classImgBox">
+							<img class="classImg" src="img/sao.jpg" />
+
+						</div>
+						<div class="">
+							<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="global_content">
+				<div style="margin: 0 auto;width: 100%;">
+					<div class="sapnBlock wid1">
+						<div class="classImgBox">
+							<img class="classImg" src="img/dio4.bmp" />
+
+						</div>
+						<div class="">
+							<!--<h3 class="leftFloat titleLink">测试</h3>
+							<p class="leftFloat">测试</p>-->
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<div id="show_float">
+			<div class="show_float_box">
+				<div id="toTop" class="small_float_box">top</div>
+				<div class="small_float_box"></div>
+				<div class="small_float_box"></div>
+				<div class="small_float_box"></div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-background">
+				<div class="footer-a">
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+					<div class="fl">
+						<li><h4>新闻中心</h4></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						<li><p>公司新闻</p></li>
+						<li><p>媒体报道</p></li>
+						
+					</div>
+				</div>
+				<div class="footer-b">
+					<p>版权所有©1997-2018 cdk软件股份有限公司 京ICP备xxxxxxxx号-1</p>
+					<ul>
+						<li>联系我们 </li>
+						<li>客户投诉 </li>
+						<li>网站地图</li>
+						<li>法律公告</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var turnRight = document.querySelectorAll('#turnRight')[0];
+		var turnLeft = document.querySelectorAll('#turnLeft')[0];
+		var CarouselBox = document.querySelectorAll('#CarouselBox')[0];
+		var Carousel = document.querySelectorAll('#Carousel')[0];
+		var img1 = document.querySelectorAll('.CarouselImg')[0];
+		var img2 = document.querySelectorAll('.CarouselImg')[1];
+		var img3 = document.querySelectorAll('.CarouselImg')[2];
+		var imgLength = document.querySelectorAll('.CarouselImg').length;
+		var img1OutHtml = Carousel.querySelectorAll('a')[0].outerHTML;
+		var CarouselIndicators = document.querySelectorAll('.CarouselIndicators')[0];
+		var toTop = document.querySelectorAll('#toTop')[0];
+		//Carousel.innerHTML = Carousel.innerHTML+img1OutHtml;
+		toTop.addEventListener('click',function(event){
+			//document.body.scrollTop = 0;//原生js方法
+			//window.scrollTo(0, 0);
+				gotoTop();
+			})
+
+			function gotoTop() {
+				var x = document.body.scrollTop || document.documentElement.scrollTop;
+				var timer = setInterval(function() {
+					x = x - 20;
+					if(x < 20) {
+						x = 0;
+						window.scrollTo(x, x);
+						clearInterval(timer);
+					}
+					window.scrollTo(x, x);
+				}, 10);
+
+			}
+			var index = 1;
+			document.body.onload = function() {
+					for(var i = 0; i < imgLength; i++) {
+						document.querySelectorAll('.CarouselImg')[i].style.display = "inherit";
+				document.querySelectorAll('.CarouselImg')[i].style.left = i * CarouselBox.offsetWidth + 0.5 * CarouselBox.offsetWidth - 0.5 * document.querySelectorAll('.CarouselImg')[i].offsetWidth + "px";
+
+			}
+		}
+		turnRight.addEventListener('click', function(event) {
+			turn(Carousel, CarouselBox, true);
+		})
+		turnLeft.addEventListener('click', function(event) {
+			turn(Carousel, CarouselBox, false);
+		})
+		Carousel.addEventListener('mousemove', function(event) {
+			document.querySelectorAll('.CarouselIcon')[0].style.opacity = "0.5";
+			document.querySelectorAll('.CarouselIcon')[1].style.opacity = "0.5";
+
+		})
+		Carousel.addEventListener('mouseout', function(event) {
+			document.querySelectorAll('.CarouselIcon')[0].style.opacity = "0";
+			document.querySelectorAll('.CarouselIcon')[1].style.opacity = "0";
+
+		})
+		document.querySelectorAll('.CarouselIcon')[0].addEventListener('mouseover', function(event) {
+			document.querySelectorAll('.CarouselIcon')[0].style.opacity = "1";
+
+		})
+		document.querySelectorAll('.CarouselIcon')[1].addEventListener('mouseover', function(event) {
+			document.querySelectorAll('.CarouselIcon')[1].style.opacity = "1";
+		})
+		//		Carousel.addEventListener('mouseout',function(event){
+		//			document.querySelectorAll('.CarouselIcon')[0].style.display = "none";
+		//			document.querySelectorAll('.CarouselIcon')[1].style.display = "none";
+		//		})
+		window.onresize = function() {
+			for(var i = 0; i < imgLength; i++) {
+				document.querySelectorAll('.CarouselImg')[i].style.left = i * CarouselBox.offsetWidth + 0.5 * CarouselBox.offsetWidth - 0.5 * document.querySelectorAll('.CarouselImg')[i].offsetWidth + "px";
+				
+			}
+		}
+		Carousel.addEventListener('click', function(event) {
+
+		})
+
+		function turn(Carousel, CarouselBox, bool) {
+			Carousel.style.transition = "all 1s";
+			if(bool) {
+				if(index == imgLength) {
+					index = 1;
+				} else {
+					index++;
+				}
+			} else {
+				if(index == 1) {
+					index = imgLength;
+				} else {
+					index--;
+				}
+			}
+
+			Carousel.style.left = "-" + (index - 1) * CarouselBox.offsetWidth + "px";
+			for(var i = 0; i < imgLength; i++) {
+				if(i == index - 1) {
+					CarouselIndicators.querySelectorAll('li')[i].style.background = "#fff";
+				} else {
+					CarouselIndicators.querySelectorAll('li')[i].style.background = "";
+				}
+
+			}
+
+		}
+	</script>
+
+</html>

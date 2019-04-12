@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" href="css/mui.css" />
+	<script type="text/javascript" src="js/jquery-1.11.0.js" ></script>
+	<script type="text/javascript" src="js/mui.js"></script>
+	<style>
+		html,body{
+			background: #fff;
+			padding: 0px;
+			margin: 0px;
+		}
+		#app {
+			display: block;
+			height: 100%;
+			width: 100%;
+			position: relative;
+		}
+		.top{
+			padding-top: 40px;
+			width: 100%;
+			height: 300px;
+			font-size: 50px;
+			color: #fff;
+			margin: 0 auto;
+			text-align: center;
+			background: #5BC0DE;
+		}
+		#img_box img{
+			width: 150px;
+			border-radius: 100px;
+		}
+		.line{
+			margin: 30px;
+			border: 3px solid #CCCCCC;
+			background: #CCCCCC;
+		}
+		ul{
+			display: block;
+		}
+		.list_item{	
+			display: block;		
+			position: relative;
+			padding-top: 20px;
+			padding-bottom: 20px;
+			list-style-type:none;
+			border-left: 5px solid #00CC00;
+			
+		}
+		.list_item:before{
+			    content: "";
+			    position: absolute;
+			    left: -19px;
+			    top: 33px;
+			    display: block;
+			    width: 24px;
+			    height: 24px;
+			    /*border: 3px solid #d2d3d2;*/
+			   	border: 5px solid #00CC00;
+			    -webkit-border-radius: 14px;
+			    -moz-border-radius: 14px;
+			    -ms-border-radius: 14px;
+			    border-radius: 20px;
+			    background: #f9f9f9;
+		}
+		.item_top{
+			height: 50px;
+			display: block;
+			font-size: 38px;
+			color: #666;
+			
+			position: relative;
+			color: #666;
+			vertical-align:middle;
+			line-height: 50px;
+			/*border: 1px solid red;*/
+		}
+		.item_box{
+			position: relative;
+			margin-left: 48px;
+			margin-right: 24px;
+			padding-left: 10px;
+			padding-top: 8px;
+			padding-bottom: 10px;
+			border-radius: 6px;
+			border-bottom: 3px solid #CCCCCC;
+			background: #fff;
+		}
+		.item_box:before{
+				content: "";
+			    position: absolute;
+			    left: -28px;
+			    top: 18px;
+			    display: block;
+			    width: 0;
+			    height: 0;
+			    border-top: 14px solid transparent;
+			    border-right: 28px solid #fff;
+			    border-bottom: 14px solid transparent;
+		}
+		.item{
+			padding: 30px;
+			padding-left: 30px;
+			position: relative;
+			font-size: 30px;
+			color: #666;
+			
+			/*border: 1px solid red; */
+		}
+		.item:before{
+				content: "";
+			    position: absolute;
+			    left: 0px;
+			    top: 32px;
+			    display: block;
+			    width: 4px;
+			    height: 4px;
+			    /*border: 3px solid #d2d3d2;*/
+			   	border: 6px solid #666;
+			    -webkit-border-radius: 14px;
+			    -moz-border-radius: 14px;
+			    -ms-border-radius: 20px;
+			    border-radius: 10px;
+			    background: #666;
+		}
+		.mui-btn{
+			position: absolute;
+			    right: 20px;
+			    top: 25px;
+			    height: 40px;
+		}
+		#info{
+			display: none;
+			
+		}
+		.confirminfo{
+			width: 100%;
+		}
+		.confirminfo tr td{
+			width: 50%;
+			height:30px;
+			text-align: left;
+			padding-left: 10px;
+		}
+		.confirminfo tr td:first-child{
+			text-align: right;
+		}
+	</style>
+
+	<body>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="mui-content" >
+						<div id="cdk" >
+					
+
+		<div class="top">
+		<div id="img_box">
+			<img src="img/head.jpg"/>
+			
+		</div>
+		</div>
+		<!--<div class="line">
+		</div>-->
+		<div id="app">
+			<div >
+				<ul >
+				<li class="list_item" id="item1">
+					<div class="item_box">
+						<div class="item_top">
+							<span>2017年11月</span>
+							<!--<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button>-->
+						</div>
+						<div class="item">1<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+						<div class="item">2<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+					</div>
+				</li>
+				<li class="list_item" id="item2">
+					<div class="item_box">
+						<div class="item_top">
+							<span>2017年10月</span>
+							
+						</div>
+						<div class="item">1<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+						<div class="item">2<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+					</div>
+				</li>
+				<li class="list_item" id="item2">
+					<div class="item_box">
+						<div class="item_top">
+							<span>2017年9月</span>
+							
+						</div>
+						<div class="item">1<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+						<div class="item">2<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+					</div>
+				</li>
+				<li class="list_item" id="item2">
+					<div class="item_box">
+						<div class="item_top">
+							<span>2017年8月</span>
+							
+						</div>
+						<div class="item">1<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+						<div class="item">2<button id='confirmBtn'  class="mui-btn mui-btn-red confirmBtn">未确认</button></div>
+					</div>
+				</li>
+				</ul>
+			</div>
+		</div>
+	
+		<div id="info"></div>
+
+		</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" charset="utf-8">
+			mui.init({
+                pullRefresh: {
+                    container: '#pullrefresh',
+                    down: {
+                        callback: pulldownRefresh
+                    },
+                    up: {
+                        auto:false,//自动上拉一次
+                        contentrefresh: '正在加载...',
+                        callback: pullupRefresh
+                    }
+                }
+           });
+			//mui初始化
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					count1=1;
+					//getdata();
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			var count1 = 1;
+			function pullupRefresh() {
+				if(count1<10){
+					count1++;	
+				}
+				setTimeout(function() {
+					
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+				}, 1500);
+			}
+			/**
+			 * 上拉加载下拉刷新实现
+			 */
+			if (mui.os.plus) {
+				mui.plusReady(function() {
+					setTimeout(function() {
+						mui('#pullrefresh').pullRefresh().pulldownLoading();
+					}, 1500);
+				});
+			} else {
+				mui.ready(function() {
+					mui('#pullrefresh').pullRefresh().pulldownLoading();
+				});
+			}
+			
+			var info = document.getElementById("info");
+			var confirmBtn = document.getElementsByClassName("confirmBtn");
+			for(var i = 0;i<confirmBtn.length;i++){
+				confirmBtn[i].setAttribute("data-index",i);
+				
+				confirmBtn[i].addEventListener('tap', function() {
+					var j = this.getAttribute("data-index");
+					
+					var btnArray = ['否', '是'];
+				
+				mui.confirm(
+				'<div><table class="confirminfo" border="0" cellspacing="" cellpadding="">'+
+				'<tr><td>姓名:</td><td>cdk</td></tr>'+
+				'<tr><td>年龄:</td><td>22</td></tr>'+
+				'<tr><td>手机:</td><td>13670183236</td></tr>'+
+				'</table></div>', '确认信息', btnArray, function(e) {
+					
+					if (e.index == 1) {
+						info.innerText = '信息已确认';
+						incheck();
+					} else {
+						info.innerText = '信息未确认'
+					}
+				})
+				
+				function incheck(){
+					
+					confirmBtn[j].innerText = '信息已确认';
+					confirmBtn[j].style.background = "#5BC0DE";
+					confirmBtn[j].style.border = "none";
+				}
+				});
+			}	
+		</script>
+</html>

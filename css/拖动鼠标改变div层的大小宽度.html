@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拖动鼠标改变div层的大小宽度</title>
+	</head>
+	<style type="text/css">
+		
+	#testDiv {
+		background-color: buttonface;
+		background-repeat: repeat;
+		background-attachment: scroll;
+		color: #3969A5;
+		position: absolute;
+		height: 300px;
+		left: 100px;
+		top: 100px;
+		overflow: hidden;
+		width: 300px;
+		z-index: 2;
+		
+		border: 2px outset white;
+		margin: 0px;
+		padding: 2px;
+		background-position: 0% 50%
+	}
+	</style>
+	
+	<body>
+		
+		<div id="testDiv" class="testDiv">
+			<p align="center">
+					请在边框处拖动鼠标
+			</p>
+		</div>
+	</body>
+	<script>
+		var div = document.getElementById("testDiv");
+		var loop;
+		var tmpX = 0;
+		var tmpY = 0;
+		var dir = "";
+		var dir2 = "";
+		var isDown = 0;
+		var offset = 10;
+		window.onmousemove = move;
+		function move(e){
+			dir = "";
+			
+			if(e.target.className == "testDiv"){
+						
+					var xPos = window.event.offsetX;
+					var yPos = window.event.offsetY;
+					 //console.log("xPos"+xPos);
+					 //console.log("offset"+offset);
+					 if (yPos<offset) dir = "n";
+					 else if (yPos > e.target.offsetHeight-offset) dir = "s";
+					 if (xPos<offset) dir = "w";
+					 else if (xPos > e.target.offsetWidth-offset) dir = "e";
+			}
+			e.target.style.cursor ="default";
+			if(dir !== ""){
+				
+				if(dir=="s"){
+					//alert(dir);
+					div.style.cursor ="s-resize";	
+					dir2 = dir;
+				}
+				if(dir=="e"){
+					//alert(dir);
+					div.style.cursor ="e-resize";	
+					dir2 = dir;
+				}
+			}
+			//console.log(window.event.offsetY);
+			if(isDown == 1 ){
+				if(dir2=="s"){
+					//niubi
+					if(window.event.target.className =="testDiv" ){
+						div.style.height = window.event.offsetY-5+"px";
+					}else{
+						div.style.height = window.event.offsetY-5-div.offsetTop+"px";
+					}
+						
+				}
+				
+			if(dir2=="e"){
+						if(window.event.target.className =="testDiv" ){
+						div.style.width = window.event.offsetX-5+"px";
+					}else{
+						div.style.width = window.event.offsetX-5-div.offsetLeft+"px";
+					}
+					}
+				}
+		}
+		document.onmousedown = doDown;
+		function doDown(){
+			isDown = 1;
+		}
+		document.onmouseup = doUp;
+		function doUp(){
+			isDown = 0;
+		}
+	</script>
+</html>

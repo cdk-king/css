@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			width: 98%;
+			height: 80%;
+		}
+		
+		#canvas {
+			border: 1px solid red;
+		}
+		
+		#colorTest {
+			float: left;
+			height: 40px;
+			width: 40px;
+			border: 1px solid red;
+			background: red;
+		}
+		
+		#colorSelect {
+			width: 50px;
+			height: 30px;
+			position: relative;
+		}
+		
+		#colorSelectBox {
+			padding: 5px;
+			border: 1px solid red;
+			position: absolute;
+			z-index: 100;
+			display: inline;
+		}
+		
+		#selectColor {
+			height: 20px;
+			width: 20px;
+			background: red;
+			
+		}
+		
+		#colorValueBox {
+			position: relative;
+			height: 100%;
+			width: 100%;
+		}
+		
+		#colorValue {
+			position: absolute;
+			vertical-align: middle;
+			top: 8px;
+			left:48px;
+			width: 150px;
+		}
+		#triangle{
+			position: absolute;
+			top: 10px;
+			right: 5px;
+			border-top: 8px solid black;
+			/*transparent透明*/
+			border-left: 5px solid transparent; 
+			border-right: 5px solid transparent;
+			float: right;
+			display: inline;
+		}
+	</style>
+
+	<body>
+		<button id="colorSelect">
+			<div id="selectColor"></div>
+		</button>
+		<!--<div id="colorSelectBox">
+			<div>颜色选择器</div>
+			<canvas id="shapeCan"></canvas>
+			<div id="colorValueBox">
+			<div id="colorTest">
+			</div>
+			<input id="colorValue" />
+			</div>
+		</div>-->
+
+	</body>
+	<script>
+		(function() {
+			(function() {
+				var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+				window.requestAnimationFrame = requestAnimationFrame;
+			})();
+			var body = document.body;
+			//innerHTML是同步的
+			var node = document.createElement("span");
+			node.innerHTML ='<div id="colorSelectBox">'+
+							'<div>颜色选择器</div>'+
+							'<canvas id="shapeCan"></canvas>'+
+							'<div id="colorValueBox">'+
+							'<div id="colorTest"></div>'+
+							'<input id="colorValue" />'+
+							'</div></div>';
+
+			body.appendChild(node);
+
+			var colorSelect = document.getElementById("colorSelect");
+			node = document.createElement("span");
+			node.id = 'triangle';
+			colorSelect.appendChild(node);
+			var selectColor = document.getElementById("selectColor");
+			var colorTest = document.getElementById("colorTest");
+			var colorValue = document.getElementById("colorValue");
+			colorValue.value = 'rgba(255,0,0,255)';
+			var shapeCan = document.getElementById("shapeCan");
+			var colorSelectBox = document.getElementById("colorSelectBox");
+			colorSelectBox.style.top = GetPos(colorSelect).y+'px';
+			console.log(colorSelect.Width);
+			colorSelectBox.style.left = GetPos(colorSelect).x+colorSelect.offsetWidth+'px';
+			var sCtx = shapeCan.getContext("2d");
+			var width = document.body.offsetWidth;
+			var height = document.body.offsetHeight;
+			var centerY = height / 2;
+			var centerX = width / 2;
+			var mouseX = 0;
+			var mouseY = 0;
+			var imageData;
+			shapeCan.width = 200;
+			shapeCan.height = 200;
+			shapeCan.style.border = "1px solid blue";
+
+			function Particle(options) {
+				var options = options || {};
+				this.x = options.x || (Math.random() * 30) - 15;
+				this.y = options.y || (Math.random() * 30) - 15;
+				this.z = options.z || (Math.random() * 30) - 15;
+
+				this.vx = 0;
+				this.vy = 0;
+				this.vz = 0;
+
+				this.startX = this.x;
+				this.startY = this.y;
+				this.startZ = this.z;
+
+				this.xPos = 100;
+				this.yPos = 100;
+
+				this.ran1 = 0;
+				this.ran2 = 0;
+				this.rgb1 = options.rgb1;
+				this.rgb2 = options.rgb2;
+				this.rgb3 = options.rgb3;
+			}
+			Particle.prototype = {
+				//不断循环
+				update: function() {
+					var phi = Math.random() * 2 * Math.PI;
+				},
+
+			}
+
+			function Emitter() {
+				this.particles = [];
+				this.shapeParts = [];
+
+				this.x = 1;
+				this.y = 1;
+				this.z = 1;
+
+				this.vx = 0;
+				this.vy = 0;
+				this.vz = 0;
+
+				this.getShape();
+				this.startTime = new Date().getTime();
+				this.checkInterval = 1000;
+			}
+
+			Emitter.prototype = {
+				update: function() {
+					var partLen = this.particles.length;
+					var sPartLen = this.shapeParts.length;
+
+					//				this.shapeParts.sort(function (a, b) {
+					//		        	return b.x - a.x;
+					//		    	});
+
+					for(var i = 0; i < partLen; i++) {
+						var particle = this.particles[i];
+						if(particle) {
+							particle.update();
+						}
+					}
+				},
+				getShape: function() {
+					var d = new Date(),
+						hour = d.getHours() % 12,
+						min = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes(),
+						sec = (d.getSeconds() < 10 ? "0" : "") + d.getSeconds();
+					sCtx.beginPath();
+					var grad = sCtx.createLinearGradient(200, 0, 200, 200);
+					/* 指定几个颜色 */
+					grad.addColorStop(0, 'rgba(255, 30, 11,1)'); // 红
+					grad.addColorStop(0.35, 'rgba(230, 225, 0,1)'); // 绿
+					grad.addColorStop(0.65, 'rgba(0, 240, 62,1)'); // 绿
+					grad.addColorStop(1, 'rgba(12, 120, 203,1)'); // 紫
+
+					//grad.addColorStop(0,'rgb(255, 0, 0)');
+					//grad.addColorStop(0.5,'rgb(255, 255, 0)'); 
+					//grad.addColorStop(0.9,'rgb(0, 225, 0)');
+					//grad.addColorStop(1,'rgb(11, 185, 255)');
+					/* 将这个渐变设置为fillStyle */
+					sCtx.fillStyle = grad;
+					sCtx.clearRect(0, 0, shapeCan.width, shapeCan.height);
+					sCtx.rect(0, 0, shapeCan.width, shapeCan.height);
+					sCtx.fill();
+					imageData = sCtx.getImageData(0, 0, shapeCan.width, shapeCan.height).data;
+
+					for(var i = 0; i < imageData.length; i += 4) {
+						var x = (i / 4) % 200;
+						var y = (i / 4 - x) / 200;
+						var rgb1 = imageData[i];
+						var rgb2 = imageData[i + 1];
+						var rgb3 = imageData[i + 2];
+						var index = i;
+						if(imageData[i + 3] > 0) {
+
+							for(var j = 0; j < 1; j++) {
+								var particle = new Particle({
+									x: ((x * 1)),
+									y: ((y * 1)),
+									z: 10,
+									rgb1: rgb1,
+									rgb2: rgb2,
+									rgb3: rgb3
+								});
+								this.particles[index + j] = particle;
+								//this.shapeParts[index + j] = particle;
+							}
+
+						} else {
+							for(var j = 0; j < 1; j++) {
+								this.particles[index + j] = undefined;
+								//this.shapeParts[index + j] = undefined;
+							}
+						}
+					}
+				},
+				render: function() {
+					var size = 1;
+					var imgData = ctx.createImageData(width, height);
+					var data = imgData.data;
+					for(var i = 0; i < this.particles.length; i++) {
+						var particle = this.particles[i];
+
+						if(particle) {
+							if(particle.x < width && particle.x > 0 && particle.y > 0 && particle.y < height) {
+								if(particle.z > 150) {
+									size = 1;
+								}
+								//console.log(size);
+								for(var h = 0; h < 1; h++) {
+									for(var j = 0; j < 1; j++) {
+										if(particle.x > 0 && particle.x < width && particle.y > 0 && particle.y < height) {
+											var pData = ((particle.x + h) + (width) * (particle.y + j)) * 4;
+											data[pData] = particle.rgb1;
+											data[pData + 1] = particle.rgb2;
+											data[pData + 2] = particle.rgb3;
+											data[pData + 3] = "255";
+										}
+									}
+								}
+							} else {
+								this.particles[i] = undefined;
+								delete particle;
+							}
+						} else {
+							this.particles[i] = undefined;
+							delete particle;
+						}
+
+					}
+					ctx.putImageData(imgData, 0, 0);
+					imgData = null;
+				}
+
+			}
+
+			var emitter = new Emitter();
+			//emitter.render();
+			//render();
+
+			function render() {
+				//获取图像
+				if(new Date().getTime() > emitter.startTime + emitter.checkInterval) {
+					emitter.startTime = new Date().getTime();
+					//emitter.getShape();
+				}
+				//emitter.update();
+				//绘图
+				emitter.render();
+				requestAnimationFrame(render);
+			}
+			document.addEventListener('click', function(e) {
+				var x = e.clientX;
+				var y = e.clientY;
+				if(e.target == shapeCan) {
+					console.log("x:" + x + " y:" + y);
+					//减去
+					//x = x- shapeCan.offsetLeft-colorSelectBox.offsetLeft-1;
+					//y = y- shapeCan.offsetTop-colorSelectBox.offsetTop-1;
+					x = x - GetPos(shapeCan).x - 1;
+					y = y - GetPos(shapeCan).y - 1;
+					console.log("x:" + x + " y:" + y);
+					var i = y * 4 * shapeCan.width + 4 * x;
+					var color = imageData[i].toString() + "," + imageData[i + 1].toString() + "," + imageData[i + 2].toString() + "," + imageData[i + 3].toString();
+					console.log(color);
+					colorTest.style.background = 'rgba(' + color + ')';
+					colorValue.value = 'rgba(' + color + ')';
+					window.selectColor = 'rgba(' + color + ')';
+					selectColor.style.background = 'rgba(' + color + ')';
+				}
+
+			});
+
+			colorValue.addEventListener('change', function(e) {
+				colorTest.style.background = colorValue.value;
+				selectColor.style.background = colorValue.value;
+			});
+			colorSelect.addEventListener('click', function(e) {
+				if(colorSelectBox.style.display != 'none') {
+					colorSelectBox.style.display = 'none';
+				} else {
+					colorSelectBox.style.display = 'inline';
+				}
+			});
+			//获取某个html元素的定位
+			function GetPos(obj) {
+				var pos = new Object();
+				pos.x = obj.offsetLeft;
+				pos.y = obj.offsetTop;
+				while(obj = obj.offsetParent) {
+					pos.x += obj.offsetLeft;
+					pos.y += obj.offsetTop;
+				}
+				return pos;
+			};
+
+		})()
+	</script>
+
+</html>

@@ -1,0 +1,30 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="a" name="a">
+			<div id="b" name="b"></div>
+		</div>
+	</body>
+	<script>
+		var a = document.getElementById('a');
+		//console.log(a.getAttribute('name'));
+		//console.log(a);
+		//var b = a.getElementById('b');
+		//var b = a.querySelector('#a');
+		//var b = a.getElementsByTagName("div")[0];
+		//console.log(b);
+				for(var i in a) {
+		
+					console.log("对象方法: ", i, "=", a[i])
+				}
+//		for(var i in document) {
+//			console.log("对象方法: ", i, "=", document[i])
+//		}
+	</script>
+
+</html>

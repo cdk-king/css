@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.verify-btn{
+				font-size: 20px;
+				text-align: center;
+				cursor: pointer;
+				margin-bottom: 5px;
+				border: 1px solid #ddd;
+				background: #0062CC;
+				color: #ffffff;
+				width: 100px;
+				height:40px;
+				margin-top: 10px;
+		}
+		.CommonVerify-showBox{
+			width: 300px;
+			height:80px;
+			border: 1px solid #0062CC;
+			text-align: center;
+			line-height: 80px;
+			font-size: 40px;
+			color: #0062CC;
+			vertical-align: middle;
+			
+		}
+		.CommonVerify-input{
+			width: 200px;
+			height:30px;
+			font-size: 20px;
+		}
+		.CommonVerify-inputBox{
+			margin-top: 10px;
+		}
+		.CommonVerify-change{
+			color: #0062CC;
+			margin-left: 20px;
+			cursor: pointer;
+		}
+		.codeFont1{
+			margin-left: 0px;
+			font-style:italic;
+		}
+		.codeFont2{
+			margin-left: 0px;
+			font-weight:bolder;
+		}
+		.codeFont3{
+			margin-left: 0px;
+			font-weight:bolder;
+		}
+		.SlideVerify-showBox{
+			position: relative;
+			width: 300px;
+			height:150px;
+			background-image: url(img/窈窕望月.png);
+			/*background-size: cover;*/
+			background-size: initial;
+		}
+		.SlideVerify-slideBox{
+			position: relative;
+			margin-top: 10px;
+			width: 300px;
+			height:50px;
+			border: 1px solid #0062CC;
+			text-align: center;
+			line-height: 50px;
+		}
+		.SlideVerify-slide{
+			position: absolute;
+			width: 48px;
+			height:48px;
+			border: 1px solid #0062CC;
+			text-align: center;
+			line-height: 50px;
+			cursor: pointer;
+			background: #fff;
+		}
+		.SlideVerify-slideText{
+			font-size: 13px;
+			font-style: initial;
+		}
+		.SlideVerify-slideProgress{
+			position: absolute;
+			top: 1px;
+			left: 1px;
+			width: 48px;
+			height:48px;
+			background: #B2DFEE;
+			z-index: -1;
+			/*border: 1px solid #0062CC;*/
+		}
+		.SlideVerify-slideEmpty{
+			position: absolute;
+			top: 30px;
+			right: 30px;
+			width: 48px;
+			height:48px;
+			border: 1px solid #fff;
+			background: #fff;
+		}
+		.SlideVerify-slideBlock{
+			position: absolute;
+			top: 30px;
+			left: 0px;
+			width: 48px;
+			height:48px;
+			border: 1px solid #fff;
+			background: #fff;
+			background-size: '50px 50px';
+			
+		}
+		.CommonVerify-slide{
+			margin-top: 20px;
+		}
+	</style>
+	<body>
+		<div>
+			<h3>普通验证码</h3>
+			<div id="CommonVerify" >
+			</div>
+			<h3>算术验证码</h3>
+			<div id="CommonVerify-calculate" >
+			</div>
+			<h3>滑动验证码1</h3>
+			<div id="CommonVerify-slide1" class="CommonVerify-slide">
+				<!--<div id="SlideVerify-showBox" class="SlideVerify-showBox">
+				<div id="SlideVerify-slideEmpty" class="SlideVerify-slideEmpty"></div>
+				<div id="SlideVerify-slideBlock" class="SlideVerify-slideBlock"></div>
+				</div>
+				<div id="SlideVerify-slideBox" class="SlideVerify-slideBox">
+					<div id="SlideVerify-slideProgress" class="SlideVerify-slideProgress"></div>
+					<div id="SlideVerify-slide" class="SlideVerify-slide">></div>
+					<div id="SlideVerify-slideText" class="SlideVerify-slideText"></div>
+					
+				</div>-->
+			</div>
+			<h3>滑动验证码2</h3>
+			<div id="CommonVerify-slide2" class="CommonVerify-slide">
+				<div id="SlideVerify-showBox" class="SlideVerify-showBox">
+				<div id="SlideVerify-slideEmpty" class="SlideVerify-slideEmpty"></div>
+				<div id="SlideVerify-slideBlock" class="SlideVerify-slideBlock"></div>
+				</div>
+				<div id="SlideVerify-slideBox" class="SlideVerify-slideBox">
+					<div id="SlideVerify-slideProgress" class="SlideVerify-slideProgress"></div>
+					<div id="SlideVerify-slide" class="SlideVerify-slide">></div>
+					<div id="SlideVerify-slideText" class="SlideVerify-slideText"></div>
+					
+				</div>
+			</div>
+			
+		</div>
+	</body>
+	<script type="text/javascript">
+		;(function(){
+			//字符合集
+			var code_chars = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    
+			//构造函数 （大写）
+			var Code = function(ele,type,option){
+				this.ele = ele;
+				this.$element = document.getElementById(ele);
+				this.default = {
+					type:type.toString() || "1",
+					codeLength:6,
+					codeFont:[],
+					codeFontText:'',
+					codeFontHtml:'',
+					success:function(){
+						
+					},
+					
+				};
+				this.option = option;
+			}
+			//对象表达式,新的对象，
+			Code.prototype = {
+				//初始化
+				init:function(){
+					var selt = this;
+					if(this.option.success!=undefined){
+						this.default.success = this.option.success;
+					}
+					if(this.option.error!=undefined){
+						this.default.error = this.option.error;
+					}
+					this.setDom();
+					this.setBackground();
+					this.setCode(); 
+					//ie浏览器禁止文字选中       ondrag元素正在拖动时触发
+					this.$element.onselectstart = document.body.ondrag = function(){ 
+						return false; 
+					};
+					this.html.CommonVerifyShowBox.addEventListener('click',function(){
+						selt.setBackground();
+						selt.setCode();
+					});
+					this.html.CommonVerifyChange.addEventListener('click',function(){
+						selt.setBackground();
+						selt.setCode();
+					});
+					this.html.CommonVerifyBtn.addEventListener('click',function(){
+						selt.checkCode();
+					});
+					
+				},
+				//设置元素
+				setDom:function(){
+					var htmlCode =  '<div id="CommonVerify-showBox" class="CommonVerify-showBox">'+
+									'</div>'+
+									'<div id="CommonVerify-inputBox" class="CommonVerify-inputBox">'+
+									'<input id="CommonVerify-input" class="CommonVerify-input"/>'+
+									'<span id="CommonVerify-change" class="CommonVerify-change">换一张</span>'+
+									'</div>'+
+									'<button type="button" id="CommonVerify-btn" class="verify-btn">确定</button>';
+					this.$element.innerHTML = htmlCode;
+					// 通过父元素获取所有div
+    				var dDiv = this.$element.getElementsByTagName('div');
+    				var dInput = this.$element.getElementsByTagName('input');
+    				var dSpan = this.$element.getElementsByTagName('span');
+    				var dButton = this.$element.getElementsByTagName('button');
+					this.html = {
+						////推荐使用querySelectorAll
+						//不能嵌套getElementById
+						CommonVerifyShowBox:this.$element.querySelectorAll(".CommonVerify-showBox")[0],
+						CommonVerifyChange:this.$element.querySelectorAll(".CommonVerify-change")[0],
+						CommonVerifyBtn:this.$element.querySelectorAll(".verify-btn")[0],
+						CommonVerifyInput:this.$element.querySelectorAll(".CommonVerify-input")[0],
+						
+					}
+					
+					
+				},
+				setBackground:function(){
+					var color = "#"+(function(color){
+							return  (color+='0123456789abcdfe'[Math.floor(Math.random()*16)]) && (color.length==6)?   color : arguments.callee(color)
+						})("");
+					this.html.CommonVerifyShowBox.style.background = color;
+					this.html.CommonVerifyShowBox.style.border = "1px solid "+color;
+				},
+				//设置验证码
+				setCode:function(){
+					
+					//console.log(this.default.type);
+					switch(this.default.type){
+						case "1": this.commonVerify();
+						break; 
+						case "2": this.commonVerifyCalculate();
+						break; 
+					}
+					
+				},
+				commonVerify:function(){
+					this.default.codeFont=[];
+					this.default.codeFontText='';
+					this.default.codeFontHtml='';
+					for(var i = 0;i<this.default.codeLength;++i){
+						var con = Math.round(Math.random()*52);
+						//console.log(con);
+						this.default.codeFont.push(code_chars[con]);
+						this.default.codeFontText += code_chars[con];
+						var color = "#"+(function(color){
+							return  (color+='0123456789abcdfe'[Math.floor(Math.random()*16)]) && (color.length==6)?   color : arguments.callee(color)
+						})("");
+						var margainLeft = Math.floor(Math.random()*30)+"px";
+						//console.log(color);
+						if(con%2==0){
+							this.default.codeFontHtml +='<font class="codeFont1" style="color:'+color+';margin-left:'+margainLeft+'">'+code_chars[con]+'</font>';
+						}else{
+							this.default.codeFontHtml +='<font class="codeFont2" style="color:'+color+';margin-left:'+margainLeft+'">'+code_chars[con]+'</font>';
+						}
+					}
+					this.html.CommonVerifyShowBox.innerHTML = this.default.codeFontHtml;
+				},
+				commonVerifyCalculate:function(){
+					this.default.codeFont=[];
+					this.default.codeFontText='';
+					this.default.codeFontHtml='';
+					
+						var con1 = Math.round(Math.random()*50);
+						var con2 = Math.round(Math.random()*50);
+						var con3 = '+-'[Math.floor(Math.random()*2)];
+						var re = eval(con1+con3+con2);
+						//console.log(re);
+						this.default.codeFont.push(re);
+						this.default.codeFontText = re ;
+						var color = "#"+(function(color){
+							return  (color+='0123456789abcdfe'[Math.floor(Math.random()*16)]) && (color.length==6)?   color : arguments.callee(color)
+						})("");
+						var margainLeft = Math.floor(Math.random()*0)+"px";
+						//console.log(color);
+						//if(con%2==0){
+							this.default.codeFontHtml +='<font class="codeFont3" style="color:'+color+';margin-left:'+margainLeft+'">'+con1+con3+con2+"=?"+'</font>';
+						//}else{
+						//	this.default.codeFontHtml +='<font class="codeFont2" style="color:'+color+';margin-left:'+margainLeft+'">'+re+'</font>';
+						//}
+					
+					this.html.CommonVerifyShowBox.innerHTML = this.default.codeFontHtml;
+				},
+				//校验验证码
+				checkCode:function(){
+					switch(this.default.type){
+						case "1": this.checkCommonVerify();
+						break; 
+						case "2": this.checkCommonVerifyCalculate();
+						break; 
+					}
+					
+				},
+				checkCommonVerify:function(){
+					var input = this.html.CommonVerifyInput.value.trim();
+					//console.log(input);
+					//console.log(this.default.codeFontText);
+					if(input==this.default.codeFontText || input.toLowerCase()==this.default.codeFontText.toLowerCase()  ||  input.toUpperCase()==this.default.codeFontText.toUpperCase()){
+						this.default.success();
+						
+					}else{
+						this.default.error();
+					}
+					
+				},
+				checkCommonVerifyCalculate:function(){
+					var input = this.html.CommonVerifyInput.value.trim();
+					//console.log(input);
+					//console.log(this.default.codeFontText);
+					if(input==this.default.codeFontText){
+						this.default.success();
+						
+					}else{
+						this.default.error();
+					}
+					
+				}
+				
+				
+			}
+			//获取某个html元素的定位
+			function GetPos(obj) {
+				var pos = new Object();
+				obj = obj.offsetParent;
+				pos.x = obj.offsetLeft;
+				pos.y = obj.offsetTop;
+				while(obj = obj.offsetParent) {
+					pos.x += obj.offsetLeft;
+					pos.y += obj.offsetTop;
+				}
+				return pos;
+			};
+			        //获取left值
+	        function getLeft(node) {
+	        	//var left = $(node).offset().left;
+	        	var nowPos = node.offsetParent;
+				var left=0;
+	        	while(nowPos != null) {　　
+	        		left += nowPos.offsetLeft;　
+	        		nowPos = nowPos.offsetParent;　　
+	        	}
+	        	return left;
+	        }
+	        var Slide = function(ele, type, option) {
+	        		this.ele = ele;
+	        		this.$element = document.getElementById(ele);
+	        		this.$element.onselectstart = document.body.ondrag = function(){ 
+						return false; 
+					};
+	        		this.default = {
+	        			type:type.toString() || "1",
+	        				isDown: false,
+	        				isMove: false,
+	        				slide: this.$element.querySelectorAll("#SlideVerify-slide")[0],
+			        		slideBox: this.$element.querySelectorAll("#SlideVerify-slideBox")[0],
+			        		slideText: this.$element.querySelectorAll("#SlideVerify-slideText")[0],
+			        		slideProgress: this.$element.querySelectorAll("#SlideVerify-slideProgress")[0],
+			        		slideEmpty: this.$element.querySelectorAll("#SlideVerify-slideEmpty")[0],
+			        		slideBlock: this.$element.querySelectorAll("#SlideVerify-slideBlock")[0],
+	        				left:0,
+	        				slideBlockLeft:0,
+	        				slideBlockTop:0,
+	        				isCheck:false
+					};
+				this.option = option || {};
+			}
+			Slide.prototype = {
+				init:function(){ 
+					
+					var selt = this;
+					selt.setDom();
+					if(this.option.success!=undefined){
+						this.default.success = this.option.success;
+					}
+					if(this.option.error!=undefined){
+						this.default.error = this.option.error;
+					}
+					window.addEventListener('mousedown',function(e){
+						if(e.target==selt.default.slide){
+							//console.log(selt.default.slide.offsetLeft);
+							selt.default.isDown = true;
+							selt.default.left = selt.default.slide.offsetLeft;
+						}
+					});
+					window.addEventListener('mousemove',function(e){
+						e.preventDefault();
+						if(selt.default.isDown == true){
+							
+							var  disX = e.clientX;
+	        				var  disY = e.clientY;
+	        				
+	        				var pos = GetPos(selt.default.slide);
+	        				//console.log(disX-pos.x);
+	        				var left = disX-pos.x-25;
+	        				//console.log(left);
+	        				if(1<=left<=250){
+	        					selt.default.slide.style.left =left+"px";
+	        					selt.default.left = left;
+	        					
+	        					selt.default.slideProgress.style.width = left+"px";
+	        					selt.default.slideProgress.style.background = "#B2DFEE";
+	        					
+	        					if(selt.default.type == "2"){
+	        						selt.default.slideBlock.style.left =left+"px";
+									if((selt.default.slideBlockLeft-5)<left && left<(selt.default.slideBlockLeft+5)){
+	        							selt.default.slideText.innerText = "松开验证";
+										selt.default.slideText.style.color = "green";
+	        							console.log(selt.default.slideText.innerText);
+	        							//selt.check();
+	        							selt.default.isCheck = true;
+	        							
+	        						}else{
+	        							selt.default.slideText.innerText = "向右滑动解锁";
+										selt.default.slideText.style.color = "green";
+										selt.default.isCheck = false; 
+	        						}
+	        					}
+	        				}
+	        				if(left>250){
+	        					selt.default.slide.style.left="250px";
+	        					selt.default.left = 250;
+	        					selt.default.slideProgress.style.width = "250px";
+	        					if(selt.default.type == "2"){
+	        						selt.default.slideBlock.style.left = "250px";
+	        					}
+	        				}
+	        				if(left<=0){
+	        					selt.default.slide.style.left="0px";
+	        					selt.default.left = 0;
+	        					selt.default.slideProgress.style.width = "0px";
+	        					if(selt.default.type == "2"){
+	        						selt.default.slideBlock.style.left = "0px";
+	        					}
+	        				}
+	        				
+	        				if(selt.default.left>=250){
+	        					//selt.check();
+	        					if(selt.default.type == "1"){
+	        						selt.default.slideText.innerText = "松开验证";
+									selt.default.slideText.style.color = "green";
+									selt.default.isCheck = true;
+	        					}
+	        					
+	        					
+	        				}else{
+	        					if(selt.default.type == "1"){
+	        						selt.default.slideText.innerText = "向右滑动解锁";
+									selt.default.slideText.style.color = "green";
+									selt.default.isCheck = false;
+	        					}
+	        					
+	        				}
+						}
+					});
+					window.addEventListener('mouseup',function(e){
+						if((selt.default.isDown == true)){
+							selt.default.isDown = false;
+							if(selt.default.isCheck){
+								selt.check();
+								selt.default.isCheck=false;
+							}
+						}
+					});
+					window.addEventListener('touchstart',function(e){
+						
+					});
+					window.addEventListener('touchmove',function(){
+						
+					});
+					window.addEventListener('touchend',function(){
+						
+					});
+				},
+				setDom:function(){
+					var selt = this;
+					
+					if(selt.default.type == "1"){
+//						var htmlCode = '<div id="SlideVerify-showBox" class="SlideVerify-showBox">'+
+//									'<div id="SlideVerify-slideEmpty" class="SlideVerify-slideEmpty"></div>'+
+//									'<div id="SlideVerify-slideBlock" class="SlideVerify-slideBlock"></div>'+
+//									'</div>'+
+						var htmlCode =
+									'<div id="SlideVerify-slideBox" class="SlideVerify-slideBox">'+
+									'<div id="SlideVerify-slideProgress" class="SlideVerify-slideProgress"></div>'+
+									'<div id="SlideVerify-slide" class="SlideVerify-slide">></div>'+
+									'<div id="SlideVerify-slideText" class="SlideVerify-slideText"></div>'+
+									'</div>';
+						selt.$element.innerHTML = htmlCode;
+						selt.default.slide= selt.$element.querySelectorAll("#SlideVerify-slide")[0];
+		        		selt.default.slideBox= selt.$element.querySelectorAll("#SlideVerify-slideBox")[0];
+		        		selt.default.slideText= selt.$element.querySelectorAll("#SlideVerify-slideText")[0];
+		        		selt.default.slideProgress= selt.$element.querySelectorAll("#SlideVerify-slideProgress")[0];
+		        		//selt.default.slideEmpty= selt.$element.querySelectorAll("#SlideVerify-slideEmpty")[0];
+		        		//selt.default.slideBlock= selt.$element.querySelectorAll("#SlideVerify-slideBlock")[0];
+		        		selt.default.slideText.innerText = "向右滑动解锁";
+						selt.default.slideText.style.color = "green";
+					}
+					if(selt.default.type == "2"){
+						var htmlCode = '<div id="SlideVerify-showBox" class="SlideVerify-showBox">'+
+									'<div id="SlideVerify-slideEmpty" class="SlideVerify-slideEmpty"></div>'+
+									'<div id="SlideVerify-slideBlock" class="SlideVerify-slideBlock"></div>'+
+									'</div>'+
+									'<div id="SlideVerify-slideBox" class="SlideVerify-slideBox">'+
+									'<div id="SlideVerify-slideProgress" class="SlideVerify-slideProgress"></div>'+
+									'<div id="SlideVerify-slide" class="SlideVerify-slide">></div>'+
+									'<div id="SlideVerify-slideText" class="SlideVerify-slideText"></div>'+
+									'</div>';
+						selt.$element.innerHTML = htmlCode;
+						selt.default.slide= selt.$element.querySelectorAll("#SlideVerify-slide")[0];
+		        		selt.default.slideBox= selt.$element.querySelectorAll("#SlideVerify-slideBox")[0];
+		        		selt.default.slideText= selt.$element.querySelectorAll("#SlideVerify-slideText")[0];
+		        		selt.default.slideProgress= selt.$element.querySelectorAll("#SlideVerify-slideProgress")[0];
+		        		selt.default.slideEmpty= selt.$element.querySelectorAll("#SlideVerify-slideEmpty")[0];
+		        		selt.default.slideBlock= selt.$element.querySelectorAll("#SlideVerify-slideBlock")[0];
+		        		selt.default.slideBlock.style.backgroundImage = 'url(img/窈窕望月.png)'; 
+		        		
+						selt.default.slideText.innerText = "向右滑动解锁";
+						selt.default.slideText.style.color = "green";
+						selt.setSlideBlock();
+						var image = new Image();
+				        image.src = 'url(img/hzw.png)';
+				        
+						var l = selt.default.slideBlockLeft;
+				        //console.log(l);
+				        var h = selt.default.slideBlockTop;
+						selt.default.slideBlock.style.backgroundPosition  = '-'+l+'px -'+h+'px';
+					}
+				},
+				moveDom:function(){
+					
+				},
+				mouseup:function(){
+					
+				},
+				check:function(){
+					var selt = this;
+					selt.default.isDown = false;
+					//selt.default.slide.style.left="250px";
+					selt.default.slide.innerText = "✓";
+					selt.default.slide.style.color = "green";
+					selt.default.slide.style.background = "#98FB98";
+					selt.default.slideBox.style.background = "#98FB98";
+					selt.default.slideText.innerText = "验证通过";
+					selt.default.slideText.style.color = "green";
+					selt.default.success();
+				},
+				setSlideBlock:function(){
+					var selt = this;
+					var right = Math.random()*100;
+					selt.default.slideEmpty.style.right = right+"px";
+					var top = Math.random()*100;
+					selt.default.slideBlock.style.top = selt.default.slideEmpty.style.top = top+"px";
+					selt.default.slideBlockLeft = Math.round(300-right-50);
+					selt.default.slideBlockTop = Math.round(top);
+					//console.log(selt.default.slideBlockLeft);
+				}
+				
+			}
+			
+			window.code = function(el,type,option){
+				
+				var code = new Code(el,type,option);
+        		code.init();
+			}
+			window.slide = function(el,type,option){
+				
+				var slide = new Slide(el,type,option);
+        		slide.init();
+			}
+		})()
+		code("CommonVerify","1",{
+			success:function(){
+				alert("验证通过");
+			},
+			error:function(){
+				alert("验证失败");
+			}
+		});
+		code("CommonVerify-calculate","2",{
+			success:function(){
+				alert("验证通过");
+			},
+			error:function(){
+				alert("验证失败");
+			}
+		});
+		slide("CommonVerify-slide1","1",{
+			success:function(){
+				alert("验证通过");
+			},
+			error:function(){
+				alert("验证失败");
+			}
+		});
+		slide("CommonVerify-slide2","2",{
+			success:function(){
+				alert("验证通过");
+			},
+			error:function(){
+				alert("验证失败");
+			}
+		});
+	</script>
+</html>

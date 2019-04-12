@@ -1,0 +1,61 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>深入理解js this</title>
+	</head>
+
+	<body>
+
+	</body>
+	<script type="text/javascript">
+		var test1 = function() {
+			console.log(this === window);
+		}
+		test1();
+
+		function oj() {
+			console.log(this === window);
+		}
+		var person = oj();
+
+		var test3 = function() {
+			innerTest = function() {
+				console.log(this === window);
+			}
+			innerTest();
+		}
+		test3();
+
+var test4 = function(){
+  var innerTest = function(){
+   console.log(this === window);
+   var innerTest1 = function(){
+    console.log(this === window);
+   }
+   innerTest1();
+  }
+  innerTest();
+ }
+test4();
+
+		var test2 = {
+			'a': 1,
+			'b': function() {
+				console.log(this === test2);
+			}
+		}
+		test2.b();
+		
+		var test ={
+		  'a':1,
+		  'b':{
+		   'b1':function(){
+		    console.log(this === test.b);
+		   }
+		  }
+		 }
+		test.b.b1();
+	</script>
+
+</html>

@@ -1,0 +1,80 @@
+<html>
+<head>
+
+<style>
+	body{
+	margin: 0px;
+}
+.banner-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.banner-wrapper #bg1{
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    
+}
+
+.banner-wrapper #bg2{
+    display: none;
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    
+}
+
+#wave{
+    position: absolute;
+    width: 1920px;
+    height: 170px;
+    left: 50%;
+    bottom: 0px;
+    margin-left: -960px;
+    z-index: 1;
+    background-image: url(img/bg_wave.png);
+    background-position: 0 0;
+    -webkit-animation:wave 20s .2s linear both infinite;
+    -moz-animation:wave 20s .2s linear both infinite;
+}
+
+@-webkit-keyframes wave{
+0%{
+-webkit-transform:translateZ(0px);
+background-position: 0 0;}
+100%{
+-webkit-transform:translateZ(0);
+background-position: -1920px 0;}
+}
+@-moz-keyframes wave{
+0%{
+-moz-transform:translateZ(0px);
+background-position: 0 0;}
+100%{
+-moz-transform:translateZ(0);
+background-position: -1920px 0;}
+}
+</style>
+<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+
+<script type="text/javascript">
+ //bg
+      $(".new-navbar-wrapper").animate({ backgroundColor: "#fff" }, 1000 )
+      setInterval(function(){
+        $("#bg1").fadeToggle(3000)
+        $("#bg2").fadeToggle(3000)       
+      },8000)
+
+</script>
+
+</head>
+<body>
+	<div class="banner-wrapper">
+      <img src="img/blue.jpg" id="bg1">
+      <img src="img/skyblue.png" id="bg2">
+      <div id="wave"></div>
+    </div>
+</body>
+</html>

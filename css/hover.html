@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/jquery-1.11.0.js"></script>
+		<script src="js/mui.min.js"></script>
+		<!--<link href="css/mui.min.css" rel="stylesheet" />-->
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+		<style>
+			div{
+				
+			}
+			.a {
+				color: #fff;
+				font-size: 30px;
+				-webkit-transition: all 0.5s ease;
+				-o-transition: all 0.5s ease;
+				transition: all 0.5s ease;
+			}
+			
+			.a:hover {
+				font-size: 32px;
+				box-shadow: 10px 20px 10px 0px rgba(0, 0, 0, 0.5);
+			}
+			/* Underline From Center */
+			
+			.b {
+				font-size: 30px;
+				color: #FFF;
+				display: inline-block;
+				vertical-align: middle;
+				-webkit-transform: perspective(1px) translateZ(0);
+				transform: perspective(1px) translateZ(0);
+				box-shadow: 0 0 1px transparent;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			.b:before {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				left: 50%;
+				right: 50%;
+				bottom: 0;
+				background: #2098D1;
+				height: 8px;
+				-webkit-transition-property: left, right;
+				transition-property: left, right;
+				-webkit-transition-duration: 0.3s;
+				transition-duration: 0.3s;
+				-webkit-transition-timing-function: ease-out;
+				transition-timing-function: ease-out;
+			}
+			
+			.b:hover:before,
+			.b:focus:before,
+			.b:active:before {
+				left: 0;
+				right: 0;
+			}
+			
+			#c:hover {
+				
+				cursor: pointer;
+				color: #fff;
+				font-size: 30px;
+			}
+			
+			#d {
+				width: 100px;
+				height: 50px;
+				font-size: 30px;
+				background: #0062CC;
+				-webkit-transition: .5s;
+			}
+			
+			#d:focus {
+				background: #fff;
+				width: 150px;
+			}
+			
+			#e {
+				position: absolute;
+				color: #fff;
+				font-size: 30px;
+				top: 330px;
+				-webkit-transition: all 1s ease;
+				-o-transition: all 1s ease;
+				transition: all 1s ease;
+			}
+			
+			#e:hover {
+				position: absolute;
+				color: #fff;
+				font-size: 30px;
+				top: 550px;
+				-webkit-transition: all 10s linear infinite;
+				-o-transition: all 10s linear infinite;
+				transition: all 10s linear infinite;
+			}
+			
+			#cdk {
+				color: #fff;
+				font-size: 30px;
+				-webkit-transition: cdk 20s linear infinite;
+				-o-transition: cdk 20s linear infinite;
+				transition: cdk 20s linear infinite;
+			}
+			
+			@keyframes cdk {
+				0% {
+					-webkit-transform: translateY(0px);
+				}
+				100% {
+					-webkit-transform: translateY(100px);
+				}
+			}
+			
+			#f {
+				width: 100px;
+				height: 50px;
+				font-size: 30px;
+				color:#fff;
+				background: blue;
+				-webkit-transition: .5s;
+				/* Safari and Chrome */
+			}
+			
+			#f:hover {
+				width: 150px;
+			}
+			
+			#box_e {
+				position: relative;
+				width: 100px;
+				height: 50px;
+				text-align: center;
+				overflow: hidden;
+			}
+			
+			#e1 {
+				position: absolute;
+				z-index: 0;
+				color: #fff;
+				font-size: 30px;
+				top: -50px;
+				left: 0px;
+				-webkit-transition: all 0.3s linear;
+				-o-transition: all 0.3s linear;
+				transition: all 0.3s linear;
+			}
+			
+			#h:hover {}
+			
+			#e2 {
+				position: absolute;
+				z-index: 1;
+				color: #fff;
+				font-size: 30px;
+				top: 0px;
+				left: 0px;
+				-webkit-transition: all 0.3s linear;
+				-o-transition: all 0.3s linear;
+				transition: all 0.3s linear;
+			}
+			
+			#i:hover {}
+			
+			#g{
+				text-align: center;
+				margin: 30px;
+				width: 100px;
+				height: 40px;
+				border-radius: 30px;
+				background: #fff;
+				border: 1px solid #ccc;
+				line-height: 40px;
+				color: #999;
+				font-size: 12px;
+				
+				/*注意-webkit-transform*/
+				transition: -webkit-transform 0.4s ease-out;
+	            -webkit-transition: -webkit-transform 0.4s ease-out;
+	            -moz-transition: -webkit-transform 0.4s ease-out;
+	            -o-transition: -webkit-transform 0.4s ease-out;
+				
+				/*如果想单独控制某个属性，可以分别用类去控制*/
+				/*transition: all 0.4s ease-out;
+	            -webkit-transition: all 0.4s ease-out;
+	            -moz-transition: all 0.4s ease-out;
+	            -o-transition: all 0.4s ease-out;*/
+	            
+	            transition: animation 0.4s ease-out;
+	            -webkit-transition: animation 0.4s ease-out;
+	            -moz-transition: animation 0.4s ease-out;
+	            -o-transition: animation 0.4s ease-out;
+			}
+			#g:hover{
+				cursor: pointer;
+				border-radius: 30px;
+				background-image: linear-gradient(-180deg, #4790E5 0%, #52A5F4 100%);
+				border: 0;
+				line-height: 40px;
+				color: #fff;
+				font-size: 12px;
+				
+				box-shadow: 3px 10px 5px 0px rgba(0, 0, 0, 0.2);
+				
+				/*animation:transform1 0.4s linear infinite;
+				-webkit-animation:transform1 0.4s linear infinite;*/
+				
+				transform: scale(1.2);
+	            -webkit-transform: scale(1.2);
+	            -moz-transform: scale(1.2);
+	            -o-transform: scale(1.2);
+	            -ms-transform: scale(1.2);
+			}
+			@keyframes transform1 {
+				0% {
+					width: 100px;
+				}
+				100% {
+					width: 200px;
+				}
+			}
+			@-webkit-keyframes transform1 /* Safari and Chrome */
+			{
+				0% {
+					transform: scale(1);
+	            -webkit-transform: scale(1);
+	            -moz-transform: scale(1);
+	            -o-transform: scale(1);
+	            -ms-transform: scale(1);
+				}
+				100% {
+					transform: scale(1.2);
+	            -webkit-transform: scale(1.2);
+	            -moz-transform: scale(1.2);
+	            -o-transform: scale(1.2);
+	            -ms-transform: scale(1.2);
+				}
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="cdk" type="button" style="width: 100px;height: 50px; background: #0062CC;text-align: center;line-height: 50px;margin: 30px;">test</div>
+		<table>
+			<tr>
+				<td>
+					<div id="a" type="button" class="a" style="width: 100px;height: 50px; background: #0062CC;text-align: center;line-height: 50px;margin: 30px;">cdk</div>
+				</td>
+				<td>
+					<div id="b" class="b" style="width: 100px;height: 50px; background: #555;text-align: center;line-height: 50px;margin: 30px;">cdk</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="c" style="width: 100px;height: 50px; background: #0062CC;text-align: center;line-height: 50px;margin: 30px;">cdk</div>
+				</td>
+				<td>
+					<input id="d" style="text-align: center;line-height: 50px;margin: 30px;"></input>
+				</td>
+			</tr>
+			<tr>
+
+				<td>
+					<div id="box_e" style="margin: 30px;">
+						<div id="e1" style="width: 100px;height: 100px; background: #0062CC;text-align: center;line-height: 50px;">cdk-h</div>
+						<div id="e2" style="width: 100px;height: 50px; background: #1E90FF;text-align: center;line-height: 50px;">cdk-h</div>
+					</div>
+				</td>
+				<td>
+					<div id="f" style=" background: #0062CC;text-align: center;line-height: 50px;margin: 30px;">cdk-f</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="g">加载更多</div>
+				</td>
+			</tr>
+		</table>
+
+	</body>
+	<script>
+		var e2 = document.getElementById("e2");
+		var e1 = document.getElementById("e1");
+		var box_e = document.getElementById("box_e");
+		box_e.onmouseover = function(e) {
+			//避免鼠标在DIV里面移动时也会可能触发onmouseover或onmouseout。		
+			if(!e) e = window.event;
+			var reltg = e.relatedTarget ? e.relatedTarget : e.toElement;
+			while(reltg && reltg != this) reltg = reltg.parentNode;
+			if(reltg != this) {
+				// 这里可以编写 onmouseleave 事件的处理代码  
+				this.style.background = "#000";
+				e1.style.top = "0px";
+				e2.style.top = "50px";
+			}
+			this.style.background = "#000";
+			return true;
+		}
+		box_e.onmouseout = function(e) {
+			//避免鼠标在DIV里面移动时也会可能触发onmouseover或onmouseout。		
+			if(!e) e = window.event;
+			var reltg = e.relatedTarget ? e.relatedTarget : e.toElement;
+			while(reltg && reltg != this) reltg = reltg.parentNode;
+			if(reltg != this) {
+				// 这里可以编写 onmouseleave 事件的处理代码  
+				this.style.background = "#fff";
+				e1.style.top = "-50px";
+				e2.style.top = "0px";
+			}
+			this.style.background = "#fff";
+			return true;
+		}
+	</script>
+
+</html>

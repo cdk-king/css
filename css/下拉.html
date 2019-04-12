@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>cdk的下拉</title>
+	</head>
+	<script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var _this1 = null;
+			$('.second-nav').hover(function() {
+				_this1 = $(this);
+				var _this2 = null;
+
+				_this2 = _this1.find('li');
+				_this2.find('.third-nav').show();
+				_this2.find('.third-nav').find('li').hover(function() {
+					$(this).find('a').css("color", "blue");
+					$(this).css("background", "#ccc");
+				}, function() {
+					$(this).find('a').css("color", "red");
+					$(this).css("background", "#fff");
+				});
+
+			}, function() {
+				$('.third-nav').hide();
+
+			});
+		});
+	</script>
+
+	<body>
+		<div style="border: 1px solid chartreuse;padding: 10px;">
+			<table>
+				<tr>
+					<td>
+						<ul class="second-nav" style="padding:0;list-style:none;margin:0 auto;text-align: center;border:1px solid red;width:120px;height:50px;z-index:999;padding: 10px;">
+							<li style="text-align: center;border:1px solid blue;margin:0 auto;padding:0;width:100px;">
+								<a href="" style="line-height:50px;">cdk</a>
+								<ul class="third-nav" style=" display:none;list-style:none;padding:0;width:100px;text-align: center;z-index:999;position:relative;">
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+
+								</ul>
+							</li>
+						</ul>
+					</td>
+					<td>
+						<ul class="second-nav" style="padding:0;list-style:none;margin:0 auto;text-align: center;border:1px solid red;width:120px;height:50px;z-index:999;padding: 10px;">
+							<li style="text-align: center;border:1px solid blue;margin:0 auto;padding:0;width:100px;">
+								<a href="" style="line-height:50px;">cdk</a>
+								<ul class="third-nav" style=" display:none;list-style:none;padding:0;width:100px;text-align: center;z-index:999;position:relative;">
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+
+								</ul>
+							</li>
+						</ul>
+					</td>
+					<td>
+						<ul class="second-nav" style="padding:0;list-style:none;margin:0 auto;text-align: center;border:1px solid red;width:120px;height:50px;z-index:999;padding: 10px;">
+							<li style="text-align: center;border:1px solid blue;margin:0 auto;padding:0;width:100px;">
+								<a href="" style="line-height:50px;">cdk</a>
+								<ul class="third-nav" style=" display:none;list-style:none;padding:0;width:100px;text-align: center;z-index:999;position:relative;">
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">flow</a>
+									</li>
+									<li style="background-image: url(../App_Themes/Default/Images/Primacy/nav_bgd.gif);height:50px;">
+										<a href="" style="color:red;line-height:50px;width:90px;">stars</a>
+									</li>
+
+								</ul>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</body>
+
+</html>

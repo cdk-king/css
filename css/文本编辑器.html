@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="Bootstrap/css/bootstrap.min.css" />
+	</head>
+	<style>
+		#showBox{
+			position: absolute;
+			padding: 10px;
+			margin: 10px;
+			border: 1px solid #ccc;
+		}
+		.show{
+			
+			width: 100%;
+			height: 300px;
+			border: 1px solid #bbb;
+			padding: 10px;
+		}
+	</style>
+	<body>
+		<div id="showBox" class="">
+			
+			<div class="btn-group" role="group" aria-label="...">
+				<div class="btn-group" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      字体
+			      <span class="glyphicon glyphicon-font"></span>
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" data-name="fontName" data-value="微软雅黑">微软雅黑</a></li>
+			      <li><a href="#" data-name="fontName" data-value="宋体">宋体</a></li>
+			      <li><a href="#" data-name="fontName" data-value="仿宋">仿宋</a></li>
+			      <li><a href="#" data-name="fontName" data-value="华文细黑">华文细黑</a></li>
+			      <li><a href="#" data-name="fontName" data-value="黑体">黑体</a></li>
+			      <li><a href="#" data-name="fontName" data-value="楷体">楷体</a></li>
+			      <li><a href="#" data-name="fontName" data-value="Helvetica ">Helvetica </a></li>
+			      
+			    </ul>
+			  </div>
+				<div class="btn-group" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      字号
+			      <span class="glyphicon glyphicon-text-size"></span>
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" data-name="fontsize" data-value="7">1号</a></li>
+			      <li><a href="#" data-name="fontsize" data-value="6">2号</a></li>
+			      <li><a href="#" data-name="fontsize" data-value="5">3号</a></li>
+			      <li><a href="#" data-name="fontsize" data-value="4">4号</a></li>
+			      <li><a href="#" data-name="fontsize" data-value="3">5号</a></li>
+			      <li><a href="#" data-name="fontsize" data-value="2">6号</a></li>
+			      
+			    </ul>
+			  </div>
+			  <div class="btn-group" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      颜色
+					<span class="glyphicon glyphicon-text-color"></span>
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" data-name="forecolor" data-value="red">红</a></li>
+			      <li><a href="#" data-name="forecolor" data-value="black">黑</a></li>
+			    </ul>
+			  </div>
+			  <div class="btn-group" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      图片表情
+			      
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" data-name="InsertImage" data-value="1">1</a></li>
+			      <li><a href="#" data-name="InsertImage" data-value="2">2</a></li>
+			      <li><a href="#" data-name="InsertImage" data-value="3">3</a></li>
+			      
+			    </ul>
+			  </div>
+			  <div class="btn-group" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      符号表情
+			      
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" data-name="InsertInputText " data-value="1">1</a></li>
+			      <li><a href="#" data-name="InsertImage" data-value="2">2</a></li>
+			      <li><a href="#" data-name="InsertImage" data-value="3">3</a></li>
+			      
+			    </ul>
+			  </div>
+			</div>
+			
+			<div class="btn-group">
+				<button class="btn btn-default" data-name="selectAll">全选</button>
+				<button type="button" class="btn btn-default" data-name="copy">复制</button>
+			  <button type="button" class="btn btn-default" data-name="paste">粘贴</button>
+			</div>
+			<!--<div class="btn-group">
+		        <button type="button" class="btn btn-default" aria-label="Left Align"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></button>
+		        <button type="button" class="btn btn-default" aria-label="Center Align"><span class="glyphicon glyphicon-align-center" aria-hidden="true"></span></button>
+		        <button type="button" class="btn btn-default" aria-label="Right Align"><span class="glyphicon glyphicon-align-right" aria-hidden="true"></span></button>
+		        <button type="button" class="btn btn-default" aria-label="Justify"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>
+		     </div>-->
+			<div class="btn-group">
+				<button class="btn btn-default" data-name="bold">加粗</button>
+				<button type="button" class="btn btn-default" data-name="italic">斜线</button>
+			  <button type="button" class="btn btn-default" data-name="underline">下划线</button>
+			  <button type="button" class="btn btn-default" data-name="undo">撤销</button>
+			   <button type="button" class="btn btn-default" data-name="removeFormat">清空格式</button>
+			   <button type="button" class="btn btn-default" data-name="InsertImage" data-value="1">插入图片</button>
+			</div>
+			<div class="show" id="show" contenteditable>我是测试文字💗</div>
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="js/jquery-1.11.0.js" ></script>
+	<script type="text/javascript" src="Bootstrap/js/bootstrap.js" ></script>
+	<script>
+		
+		var face1 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAb/0lEQVR42u2becyuaV3fP79ruZdne9dz5pwzc85sMAwDDMaC1dTGYmubFhNjqlRLLVIQyqJSaTDGWEQlWOxI1GDLprGAtYBtNRZKGmtaG61RsYIsM8wwwyxne/dnu5dr+fWP+1Vj6yDgoBj7/PPkfZ87931f3+u6fsv3+71EVfnL/DH8Jf/8fwD+sgPg/iwe8qYXb2z72j61HNlbcsi3FxN3o7OMq8ptasz0MR+nxKpt42NezAO9poeaw/Txf/b2k8Mv9LvJFyoIvvEVu0+d1fr3ts9Wz5nMyrvHs6qoK+eq2hfijLWFM1YwUlhMThkTc+hzCn3fN8d9bLrYH15pP3y4t/6V5TK+/1VvXnz8ix6Al75U/NPL3W/Y3HH/6MZL0y/ZvGE2ridlPZrVRekttgTJinEVxoPmjPceNJFSJocedZC6RNv2pBj6xUnbzK8uV5cfWfzu4X5454dOjt73lrdo+KID4M3fufuC8zfXr7jxtq3bNrYn07Iui3I0xRjw3mFSRqwgKlgPxagAYyBFcJ4cOsgJFQMixNCTScS2ow897aLtj64tF499ev6pRx9s3/yyH93/mS8KAH7i5TtfvnOx/IGbn7T7V7bPTDemGxPrCo/3FbYoMdZD6hBjEMAQ8XVGTI0UBdr1qCSEhHYZdRZRRU1GRUjNGiWRtKedB9brNh0dLE4e+PDhb+9dD//iZfcc/K8/NwD+zau3f+iOu3defO7Gre2N7bE3xZTC17jCY3yJNYoo4AvSusVIptiwCBlNgibF1BVkUO2wzkJKZM2oZogRzS2alSwd2gvNuqNddywWTbjyyPHhfR8+fsdL3nj4vX+mALzxReMLO2cn77jjrp2/dubC9vTMjTP8dAI6wpYlNmVyNqABDRHxNcYXuEqRHP/gPjkmxFrEGkAxkoFIzgqaQXs0ZjSlIU70PTJyxC7TrFua+YLrl08WD3zk4Nceurr8J6/5idXlLzgA9/zTnbvOXyjfe+ut20/eOLvlN89M2Dq/gys9GhSKmhSEFBIGEECBclJgrCXHHlVBxP7hTVMGK2juIAeGV8pgdPiNiJxehioqgmpP2zY0xysOrh2Hh+7b/+RDD3ff+O3/6uBjXzAA3vCina+4/bb631+6dfum3XM7Mt7eZLRdM56N0RTJMYGUhGhBDaqC8w7JATeC1CtkgzGKWBBjISuIkLsINiE2g2RSHzHIgCBK1ggIRixZexSFHAkxsjqZc3z1WB+8d+/Rh+9v/sFL33Tw6094JfgvX7T1zFsvVT9/8y3bFze3NmW8c4Z6NsOaCg1KvwrEOCZGAQUjHrHF8AhRUp/JOZCJZD0ddOjJSVEMUg6voilBzBgzZIMBAQEcRkG8QBKsGowv8b5gNBqzfeGM3HrHmYs33lL9/E+8euuZTygAr3/B6Mabbqred/Hi7Pxse8Zka0q9NaaYbOCqihiFpDPCuiM2DRqFnHu0X5K6NdaCcWYoPHNAk4JxIIac+2G5k8EkxAhSOKQsyBrJnG4HVRCDBkWNRQqPZIMRT1HXlN4z2Z5xy5N2zt96+/h9r3/Z6MYnrBQ+d37yzpsvTG/f3J4xnkyod7cpjEFyRnHEGBB6hDWSBc0ryC1CwvpNXD0j9BExghEHCCl00PdghdSvMaKIN2hIkBPY0wiiiSwZjZnsLYaM88O8mcqjXUBcRblhUQOpD1zSdPv8KL4T+Oo/9Qp48yu3X3/LzRtfOd2cyGijZrQxoRpXiLFoyqQE5AxxhcgQyCS1SOqBDkym7xI5JEQzUjhUI8YYpCrRlDEiZFU0RDKKGkU1YUr7B7Ov2oPmIUXGdJodMmINkjJODIXzTKcTtrZncunmja/816/afv2fCoAffsnGsy9cmn7H5kbtp9tTxjszyo2a3Gc0G3AF2q8hr1HNiGGYPc2kdj0EQqPkqCAWciIHxVh3GtAMrqrBDX/nNAxWrCXHSG57iInUdmBkuHcfyQwrRBBwp7HCGvy0pN6e4OoRm5tjf+n26Xfc85KNZ3/eAJw/U7/phjPjyXhWU85qfDUhdRnxFVIU5NQMS108rqwQFFONh8E6T+4hLdekmIbUVowwvgLj/zC4GUdOgDhyzqQ+EFYdGgyhTYQsoB6wmKLEztxQYJHQnNCuH+oIVYiKKwTnS6rScW53PNk9X73p8wLgnpfuvuCGG2dfNpuVbJzfopzVQ8pSMHaI1poyYipMWRPbObHNxFYJjdLPlW6+IsWaHAtIFdoKaR3JSZFqiqojRUWTkJKSAqRsCa3StYGwWtMezulWa1YHC1Z7R7R7x6S+J8WApgAoGnuIATQRm4h1ltHWiKryXLxx/GU//p1bL/icAHjdc8SdOeu/b3NS+KGhqbBGMR5skRFRyD2SG3JsCc2arDVKBo1oXqJpTWiXrPavcvLIZU4evU5zsiKqQZMhrdeIAVdVYIflrQrN3pyTxw5Y7c9pTlbDdaXFeTDeoFnoVh3aR9A0bL3SgE2YcgicGhU/njGa1WxNK392p/i+1z1H3GedBcZP3XremTOjW8fjEj/yaMhoKLC+x4hHMYAhd2uUERpWSOHwtQUsVJ5cCDGM6RqlPzmkPXKsThzTnQnlxpRq4sE4NDaIdoTlmuX+nPX+Ea50GCmoZ55y5rFVSWpLjDfkaFHJhNRCGxmGZTFlQe4TzkM1c6xPAuWootqInLnQ3Xr9meF5wM9+VgBsTtwrN6a1qbc2cZMJrixwsxrjHeShhlcM6qbo+ipuvAXW060DMSxIqzm2tlgKikmFusjq6hHtXiTMj9m59QJ+tIORiGSFDOvDIw4fukZRWGTs8BNPOStQDSyuXCZlARGM8fi6pJxsoGLBKrHv0HaF9hFTlKiANUIelVRtYjpqzObUvPKzAuANL5zd+eSnbD9rNKtwvsB7g3MRVxiSFsOSsw7tI2Jq3MZNpORZ7V1jfuUxcmjJ2QEOzR3jnSnlqEJDIIaO2PU0h3OqMzW2LzHeompYzztyG1GTsUZxFlaHJ6z25vTrNUkdKSjiDFXtmZ1bU063KSZjUvLE1WpIBpMRebmGrFjnsBZGs5rNrcmz7nnp7M5Xv2X+ic8IgC/N129veD+ZGErfU5YjbF0NdbyziPbQtYgfQ8pkt8PyyqcI80Mm44pgzhJTjSsSzqxY7l1lfbjGuQJIaO5JWch9Bp8RsXSrhtT2mLICLxgPi+v7hHXL1u6UtLnBqp2gKli3T1i1HD1ynemNQrYeZw2mmpFChGWLKTym7xEDReVwrWe2UXjvzdcDb/iMAGxOy6/d2KyhC4gbEYNi7ApNBjEN6AJxYzQnxFSEoyt0x/v86u8suP/BwNPvPMutt97C4vgRyvKYSzfv0B8ecrI/x5JAFCGg2ZKlRPuO3Ld47wguYJ2hOWkoykzwFf/2F+e065q/+mVPoaos7aJjMlKmRaQ9WeLGE0w9xfgSjULqO7ImJGcIAe8MZVkwHpXMxu5r/28A/kgW+J6Xb25NN8tn+QKMLUlJycs5cd4h1RjVjPYZ7Xt8NUHwLK9f5cd/6tO88Scf4Rc/eMTb3vUJ9to7+fLn/iB+8xv46EdnSCF435O6iGgk93O0P4C4QBVUE2LAOIeIoSodB3Pln//AI7ztXfv8hw/s8bP/8RFueeaLuftv/BCxeC6PXJ2wPlqg6wWkFu0bjGRUlRwhSgllTaJAgKLyzLarZ/3wyze3HheA7VbuHte2cEWJmU6hXaPNGikLjHdIMUZGu5jRJmZUoe0xv/arhyzyU5lMb6DtErGL/NRbf4ZVZ7jr2V/L2Vu/mfs/vcFoAsXUY61FckKzYL0gEjEGcIbCC+WkxFQF/+03K+rpl5JwCJZPfPQ+/t273sPOpbu56yv+IaPzX8fDn8qEdYf1CTEZ68BVBiv9AEbscXVBtTXCeceodkUZ5e7HBcDV8rSqLkhZ0GywzlLs7FKcOYtRwXiHq8bYqsb0DQ//7kP81/9xwg3nbsdWJQcnJ0zGY/b29/jkxz/GZDJm58bbycVXsGgdo4mhmBTIqMJUU2w5wntBTMZVJX5cUo0Lfu/eFfc/MOOmSzexDpH5csnWzia/86HfoV+dUFY1527/6xytL3D13utAwvqBOzDeYgvBmoAhozGSu4QmqKoCU8rTHj8GZH2KMwNRIbGHvkXO34AwlJpGAE0IBWjPxs4G1h3yW//z11lev8ItZ3Z48p1P5v5PPch0c0ZSxRqHqy/Q5RlFFTCFRYIOzVIUMDNgAWmOSMI7w7Ujw72fuIy1VxnlwFOfdAe753aoJmOKqmA1X6LZsX12g/HsYOAgjZBl6CY1GcSXkBUJCVLAOIstDIXTOx8XAO/sJWuGWpoUYQjc5JCw1qM5I5qxBdAbNi5s8K3f9mTe/varXDp/NxdvvsSyWfHVf/Nvc+fT72a9bFieXGfkP8HFi5uYtsWkSEoFqglMAVRkFUwhQEvQzNc89yY+/OErXHm04hlPuYMz585y5foez/uWf4yo53B/j+bwN3jqMyKlO0voDNVIIJuhM82CKSGLR1KHQTBW0D7hjL34GQCQMzkqCcVUNVJaNCvaJ6QqwFissRjrMSXELDzjrg1e/d27/PJ/mXOyWPCML7mLr/o7f4vDy/cxP7wX4kd5+pfM8VLTHguhaXGuxrgCVTCimBwpa4/UDiMtU3vAd3//k/jALyx56IGMcR1/9+u+mjtuv8C9H/kgubuX8+cuo6s0dKVRSKnAeE/qEuF4QV5AOa2G330B2kGvgJx5XABEZJQjAy8vBr+5ibEG7SKUFustzioaDSlDMalo5j233waXXrZDs6oRk1H5ZWxccv7MnGqUCX2BxhHlpsV4T7vKiAiEDgqPeCGvlWprA0lzYr9mWjzG3/+mXZrVDilNEa6RuveyPV4yPtfTd3t0S8VPatx0A42AWjSCiMMw1C2UFu1apE8DUVswelwAQpskhoyRRF62sJspygItLDBw/CoWkQKMUpQBZkLfB7xvmE1X2PJw6MzCghQhNOfAVZixw8SWpC20DWg3dMVERAOqLWKmFOWE7Atio+T+kHG5wE1niJ8SujWh7YlNRLtAMZlQTmeImoFiSxlTjDFTHZqylEkxDLSaG3hIbQea9Y8FQKO22kckJOzmFHGWkCPOGUxlkSwgBSgII0wBhQmQI0pECoMYQfWYLGPwNeQCa8DaTNtlwvEaup5cKppLxCqp7YZSedHhNktELHZzjHQKdkVMq2Fva8bVJdp5xNbI6XYkG6ytSTkObFM1AlpyWCNisM6Q+4TxjhRT+7gAZMOhLS3kgYc3zoBGjIAVD6ZgkDAEzYrYEusdkBGr5OaEGONp01KRTIUrFMkt/bojtR0pR5JAisOAtFf6ZAi9YvqI72vE9lhjcBNH7i3GGjLlEISlQKqEiQbEDXyEFqAJBCRnRDJqLZoUzZmUMmIEUiYph48LQBIeyzGRu0CcL0gzi59NMIUdSl8ZODnBgoJmQYwfODoxYMdou491HsRhXU9OmbDsCE1PWKxJ2Q5R2nvEFWjKOGtpsiGs16xJVFtj8mKBLyJiJkixi2QHkgYWSWrwp5NCMVDsOYEK4jNCJuaIqkBWNARyYZHSgvDY42+BJPclhZSUsGgIaYaVoVsTyYgxgEWTnL58PwRPO/wPM8KOdiCviN0KwRAWLauDjvnVOb6Y4kc1YXVENXGQHSKgIdAdNuTKsdxvMY82TG/w1NtTTAU2NBg7BmMHeR0l8/u6AaeUuQVJGE1ooeg6oyrkrGiCvOqJJILwyccFoO3jx9uk9G2mGCViyzC7XUBLPzQyogMHl+JAaOQwZA0Np0VSIqmgYoirhnYeCI3SzHvOfOlNzG66jeX1T5D7DpiARqwbsXv7OWYXnsZyf85Dv/arWD/BVImyGNgiYY24MRghyxDwcooM6qs7XRkRxJDWHYgglYeuI4dASom2iWiXPva4AKxS/NCqCUQRZFKSsYQuYq1BfMTkhJiAMQOZiYaByjIRMQm0J7ZrNAdySmQ1+HrCaFahSRH2iR0UI2AywtgCGFOf3SbrEpU94JjJzpid224ldIekVQcjJZdj6FdYVw4zL274Vh3eQwdxJXEqRuZI6lpyF4ft4YXVMrBm/qHHBaB41/ra8lWjjyr5ad0iUUwyOQ48vDllYpGEShgeQhqeljOqDXgBzcTYs15njGbKkacczRhvrdm79yH6//0ouJrZjSO2LgmoZf7YFeaPLRBVbCVMb9imno1gEekWJ7Qd1DPB+mIoye3pKhRBvB88BnqqTQIqkNqIpogaoW8i7bJnPu8/Gt7KNd7yOAC8VjX/6Cu3Prhc9k/z2dOt1xS1ooWS1WHFnAY/HeJBDqgqYjOSIa7WhBwI60RadigdKok+dYw2EnJpE7WGiGd+ec2jv/1xIGF8weZNI2xdYL2nsHNCc4iogrXE1ZJYu0E4pR8kAs1AgYkBNW5o6yShOQ90uSRIQuh6cs6sm8jJPH7wtar5MxIi8Ti/d9X137W5OyOGQAwVfR8oVYEWoUdlBjkM/HiI5BQQn8gaaRcd/fEJOSqmsqANWTpckanGDaaaYWa7TM9Bd3SN1Arl1FOOBBVQiWhfDkqQOPI8kpuW9bVD3LhmvFsTYwBGWANZFEmObARxgvhTzbE3qHOgLX2XONxr6Jr0vj+RFn9gPP/t/b3mvhB6wrIntg1qlNB2qLYoLcgapAVdg+mBQOoj3bolzBfMr5xw9OlDwFGfPY8rJpAr3GyKSIk1mxR2Qj3bpN6a4eodrN/GuAptAmTFlNtUs21SUA4fnHNyZUFYrujWgaQGzZEUlqTYEiUMkrqB3Ae0GYJhDj3d/ITlccPRcXvfTrX4rT+RFH3LWzT86It33nZ03P6IlEqhCV85vAw7XpzHaHuqjlikcqRlT7foWO3NWR3MWR12rK6taY4a+lXLxg1jys0pisOMRsQ2kZo1tt7B20DXLRGtES0QU2PciKbJzB98iMsfuczi2prx2RpnhzmTrYSzGWMLzGgysEwhkXKCFEk5kVOmPz5hdRQ42m+Zz/Pbvuut/6+77I+lxfeuHr5ja8d/7/ii22xzi533FJWjmrhT0dNAUaGaSScr1Fhcbam3R4T1mq3zEy596W2IU67fd5n9+69RbY4x1iJljRVD6pbYwmGsoWt6jBRY6enaltgJsQ1UU8+TvupW2lXi5LFj7LigGBcYATGObA1CGGr8rIOC3KzJYsldw3KurLKwd9gc710+fMdnLYy84Zf06EdevHXP2bPdD1b1lLCKxC6RssVUJeIKxIL2LeIdOcYhgrvMxk2bpDYyOV9S1iMmZ8Y0+8c080A772mXDc2iYXW8JLb9aUbzFGPPaKPCjUomWxWb56dML27iSke7v6SohvwvVhArqMggp+cArYCxqFWSDDacZhnoU+LkYMnhsr/nDb+kR5+TP0D3jn9s/2zxws2d+rZcWpIIuVO0NCR6TBpysKYAMYM1WG8pJtVwYyOk2FNNC4wZM941mNqhnRJjTe4MWcsBAOkxFtwkIXFJTAlXlaCW1IIvKyZnFFymb5ScLGg6bYTCqeociCGR20hKgaSJVddz9crqUykc/9jnLI6+5hd0cXTcv/roYEHs1qecvhKaHm17ck6Id8NyrEo065AmwyCTDz4nHcwThafrO9qjFTH2uDIz3i2Znh0z2akZ71YUm5m4PqFdNvSrntQmyAbJDnElUjpcVVCMBzVZxAx5/jTNhT6S1x2pXRL6xOJwyd4jxxwf969+zTt08Xk5ROxDxx941Mu7Z5vV8zdvqOgClM6QjMFh0KiI9QinBIcBcQJZkHJoUzVEUMUiw+CaSGz3hsKNQW3WmDCFwRYWPy6oNybYqoRohvbbZiyW3HWg4EwEPIKSU0RPJfauSYQus1qvOby64Nre+t3F5eMPfN7+gG9/v3bX9uKrHr7/+JPz6yd0q47Ydoi3A1eYFRUwaZCsRMAVBb46NUdhMb4cvq3Dj0p84UAzq70lBw8ccPTIEe16CM6+cpTTEdYJBEVcCXa4XoxBDAiR8W6Fn3iwiZAgcOodPG5YLDOHewse/vTJJ69d61/17e/X7k9tk/uxV4yfffGmjV+54+m74+1zW4ymNa70eO9AwNUFOQQUGVwb4k99gBZxHjQMik2MxK4n9oF+OdQZOEs9qzHFQLn5cgDN+goxJaoGUgOuBW2xRunWEIIlHs9ZryHi6ZueZr7kaG/Bww8erK5dWTzn1T+9+s0nxCR1YW/9oT3sNzvkPxlvDCgjGQGKc464bDClH2hzAdXfd4MKGhNExbrylF43uPGYeqb0zWBwcFVx6hY1WF8Mbb8Wp/18RjUgeeg/kjraBrp1QExJlkxoe9qDY07mHY88cpyPDtff/Bur9YeeMJfYN75H0+ueJx80Tp5vPsI7b78bp1YYUWMKh0QdrK4qp/yADORJjIOJyVswHskWX4KKQUqHsRGFU0+gOeUV0uAiH1o6NK9RXZOaTFYl5Ux/3BB6Q4yJbh1o2475quXRh4/iwdXltxwdLz74nvdoesKdoq97oVQXd2bP2b1h/HO33LE92zo7Y7w1xVcOZxxGDfihSBygsODKgUSVYjBNJUVkMEeIWIwVUh48wfL7xlqb0NAisgYfISWWc6E77vA2E5s17bJluRDaLrFYrHjs08fzawftN500R7/y2p/W9gvmFX7d86S4cHH6rK0z43fcfGl25+buhHpSM9qd4gSsc7jSYUuDOE/uMsSBQcIVEA1iqgGcUyvsII6mgYt0ilqF3CHdESEp3QratiCs1qQ+EtpACi0n+w0ni44r1+afWBysXrS3t/it175H+y+4W/y9zxO7eNruDT7oG8+fGz//zLkJ080R9caIelJhxx4nBjEWW3tEDSkmrK+G/kGKgcJSCzljCiGnALlH80CRp6D060DfZJp5RHPASGR+FAnLNevlmoPDlqv7zbuN5TXTB/evfeNnueyfsPMCb37lbGe24b6mqPwPnD87fvLOhSmTrRH1tB5MC87iRhXO2sFDaBxG7JDDxf6B2RI3BE6JHSmsSSGzPGjRckwzj8TlEpo5ISuLJnJ8ZcX+UfOp+Tp9/9Fh//7v+Zn5wZ/biZHXvVCqp5zd3W7J3zaZ+Jefu2l8dvvMlNGsoqgKXOGwpcciGOcwxmKrAlcUgzkyxAGA0JP6NamNpKj060jIQrcKNEdLmpMVx8vE3rXm+nwefnJUytsfPDo4+Fz2+xf0zNAbXyTTM2c3zmgqvmm2YZ+/e0N918ZmxXijpKg8xjiqWYkYgxVLFoNzDmSwyKY0iBph2RGD0reB2AeO9jsODzqOj9qPHc/Tu02MP7foTvY+U3n753ps7idfIZNqsjszRb7bJXluPXVfNd4snl45J9XYURQFRW0xIkNdAOSUSP1wVKbvIquTSJeDrlbh9w6vx/+eo/5nX5kPtw/uz1/+Hl3+hTg3+NaXil+PNse7I1c7K+fWi3gX4m7OKT3JOXujK2RiLBsCJOUktboMKT3mCnt/zvHTo5H7WEx6df/yfjMqWL3kCTwq92cCwB+JEyKGb6WoDd4v8KmauM1tlSxqAIxKPj4Ute0yhimhyQRuoX/ta/8ogfkXFoAv5s//AfNdxxQsXGRdAAAAAElFTkSuQmCC";
+		var showBox = document.getElementById('showBox');
+		var btns = showBox.getElementsByTagName('button');
+		var ls = showBox.getElementsByTagName('a');
+		
+		for(var i = 0; i < btns.length; i++) {
+			btns[i].onclick = function() {
+				if(this.dataset.name=="InsertImage"){
+					this.dataset.value = face1;
+				}
+				document.execCommand(this.dataset.name, true, this.dataset.value);
+			}
+		}
+		for(var i = 0; i < ls.length; i++) {
+			ls[i].onclick = function() {
+				if(this.dataset.name=="InsertImage"){
+					this.dataset.value = face1;
+				}
+				document.execCommand(this.dataset.name, false, this.dataset.value);
+			}
+		}
+		var num = -26;
+		console.log(num.toString(2));
+	</script>
+</html>

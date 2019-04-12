@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		body,html{
+			overflow: hidden;
+		    width: 100%;
+		    height:100%;
+		    margin: 0;
+		    padding: 0;
+		    background: #21333C;
+		}
+	</style>
+	<body>
+		<canvas id="canvas" >
+			
+		</canvas>
+	</body>
+	<script>
+		var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d'); 
+        var body = document.body;
+        
+		var width = body.offsetWidth;
+		var height = body.offsetHeight;
+		canvas.setAttribute('width',width);
+		canvas.setAttribute('height',height);
+		
+		var balls = [];
+		var numBalls = 50;
+		if(width>1000){
+			console.log(width);
+			numBalls = 100;
+		}
+		var friction = 0.01;
+		var gravity = 0.2;
+		var bounce = -1.0; //定义反弹系数
+		var disX =0;
+	    var disY =0;
+     	document.addEventListener('mousemove',function(e){
+	        disX = e.clientX;
+	        disY = e.clientY;
+     	})
+		
+		var Ball = function(r,color){
+        	this.r = r;
+        	this.color = color;
+        	this.active = true;
+        	this.x = 100;
+        	this.y = 100;
+        	this.lastX = 100;
+        	this.lastY = 100;
+        	this.t = 0;
+        	this.vx = 0;
+        	this.vy = 0;
+        	this.nVx = 0;
+        	this.nVy = 0;
+        	this.mass = 10;
+        	this.vis = true;
+        	//球的体积公式
+        	this.mass = (4/3)*Math.PI * this.r * this.r* this.r;
+       	}
+        Ball.prototype = {
+        	draw:function(ctx){
+        		
+        		ctx.beginPath();
+				ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+//				ctx.moveTo(this.x,this.y); 
+//				ctx.lineTo(disX,disY); 
+//				ctx.strokeStyle = "#fff";
+//				ctx.stroke(); 
+        	}
+        }
+        createBall();
+        function createBall(){
+        	 for(var i=0; i<numBalls; i++){
+               var radius = Math.random()*5 + 10;
+               //var color = Math.random()*(0xffffff);
+               var ball = new Ball(radius, "#fff");
+               //ball.mass = Math.random()*5 + 2;
+               ball.x = Math.random()*canvas.width;
+               ball.y = Math.random()*canvas.height;
+               ball.vx = Math.random()*6 - 3;
+               ball.vy = Math.random()*6 - 3;
+               balls.push(ball);
+           }
+        };
+        
+        function rotate(x, y, sin, cos, reverse){
+               return {
+                   x: (reverse)?(x*cos + y*sin):(x*cos - y*sin),
+                   y: (reverse)?(y*cos - x*sin):(y*cos + x*sin)
+               }
+        }
+        
+		var intersects  = function(rectA, rectB){
+			return Math.sqrt((Math.pow(rectA.x-rectB.x,2)+Math.pow(rectA.y-rectB.y,2))) <= (rectA.r+rectB.r);
+		}
+		function collisionDetection(ball1,index){
+			for(var i= index;i<balls.length;i++){
+				var ball2 = balls[i];
+				if(ball2!=ball1){
+					var dx = ball2.x - ball1.x;
+                   	var dy = ball2.y - ball1.y;
+                   	var dist = Math.sqrt(dx*dx + dy*dy);
+					var isCollision = intersects(ball1,ball2);
+						if(isCollision){
+							//相对角度
+							var angle = Math.atan2(dy, dx);
+                       		var sin = Math.sin(angle);
+                       		var cos = Math.cos(angle);
+                       		//旋转球0位置
+			                   var pos0 = {
+			                       x: 0,
+			                       y: 0 
+			                   }
+							var pos1 = rotate(dx, dy, sin, cos, true);
+							//旋转速度 ball1
+		                   	var vel0 = rotate(ball1.vx, ball1.vy, sin, cos, true);
+		                   
+		                   	//旋转速度 ball2
+		                   	var vel1 = rotate(ball2.vx, ball2.vy, sin, cos, true);
+		                   	
+		                   	var vxTotal = vel0.x - vel1.x;
+                   
+		                   vel0.x = ((ball1.mass - ball2.mass)*vel0.x + 2*ball2.mass*vel1.x)/(ball1.mass + ball2.mass);
+		                   vel1.x = vxTotal + vel0.x;
+							
+							//这里不能直接改变速度,否则会直接影响其他小球
+							//ball1.nVx =  ((ball1.mass - ball2.mass)*ball1.vx + 2*ball2.mass*ball2.vx) / (ball1.mass +ball2.mass);
+							//ball2.nVx =  ((ball2.mass - ball1.mass)*ball2.vx + 2*ball1.mass*ball1.vx) / (ball1.mass +ball2.mass);
+							//ball1.nVy =  ((ball1.mass - ball2.mass)*ball1.vy + 2*ball2.mass*ball2.vy) / (ball1.mass +ball2.mass);
+							//ball2.nVy =  ((ball2.mass - ball1.mass)*ball2.vy + 2*ball1.mass*ball1.vy) / (ball1.mass +ball2.mass);
+							//ball1.vx = ball1.nVx;
+							//ball2.vx = ball2.nVx;
+							//ball1.vy = ball1.nVy;
+							//ball2.vy = ball2.nVy;
+							
+							//if(overlap>0){
+							//if(ball2.x-ball1.x>0){
+							//ball1.x -=1;
+							//ball2.x +=1;
+							//}else{
+							//ball1.x +=1;
+							//ball2.x -=1;
+							//}
+							//if(ball2.y-ball1.y>0){
+							//ball1.y -=1;
+							//ball2.y +=1;
+							//}else{
+							//ball1.y +=1;
+							//ball2.y -=1;
+							//}
+							//}
+							
+							//旋转一切
+		                    var pos0F = rotate(pos0.x, pos0.y, sin, cos, false);
+		                    var pos1F = rotate(pos1.x, pos1.y, sin, cos, false);
+							
+							var overlap =(ball1.r+ball2.r)- Math.sqrt(Math.pow(ball1.x-ball2.x,2)+Math.pow(ball1.y-ball2.y,2)); 
+							var totalVx = Math.abs(ball1.vx)+Math.abs(ball2.vx);
+							var totalVy = Math.abs(ball1.vy)+Math.abs(ball2.vy);
+							var absV1x = Math.abs(ball1.vx);
+							var absV1y = Math.abs(ball1.vy);
+							var absV2x = Math.abs(ball2.vx);
+							var absV2y = Math.abs(ball2.vy);
+							var absV1x = 1;
+							var absV1y = 1;
+							var absV2x = 1;
+							var absV2y = 1;
+
+							if(overlap>0){
+								if(pos1.x-pos0.x>0){
+									pos0.x -=absV1x;
+									pos1.x +=absV2x;
+								}else{
+									pos0.x +=absV1x;
+									pos1.x -=absV2x;
+								}
+								if(pos1.y-pos0.y>0){
+									pos0.y -=absV1y;
+									pos1.y +=absV2y;
+								}else{
+									pos0.y +=absV1y;
+									pos1.y -=absV2y;
+								}
+							}
+							
+					var pos0F = rotate(pos0.x, pos0.y, sin, cos, false);
+                   var pos1F = rotate(pos1.x, pos1.y, sin, cos, false);
+                   
+                   //将位置调整到实际屏幕位置
+                   ball2.x = ball1.x + pos1F.x;
+                   ball2.y = ball1.y + pos1F.y;
+                   ball1.x = ball1.x + pos0F.x;
+                   ball1.y = ball1.y + pos0F.y;
+                   
+                   //转速反向
+                   var vel0F = rotate(vel0.x, vel0.y, sin, cos, false);
+                   var vel1F = rotate(vel1.x, vel1.y, sin, cos, false);
+                   
+                   ball1.vx = vel0F.x;
+                   ball1.vy = vel0F.y; 
+                   ball2.vx = vel1F.x;
+                   ball2.vy = vel1F.y;
+							
+							isCollision = false;
+						}
+				}
+			}
+		}
+		//边界碰撞处理
+		function checkWalls(ball){
+               if(ball.x + ball.r > canvas.width){
+                   ball.x = canvas.width - ball.r;
+                   ball.vx *= bounce;
+               }else if(ball.x - ball.r < 0){
+                   ball.x = ball.r;
+                   ball.vx *= bounce;
+               }
+               
+               if(ball.y + ball.r > canvas.height){
+                   ball.y = canvas.height - ball.r;
+                   ball.vy *= bounce;
+               }else if(ball.y - ball.r < 0){
+                   ball.y = ball.r;
+                   ball.vy *= bounce;
+               }
+        }
+		//边界碰撞处理
+		function border(){
+			for(var i= 0;i<balls.length;i++){
+				var ball = balls[i];
+				if((ball.x+ball.r+ball.vx)>width || (ball.x-ball.r+ball.vx)<0){
+					ball.vx = -1* ball.vx;
+				}
+				if((ball.y+ball.r+ball.vy)>height || (ball.y-ball.r+ball.vy)<0){
+					ball.vy = -1* ball.vy;
+				} 
+			}
+			
+		}
+		
+		function gravityHandle(ball1){
+			if(ball1.y+ball1.r>height){
+				ball1.vy = ball1.vy;
+			}else{
+				ball1.vy = ball1.vy + gravity;
+			}
+		}
+		
+		function frictionHandle(ball1){
+			if(Math.abs(ball1.vx)-friction<=0){
+				ball1.vx = 0;
+			}else if(ball1.vx>0){
+				ball1.vx = ball1.vx-friction;
+			}else if(ball1.vx<0){
+				ball1.vx = ball1.vx+friction;
+			}
+			
+			if(Math.abs(ball1.vy)-friction<=0){
+				ball1.vy = 0;
+			}else if(ball1.vy>0){
+				ball1.vy = ball1.vy-friction;
+			}else if(ball1.vy<0){
+				ball1.vy = ball1.vy+friction;
+			}
+		}
+		function drawBall(ball1,index){
+			
+			//gravityHandle(ball1);
+			
+			frictionHandle(ball1);
+			
+			ball1.x += ball1.vx;
+
+			ball1.y += ball1.vy;
+
+			ball1.draw(context);
+
+		}
+		
+		function drawLine(ball0, index){
+			for(var i= index;i<balls.length;i++){
+				var ball1 = balls[i];
+				if(ball0!=ball1){
+               var dx = ball1.x - ball0.x,
+                   dy = ball1.y - ball0.y,
+                   dist = Math.sqrt(dx*dx + dy*dy);
+               
+               if(dist < 100){
+                   context.save();
+                   context.strokeStyle = "rgba(255,255,255,0.5)";
+                   context.beginPath();
+                   context.lineWidth = (1.0 - dist / 100) * 2.5;
+        		   context.globalAlpha = 1.0 - dist / 50;
+                   context.moveTo(ball0.x, ball0.y);
+                   context.lineTo(ball1.x, ball1.y);
+                   context.closePath()
+                   context.stroke()
+                   context.restore();
+               }
+              }
+			}
+        }
+		
+		drawFrame();
+        function drawFrame(){ 
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+			//球体碰撞处理
+			balls.forEach(collisionDetection);
+			
+			//边界碰撞处理
+			//border();
+			balls.forEach(checkWalls);
+			
+			//绘制小球
+			balls.forEach(drawBall);
+			
+			//绘制连线
+			balls.forEach(drawLine);
+			
+			
+			
+			
+            window.requestAnimationFrame(drawFrame, canvas);
+        }
+		document.addEventListener('mousemove',function(e){
+	        disX = e.clientX;
+	        disY = e.clientY;
+	        balls[0].lastX = balls[0].x;
+	        balls[0].lastY = balls[0].y;
+			//balls[0].vx = (balls[0].x - balls[0].lastX)/30;
+			//balls[0].vy =  (balls[0].y - balls[0].lastY)/30;
+	        balls[0].mass = 10000;
+	        balls[0].vis = false;
+	        balls[0].x = disX;
+	        balls[0].y = disY;
+	        balls[0].color = 'red';
+	        balls[0].vx = 0; 
+	        balls[0].vy = 0;
+     	})
+	</script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Dom元素拖放</title>
+	</head>
+	<style>
+		#dropTarget{
+			width: 100px;
+			height: 100px;
+			background: red;
+		}
+		#dragImg{
+			width: 100px;
+			height: 100px;
+		}
+		#dragDiv{
+			width: 50px;
+			height: 50px;
+			background: #007AFF;
+		}
+	</style>
+	<body>
+		<div id="dropTarget"></div>
+		<img id="dragImg" src="img/b1.png"></img>
+		<div id="dragDiv" draggable="true" ></div>
+	</body>
+	<script type="text/javascript">
+		document.addEventListener('mousemove',function(event){
+			//event.preventDefault();
+ 
+		})
+		var dragDiv = document.getElementById('dragDiv');
+		var dragImg = document.getElementById('dragImg');
+		var dropTarget = document.getElementById('dropTarget');
+		
+		dropTarget.addEventListener('dragover',function(event){
+			event.preventDefault();
+		})
+		dropTarget.addEventListener('dragenter',function(event){
+			event.preventDefault();
+		})
+		
+		dragDiv.addEventListener('dragstart',function(event){
+			event.dataTransfer.setData("text",event.target.id);
+		})
+		dragImg.addEventListener('dragstart',function(event){
+			event.dataTransfer.setData("text",event.target.id);
+		})
+
+		dropTarget.addEventListener("drop", function(event) {
+		    event.preventDefault();
+		    var data=event.dataTransfer.getData("text");
+		    console.log(data);
+		    //如果文档树中已经存在了 newchild，它将从文档树中删除，然后重新插入它的新位置。
+		    event.target.appendChild(document.getElementById(data));
+		}, false);
+	</script>
+</html>

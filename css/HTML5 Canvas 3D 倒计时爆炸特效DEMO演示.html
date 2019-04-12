@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="UTF-8">
+
+		<title>HTML5 Canvas 3D 倒计时爆炸特效DEMO演示</title>
+
+		<link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+
+	</head>
+	<style>
+		body,html{
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+	</style>
+	<body>
+
+		<canvas id="canvas" ></canvas>
+
+		<script>
+					(function () {
+		    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+		    window.requestAnimationFrame = requestAnimationFrame;
+		})();
+
+
+		var canvas = document.getElementById("canvas"),
+		    shapeCan = document.createElement("canvas"),
+		    ctx = canvas.getContext("2d"),
+		    sCtx = shapeCan.getContext("2d"),
+		    width = document.body.offsetWidth,
+		    height = document.body.offsetHeight,
+		    vanishPointY = height / 2,
+		    vanishPointX = width / 2,
+		    focalLength = 300,
+		    angle = 0,
+		    angleY = 0,
+		    angleX = 0,
+		    angleZ = 0,
+		    mouseX = 0,
+		    mouseY = 0;
+
+		var settings = {
+		    MouseRotation: false,
+		    ClockColor: {
+		        r: 0,
+		        g: 0,
+		        b: 0
+		    }
+		}
+
+		canvas.width = width;
+		canvas.height = height;
+
+		shapeCan.width = 200;
+		shapeCan.height = 100;
+		sCtx.font = '3em Arial';
+
+		/*
+		 *	Controls the emitter
+		 */
+		function Emitter() {
+		    this.particles = [];
+		    this.shapeParts = [];
+
+		    this.x = 1;
+		    this.y = 1;
+		    this.z = 1;
+
+		    this.getShape();
+
+		    this.startTime = new Date().getTime();
+		    this.checkInterval = 1000;
+		}
+
+		Emitter.prototype.update = function () {
+		    var partLen = this.particles.length;
+
+
+		    //?? 
+		    this.particles.sort(function (a, b) {
+		        return b.z - a.z;
+		    });
+
+		    for (var i = 0; i < partLen; i++) {
+		        var particle = this.particles[i];
+		        if (particle) {
+		            particle.update();
+		        }
+		    }
+
+		}
+
+		Emitter.prototype.getShape = function () {
+		    var d = new Date(),
+		        hour = d.getHours() % 12,
+		        min = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes(),
+		        sec = (d.getSeconds() < 10 ? "0" : "") + d.getSeconds();
+
+
+		    sCtx.clearRect(0, 0, shapeCan.width, shapeCan.height);
+		    sCtx.fillText(hour + ":" + min + ":" + sec, 0, 30);
+
+		    var imageData = sCtx.getImageData(0, 0, shapeCan.width, shapeCan.height).data;
+			
+		    for (var i = 0; i < imageData.length; i += 4) {
+		        var x = i / 4 % shapeCan.width,
+		            y = (i / 4 ) / shapeCan.width,
+		            index = i;
+				//console.log(x);
+		        if (imageData[i + 3] > 0) {
+		            for (var p = 0; p < 1; p++) {
+		            	//爆炸后的new
+		            	//这里的new是新建一个像素
+		                if (this.shapeParts[index + p] == undefined) {
+		                    var particle = new Particle({
+		                        x: ((x * 2))+vanishPointX-170,
+		                        y: ((y * 2))+vanishPointY-50,
+		                        z: 10
+		                    });
+		                    //共用一个引用
+		                    this.shapeParts[index + p] = particle;
+		                    this.particles[index + p] = particle;
+		                }
+		            }
+		        } else {
+		            for (var p = 0; p < 1; p++) {
+		            	//下一秒显示的数字当中，显示空白的但是在上一秒当中却又不是空白的像素，发生爆炸
+		            	//
+		                if (this.shapeParts[index + p]) {
+		                	if(this.shapeParts[index + p].vx == 0) {
+		                    this.shapeParts[index + p].explode();
+		                    //this.particles[index + p].explode();
+		                    //this.shapeParts[index + p].vx = 4;
+		                    //console.log(this.shapeParts[index + p].vx);
+		                  	this.shapeParts[index + p] = undefined;
+		                  	//this.particles[index + p] = undefined;
+		                  }
+		                }
+		            }
+		        }
+		    }
+		}
+
+		Emitter.prototype.render = function () {
+		    if (new Date().getTime() > this.startTime + this.checkInterval) {
+		        this.startTime = new Date().getTime();
+		        //间隔执行
+		        this.getShape();
+		    }
+		    var imgData = ctx.createImageData(width, height),
+		        data = imgData.data,
+		        partLen = this.particles.length;
+
+		    for (var i = 0; i < partLen; i++) {
+		        var particle = this.particles[i];
+		        if (particle) {
+		        	//console.log(particle.vx);
+		            if(particle.x < width && particle.x > 0 && particle.y > 0 && particle.y < height){
+		            for (var w = 0; w < particle.size; w++) {
+		                for (var h = 0; h < particle.size; h++) {
+		                    //if (particle.xPos + w < width && particle.xPos + w > 0 && particle.yPos + h > 0 && particle.yPos + h < height) {
+		                        //pData = (~~(particle.x + w) + ~~(particle.y+ h)*width) * 4; 
+		                        pData = (~~(particle.x  + w) + (width) * ~~(particle.y  + h)) * 4;
+		                        //pData = (~~ (particle.xPos + w) + (~~ (particle.yPos + h) * width)) * 4;
+		                        data[pData] = settings.ClockColor.r;
+		                        data[pData + 1] = settings.ClockColor.g;
+		                        data[pData + 2] = settings.ClockColor.b;
+		                        data[pData + 3] = particle.color[3];
+		                    //} 
+		                }
+		            }
+		            }else{
+		            	this.particles[i] = undefined;
+		            	//delete this.particles;
+		            	this.shapeParts[i] = undefined;
+		            	//delete this.shapeParts;
+		            }
+		        } else if (particle && !particle.render) {
+		            this.particles[i] = undefined;
+		            //delete particle;
+		            this.shapeParts[i] = undefined;
+		            
+		        }
+		    }
+		    ctx.putImageData(imgData, 0, 0);
+		}
+
+
+		/*
+		 *	Controls the individual particles
+		 */
+		function Particle(options) {
+		    options = options || {};
+
+		    this.maxDist = 1000;
+
+		    this.x = options.x || (Math.random() * 5) - 2.5;
+		    this.y = options.y || (Math.random() * 5) - 2.5;
+		    this.z = options.z || (Math.random() * 5) - 2.5;
+
+		    this.startX = this.x;
+		    this.startY = this.y;
+		    this.startZ = this.z;
+
+		    this.xPos = 0;
+		    this.yPos = 0;
+
+		    this.angle = 0;
+
+		    this.vx = 0;
+		    this.vy = 0;
+		    this.vz = 0;
+		    
+		    this.size = 2;
+
+		    this.color = [0, 0, 0, 255]
+		    this.scaler = 2;
+		}
+
+		Particle.prototype.explode = function () {
+			var cosTheta = Math.random() * 2 - 1,
+				sinTheta = Math.sqrt(1 - cosTheta * cosTheta),
+				phi = Math.random() * 2 * Math.PI;
+		    this.vx = (Math.random() * 30) - 15;
+		    this.vy = (Math.random() * 30) - 15;
+		    this.vz = (Math.random() * 10) - 5;
+//		    this.vx = (Math.floor((Math.random() * 30) - 15)* Math.cos(phi)*sinTheta);
+//			this.vy = (Math.floor((Math.random() * 30) - 15)* Math.sin(phi)*sinTheta);
+//			this.vz = (Math.floor((Math.random() * 10) - 5)* cosTheta);
+		}
+
+		Particle.prototype.rotate = function () {
+		    var x = this.startX * Math.cos(angleZ) - this.startY * Math.sin(angleZ),
+		        y = this.startY * Math.cos(angleZ) + this.startX * Math.sin(angleZ);
+
+		    this.x = x;
+		    this.y = y;
+
+		    x = this.startX * Math.cos(angleY) - this.startZ * Math.sin(angleY);
+		    var z = this.startZ * Math.cos(angleY) + this.startX * Math.sin(angleY);
+
+		    this.x = x;
+		    this.z = z;
+
+		    y = this.startY * Math.cos(angleX) - this.startZ * Math.sin(angleX);
+		    z = this.startZ * Math.cos(angleX) + this.startY * Math.sin(angleX);
+
+		    this.y = y;
+		    this.z = z;
+		}
+
+		Particle.prototype.update = function () {
+		    this.startX += this.vx;
+		    this.startY += this.vy;
+		    this.startZ -= this.vz;
+			this.x = this.startX;
+		    this.y = this.startY;
+		    this.z = this.startZ;
+		    //this.rotate();
+
+		    if (this.z > -focalLength) {
+		        var scale = 300 / (300 + this.z);
+				
+				if(scale < 6){
+					if(this.vx > 5 || this.vx<-5 || this.vy >3 || this.vy<-3){
+						this.size = scale * 1.5;
+					}
+				}
+		        this.xPos = vanishPointX + this.x * scale;
+		        this.yPos = vanishPointY + this.y * scale;
+		    }
+		}
+
+		function render() {
+		    emitter.update();
+		    emitter.render();
+		    requestAnimationFrame(render);
+		}
+
+		var emitter = new Emitter();
+		render();	
+
+		window.onresize = function () {
+		    height = canvas.height = document.body.offsetHeight;
+		    width = canvas.width = document.body.offsetWidth;
+		    vanishPointY = height / 2;
+		    vanishPointX = width / 2;
+		};
+		</script>
+
+	</body>
+
+</html>

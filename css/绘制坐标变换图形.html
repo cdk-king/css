@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+        <title>绘制坐标变换图形</title>
+                <script type="text/javascript">
+                window.onload = function()
+                 {
+                        var canvas = document.getElementById("W3Cfuns_canvas");
+                        var context = canvas.getContext("2d");
+                        context.fillStyle = "#d4d4d4";
+                        context.fillRect(0, 0, 400, 300);
+                        //绘制图形
+                        context.translate(200, 25);
+                        context.fillStyle = "rgba(0, 0, 255, 0.25)";
+                        for(var i = 0; i < 50; i++)
+                        {
+                                context.translate(25, 25);
+                                context.scale(0.95, 0.95);
+                                context.rotate(Math.PI / 10);
+                                context.fillRect(0, 0, 100, 50);
+                        }
+                }
+        </script>
+    </head>
+     
+    <body>
+            <canvas id="W3Cfuns_canvas" width="600" height="400"></canvas>
+    </body>
+</html>
