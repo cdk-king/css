@@ -13,7 +13,7 @@
 
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    var fallLength = 50;
+    var fallLength = 200;
     var centerX = 320;
     var centerY = 320;
     var angleY = 0.01;
@@ -147,8 +147,8 @@
     window.addEventListener("mousemove" , function(event){
                 var x = event.clientX - canvas.offsetLeft - centerX;
                 var y = event.clientY - canvas.offsetTop - centerY;
-                //angleY = x*0.0001;
-                //angleX = y*0.0001;
+                angleY = x*0.0001;
+                angleX = y*0.0001;
             });
 </script>
 </html>
