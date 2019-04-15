@@ -105,26 +105,54 @@
     };
     
     //todo
-    var Face = function(vector1,vector2,vector3,vector4,color){
+    var Face = function(vector1,vector2,vector3,color){
         this.v1 = vector1;
         this.v2 = vector2;
         this.v3 = vector3;
-        this.v4 = vector4;
+        //this.v4 = vector4;
         this.color = color;
-        this.zIndex = (this.v1.z + this.v2.z + this.v3.z + this.v4.z)/4;
+        this.zIndex = (this.v1.z + this.v2.z + this.v3.z)/4;
         this.draw = function(){
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(this.v1._get2d().x , this.v1._get2d().y);
             ctx.lineTo(this.v2._get2d().x , this.v2._get2d().y);
             ctx.lineTo(this.v3._get2d().x , this.v3._get2d().y);
-            ctx.lineTo(this.v4._get2d().x , this.v4._get2d().y);
+            //ctx.lineTo(this.v4._get2d().x , this.v4._get2d().y);
             ctx.closePath();
             // ctx.fillStyle = "rgba("+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+",0.2)";
             ctx.fillStyle = this.color;
             ctx.fill();
         }
     }
+    Face.prototype = {
+        copy : function() { 
+            return new Face(this.v1.copy(), this.v2.copy(),this.v3.copy(),this.v3.copy(),this.color); 
+        },
+        initialize:function(){
+
+        },
+        intersect:function(ray){
+            var p = ray.origin.subtract(this.center);
+        },
+        PointinTriangle1:function(p){
+            return this.SameSide(this.v1,this.v2,this.v3,p) &&
+            this.SameSide(this.v2,this.v3,this.v1,p) &&
+            this.SameSide(this.v3,this.v1,this.v2,p) ;
+        },
+        SameSide:function(v1,v2,v3,p){
+            var AB = this.v2.subtract(this.v1);
+            var AC = this.v3.subtract(this.v1);
+            var AP = p.subtract(this.v1);
+
+            var v1 = AB.cross(AC) ;
+            var v2 = AB.cross(AP) ;
+
+            // v1 and v2 should point to the same direction
+            return v1.dot(v2) >= 0 ;
+        }
+    }
+    
 
     var Sphere = function(center, radius) {
         this.center = center;
