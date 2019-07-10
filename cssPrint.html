@@ -6,12 +6,25 @@
 		<title></title>
 	</head>
 	<body>
+		<div id="css0">
+				html{
+					color:red;
+				}
+				
+		</div>
 		<div id="div"></div>
 	</body>
 	<script>
+
+//el.scrollTop = el.scrollHeight;
+//slice()
+
 		var data = "html{\ncolor:red;\n}";
 		var div = document.getElementById("div");
-		writer(div,data,0);
+		var css0El = document.getElementById("css0");
+		var css0  = css0El.innerHTML;
+		console.log(css0);
+		writer(div,css0,0);
 		
 		function writer(el,data,index){
 			
@@ -20,6 +33,7 @@
 			el.innerText=data.substring(0,index+1);
 			index++;
 			if(index<data.length){
+				console.log(data.substring(index-1,index));
 				if(data.substring(index-1,index)==","){
 					setTimeout(function(){
 						writer(el,data,index);

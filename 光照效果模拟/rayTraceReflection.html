@@ -346,6 +346,7 @@ var PhongMaterial = function(diffuse, specular, shininess, reflectiveness) {
 };
  
 // global temp
+//临时光源
 var lightDir = new Vector3(1, 1, 1).normalize();
 var lightColor = Color.white;
 
@@ -524,7 +525,7 @@ rayTraceReflection(
     document.getElementById('rayTraceReflectionCanvas'), 
     new Union([plane, sphere1, sphere2]),
     new PerspectiveCamera(new Vector3(eye.x, eye.y, eye.z), new Vector3(front.x, front.y, front.z), new Vector3(up.x, up.y, up.z), fov),
-    1);
+    2);
 
 
     document.onkeydown=function(event){
