@@ -6,42 +6,279 @@
 		<title></title>
 	</head>
 	<body>
-		<div id="css0">
+		<div id="css0" style="display: none;">
+				/* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
+				现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
+				我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ */
+		
+				/* I'm cheating a bit */
+		
+		html, body {
+			margin-top: 0;
+			height: 100%;
+			overflow: hidden;
+		}
+		
+		pre {
+			overflow: auto;
+			max-height: 90%;
+			width: 100%;
+			border-radius: 1px; /* Prevents bad clipping in Chrome */
+		}
+		
+		#content {
+			position: absolute;
+			top: 0; right: 20px; left: 0; bottom: 20px;
+		}
+		
+		#header {
+			position: absolute;
+			bottom: 0;
+			height: 20px;
+			left: 0;
+			right: 0;
+			padding: 0 10px;
+		}
+		
+		a:after {
+			content: '';
+			padding-right: 5px;
+			border-right-width: 1px;
+			border-right-style: solid;
+			border-color: inherit;
+		}
+		
+		a:last-of-type:after {
+			border: none;
+		}
+				
+		</div>
+		<div id="biaobai" style="display: none;">
+				/**
+				*
+				* Hey. My name's CDK. 
+				*
+				*/
+
+				/**
+				*
+				* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
+				* 现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
+				* 我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ 
+				*
+				*/		
+
 				html{
 					color:red;
 				}
 				
 		</div>
+		<div id="css1" style="display: none;">	    
+/**
+*
+* Hey. My name's CDK. 
+*
+* 我打算建立一个动态网站。
+*
+* 实况直播编码怎么样？
+*/
+
+/**
+* 让我马上开始吧。我们先从动画开始，设置动画过渡时间
+*/
+
+* {
+	transition: all 1s;
+	-webkit-transition: all 1s;
+}
+
+/**
+*白底黑字很无聊，
+*所以让我们做点什么。
+*/
+
+html {
+ background: rgb(63, 82, 99);
+}
+
+/**
+* 还有字体颜色
+*/
+
+pre, a {
+ color: white;
+}
+
+/**
+* 这样就好多了。
+*
+* 在这片空旷的地方工作是很困难的。
+*
+* 我要为我们的工作创造一个好地方。
+*
+* 指定不是空的pre元素样式
+*/
+
+pre:not(:empty) {
+ overflow: auto;
+ background: rgb(48, 48, 48);
+ border: 1px solid #ccc;
+ max-height: 44.6%;
+ width: 49%;
+ font-size: 14px;
+ font-family: monospace;
+ padding: 10px 10px 20px;
+ box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
+ white-space: pre-wrap;/*保留空白符序列，但是正常地进行换行。*/
+ outline: 0;
+}
+
+/**
+* 可以。我们要开始填充屏幕。
+* 我们准备做些工作吧。
+*/
+
+#style-text {
+ -webkit-transform: translateX(95%);
+ position: absolute;
+}
+
+/**
+* 这很好，但是所有的文字都是白色的！
+* 让我们让它更具可读性。
+*/
+
+.comment       { color: #857F6B; font-style: italic; }
+.selector      { color: #E69F0F; }
+.selector .key { color: #64D5EA; }
+.key           { color: #64D5EA; }
+.value         { color: #BE84F2; }
+.value.px      { color: #F92772; }
+
+/**
+* 现在我们到了某个地方。
+* 是时候了解一下情况了。
+* 设置元素被查看位置的视图
+*/
+
+body {
+ -webkit-perspective: 1000px;
+}
+
+#style-text {
+ -webkit-transform: translateX(98.5%) rotateY(-10deg);
+ -webkit-transform-origin: right;
+ max-height: 94.5%;
+}
+
+/**
+* 那么，让我们谈谈项目。这就是你来这里的原因，对吧？
+* 我无法想象你只是来看漂亮的颜色。
+*/
+
+pre:not(#style-text) {
+ -webkit-transform: rotateY(10deg);
+ -webkit-transform-origin: left;
+}
+		</div>
 		<div id="div"></div>
+		<div id="content">
+		<!-- <pre> 标签可定义预格式化的文本。
+		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
+		<!-- contenteditable 属性规定元素内容是否可编辑。 -->
+		<pre contenteditable id="style-text"></pre>
+		<pre id="work-text"></pre>
+		<pre id="pgp-text"></pre>
+		</div>
+		<div id="header"></div>
 	</body>
 	<script>
 
 //el.scrollTop = el.scrollHeight;
 //slice()
 
+		var isInside = false;
+		var isComment = false;
+		var startSelect = false;
 		var data = "html{\ncolor:red;\n}";
+		var html = "";
 		var div = document.getElementById("div");
+		var styleText = document.getElementById("style-text");
 		var css0El = document.getElementById("css0");
 		var css0  = css0El.innerHTML;
-		console.log(css0);
-		writer(div,css0,0);
+		var css1El= document.getElementById("css1");
+		//var css1  = "<span>"+css1El.innerHTML+"</span>";
+		var css1  = css1El.innerHTML;
+		//console.log(css0);
+		writer(styleText,css1,0);
+		//styleText.innerHTML = css1;
 		
 		function writer(el,data,index){
 			
 			
-			updateCss(data.substring(0,index+1));
-			el.innerText=data.substring(0,index+1);
+			updateCss(css0+data.substring(0,index+1));
+			var oochar = data.substring(index-1,index);
+			var ochar = data.substring(index,index+1);
+			var nchar = data.substring(index+1,index+2);
+			// if(ochar=="\n"){
+			// 	//innerHtml不能一个一个加
+			// 	//el.innerHTML = html;
+			// 	html += data.substring(index,index+1)+"</span><span>";
+			// 	//el.innerHTML = data.substring(0,index+1)+"</span><span>";
+			// 	el.innerHTML = html;
+			// }else
+			if(ochar=="{"){
+				isInside = true;
+				startSelect=false;
+				html +="</span>";
+			}	
+			if(ochar=="}"){
+				isInside = false;
+			}
+
+			
+
+			if(isInside){
+
+			}
+
+			if((ochar+nchar)=="/*"){
+				isComment=true;
+				html +="<span class='comment'>"+ data.substring(index,index+1);
+			}else if((oochar+ochar)=="*/"){
+				isComment=false;
+				html += data.substring(index,index+1)+"</span>";
+			}
+			else{
+				//el.innerHTML = html;
+				html += data.substring(index,index+1);
+			}
+
+			if(!isInside && !isComment && !startSelect){
+				//选择器
+				startSelect=true;
+				html +="<span class='selector'>";
+			}
+			
+			el.innerHTML = html;
 			index++;
 			if(index<data.length){
-				console.log(data.substring(index-1,index));
-				if(data.substring(index-1,index)==","){
+				
+				var char = data.substring(index-1,index);
+				//console.log(char);
+				// if(char=="\n"){
+				// 	console.log(char);
+				// }
+				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
 						writer(el,data,index);
-					},1000)
+						el.scrollTop = el.scrollHeight;
+					},20)
 				}else{
 					setTimeout(function(){
 						writer(el,data,index);
-					},50)
+						el.scrollTop = el.scrollHeight;
+					},10)
 				}
 				
 			}
@@ -51,6 +288,12 @@
 			var style = document.createElement('style');
 			style.type = 'text/css';
 			style.innerHTML=data;
+			var parent=document.getElementsByTagName('HEAD').item(0);
+			var childs=parent.getElementsByTagName("style");
+			if(childs.length>0){
+				parent.removeChild(childs[0]);
+			}
+			
 			document.getElementsByTagName('HEAD').item(0).appendChild(style);
 		}
 		function mapData(data){
