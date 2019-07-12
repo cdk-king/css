@@ -194,50 +194,82 @@ pre:not(#style-text) {
   -webkit-transform: rotateY(190deg) rotateZ(180deg);
   margin-top: 800px;
 }
+
+/**
+ * We're almost done.
+ */
+
+ pre:hover{
+   box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+ }
 		</div>
 		<div id="workText" style="display: none;">
-STRML.net
+cdkking.top
 =========
 
-Samuel Reed
-CTO, BitMEX (The Bitcoin Mercantile Exchange)
-Full-Stack / NodeJS / DevOps
-
-Contact
+基本信息
 -------
+姓名：  CDK
+出生：	1995-05-30
+院校:	深圳大学
+现居:	深圳
 
-* sam at bitmex dot com
-* samuel.trace.reed at gmail dot com
-* STRML on irc.freenode.net
-* @STRML_ on Twitter
+联系方式
+-------
+手机： 	13670183236
+邮箱： 	1360531956@qq.com
 
-Projects
---------
+个人技能
+-------
+语言：JavaScript / Html5 / Css3 / Java / C# / C++
+数据库：MySQL / SQL Server
+前端框架：Vue / Element UI / Amazing UI / Bootstrap / MUI / Echarts
+工具：SVN / Git / Visual Studio Code / IntelliJ IDEA
+熟练掌握单例、工厂、构造、原型等多种Javascript设计模式
+精通原生JavaScript，canvas绘图，能够独立编写web游戏
+个人Git地址：https://github.com/cdk-king
 
-* www.BitMEX.com
-* www.Securesha.re
-* www.Tixelated.com
-* www.BrightestYoungThings.com
-and of course...
-* www.strml.net
+工作经历
+-------
+深圳市中交阳光科技有限公司 | 全栈开发工程师 2017-2018
+技术栈：ASP.NET （Web Forms 、MVC）/ Vue 
+参与铁路道路门户管理系统的开发：
+负责恒泰实业公路工程动态管理系统平台、深圳地铁管理系统平台、佛山地铁OA系统平台 
+的管理和开发，主要负责公文系统，合同管理、用户管理系统的开发 
+参与工汇通农民工工资管理系统开发：
+主要负责工资查询系统、个人工资时间轴系统、话题评论系统的开发 
+参与工汇通钉钉和微信公众号平台端的开发 
 
-Open Source
------------
+深圳市九五互娱科技有限公司 | 前端开发工程师 2018-2019
+技术栈：Vue + Java SpringBoot 
+主导游戏后台管理系统前端的设计和开发：
+实现用户角色权限管理、多游戏多平台渠道区服管理、玩家日志公告道具礼包等运营管理 
+主导后台管理系统后台接口和数据库的设计开发：
+实现一对多和多对多关系数据表间映射、多线程缓存数据接口、激活码的生成和验证算法 
+参与游戏服务器部分功能开发：
+游戏任务功能的开发、游戏日活跃度功能开发 
 
-* Babel
-* React-Grid-Layout
-* React-LocalStorage
-* React-Router-Component
-* React-Resizable
-* React-Draggable
-* OpenBazaar
-* JSXHint
-* BTChip-Signing-Tools
-* TextFit
-* Imgur-to-GFYcat
-* backbone.queryRouter
-* backbone.layoutManager
-* Mongoose-Filter-Denormalize
+项目
+-------
+* 游戏后台管理系统
+* cdk.js
+* web游戏
+* 个人博客
+  当然还有
+* www.cdkking.top
+
+开源
+-------
+* CerradK
+* T2D
+* lastColony
+* frootWars
+* Snail-Bait
+* Imitation
+* live_game
+* cdkBlog
+* CDK-Project
+
 		</div>
 		<div id="div"></div>
 		<div id="content">
@@ -284,7 +316,7 @@ Open Source
 		//var css1  = "<span>"+css1El.innerHTML+"</span>";
 		var css1  = css1El.innerHTML;
 		//console.log(css0);
-		writer(styleText,css1,0);
+		writerCss(styleText,css1,0);
 
 		var workText = document.getElementById("workText");
 		var workTextEl = document.getElementById("work-text");
@@ -300,14 +332,37 @@ Open Source
 				data = "";
 				html = ""; 
 				console.log("startWorkText");
-				writer(workTextEl,workText.innerHTML,0);
+				writerMarkdown(workTextEl,workText.innerHTML,0);
 				clearInterval(time);
 			}
 		},1000);
 		
 		//styleText.innerHTML = css1;
+
+		function writerMarkdown(el,data,index){
+			var oochar = data.substring(index-1,index);
+			var ochar = data.substring(index,index+1);
+			var nchar = data.substring(index+1,index+2);
+			html += data.substring(index,index+1);
+			el.innerHTML = html;
+			index++;
+			if(index<data.length){
+				var char = data.substring(index-1,index);
+				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
+					setTimeout(function(){
+						writerMarkdown(el,data,index);
+						el.scrollTop = el.scrollHeight;
+					},20)
+				}else{
+					setTimeout(function(){
+						writerMarkdown(el,data,index);
+						el.scrollTop = el.scrollHeight;
+					},10)
+				}
+			}
+		}
 		
-		function writer(el,data,index){
+		function writerCss(el,data,index){
 			
 			
 			if(startCss){
@@ -400,16 +455,15 @@ Open Source
 				// }
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
-						writer(el,data,index);
+						writerCss(el,data,index);
 						el.scrollTop = el.scrollHeight;
 					},20)
 				}else{
 					setTimeout(function(){
-						writer(el,data,index);
+						writerCss(el,data,index);
 						el.scrollTop = el.scrollHeight;
 					},10)
 				}
-				
 			}else{
 				startCss = false;
 			}
