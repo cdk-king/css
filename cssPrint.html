@@ -180,6 +180,64 @@ pre:not(#style-text) {
  -webkit-transform: rotateY(10deg);
  -webkit-transform-origin: left;
 }
+
+
+/**
+ * That markdown on the left doesn't look great. Let's render it.
+ */
+
+#work-text.flipped {
+  -webkit-transform: rotateX(0deg) rotateY(190deg) rotateZ(180deg);
+}
+
+#work-text .md {
+  -webkit-transform: rotateY(190deg) rotateZ(180deg);
+  margin-top: 800px;
+}
+		</div>
+		<div id="workText" style="display: none;">
+STRML.net
+=========
+
+Samuel Reed
+CTO, BitMEX (The Bitcoin Mercantile Exchange)
+Full-Stack / NodeJS / DevOps
+
+Contact
+-------
+
+* sam at bitmex dot com
+* samuel.trace.reed at gmail dot com
+* STRML on irc.freenode.net
+* @STRML_ on Twitter
+
+Projects
+--------
+
+* www.BitMEX.com
+* www.Securesha.re
+* www.Tixelated.com
+* www.BrightestYoungThings.com
+and of course...
+* www.strml.net
+
+Open Source
+-----------
+
+* Babel
+* React-Grid-Layout
+* React-LocalStorage
+* React-Router-Component
+* React-Resizable
+* React-Draggable
+* OpenBazaar
+* JSXHint
+* BTChip-Signing-Tools
+* TextFit
+* Imgur-to-GFYcat
+* backbone.queryRouter
+* backbone.layoutManager
+* Mongoose-Filter-Denormalize
 		</div>
 		<div id="div"></div>
 		<div id="content">
@@ -197,13 +255,29 @@ pre:not(#style-text) {
 //el.scrollTop = el.scrollHeight;
 //slice()
 
+				// isInside = false;
+				// isComment = false;
+				// startSelect = false;
+				// startKey = false;
+				// startValue = false;
+				// data = "";
+				// html = "";
+				// writer(workTextEl,workText.innerHTML,0);
+
+		var startCss = true;
 		var isInside = false;
 		var isComment = false;
 		var startSelect = false;
-		var data = "html{\ncolor:red;\n}";
+		var startKey = false;
+		var startValue = false;
+		var data = "";
 		var html = "";
 		var div = document.getElementById("div");
 		var styleText = document.getElementById("style-text");
+
+		
+		
+		
 		var css0El = document.getElementById("css0");
 		var css0  = css0El.innerHTML;
 		var css1El= document.getElementById("css1");
@@ -211,12 +285,35 @@ pre:not(#style-text) {
 		var css1  = css1El.innerHTML;
 		//console.log(css0);
 		writer(styleText,css1,0);
+
+		var workText = document.getElementById("workText");
+		var workTextEl = document.getElementById("work-text");
+		// workTextEl.innerHTML = workText.innerHTML;
+
+		var time = setInterval(function(){
+			if(startCss == false){
+				isInside = false;
+				isComment = false;
+				startSelect = false;
+				startKey = false;
+				startValue = false;
+				data = "";
+				html = ""; 
+				console.log("startWorkText");
+				writer(workTextEl,workText.innerHTML,0);
+				clearInterval(time);
+			}
+		},1000);
+		
 		//styleText.innerHTML = css1;
 		
 		function writer(el,data,index){
 			
 			
-			updateCss(css0+data.substring(0,index+1));
+			if(startCss){
+				updateCss(css0+data.substring(0,index+1));
+			}
+			
 			var oochar = data.substring(index-1,index);
 			var ochar = data.substring(index,index+1);
 			var nchar = data.substring(index+1,index+2);
@@ -230,12 +327,30 @@ pre:not(#style-text) {
 			if(ochar=="{"){
 				isInside = true;
 				startSelect=false;
+				startKey = true;
 				html +="</span>";
 			}	
 			if(ochar=="}"){
-				isInside = false;
+				isInside = false; 
+				startKey = false;
+				startValue = false;
+				
 			}
-
+			
+			if(ochar==":" && isInside){
+				isInside = true;
+				startSelect=false;
+				startValue = true;
+				startKey = false;
+				html +="</span>";
+			}
+			if(ochar==";"){
+				isInside = true;
+				startSelect=false;
+				startValue = false;
+				startKey = true;
+				html +="</span>";
+			}
 			
 
 			if(isInside){
@@ -259,7 +374,21 @@ pre:not(#style-text) {
 				startSelect=true;
 				html +="<span class='selector'>";
 			}
+
+			if(isInside && !isComment && !startSelect && startKey && !startValue){
+				//key
+				startSelect=false;
+				startKey = false;
+				html +="<span class='key'>";
+			}
 			
+			if(isInside && !isComment && !startSelect  && !startKey && startValue){
+				//value
+				startSelect=false;
+				startValue = false;
+				html +="<span class='value'>";
+			}
+
 			el.innerHTML = html;
 			index++;
 			if(index<data.length){
@@ -281,6 +410,8 @@ pre:not(#style-text) {
 					},10)
 				}
 				
+			}else{
+				startCss = false;
 			}
 			
 		}	
