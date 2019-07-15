@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    html,
+    body {
+        margin-top: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+
+    * {
+        transition: all 1s;
+        -webkit-transition: all 1s;
+    }
+
+    /* CSS3 圆形  */
+    #css3-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: #1c88b3;
+    }
+
+    /* CSS3 椭圆形  */
+    #css3-elipse {
+        width: 200px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #1c88b3;
+    }
+</style>
+
+<body>
+    <div id="css3-circle"></div>
+    <div id="css3-elipse"></div>
+</body>
+<script>
+    var circle = document.getElementById("css3-circle");
+    document.addEventListener("click",function(){
+        console.log(circle.style.borderRadius);
+        circle.style.borderRadius = "50%";
+        circle.style.width = "200px";
+        circle.style.height = "100px";
+
+    });
+
+</script>
+
+</html>

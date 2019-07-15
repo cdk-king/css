@@ -255,7 +255,6 @@ cdkking.top
 * cdk.js
 * web游戏
 * 个人博客
-  当然还有
 * www.cdkking.top
 
 开源
@@ -287,14 +286,14 @@ cdkking.top
 //el.scrollTop = el.scrollHeight;
 //slice()
 
-				// isInside = false;
-				// isComment = false;
-				// startSelect = false;
-				// startKey = false;
-				// startValue = false;
-				// data = "";
-				// html = "";
-				// writer(workTextEl,workText.innerHTML,0);
+		// isInside = false;
+		// isComment = false;
+		// startSelect = false;
+		// startKey = false;
+		// startValue = false;
+		// data = "";
+		// html = "";
+		// writer(workTextEl,workText.innerHTML,0);
 
 		var startCss = true;
 		var isInside = false;
@@ -339,10 +338,60 @@ cdkking.top
 		
 		//styleText.innerHTML = css1;
 
+		var  mdSign1 = true;
+		var  mdSign2 = false;
+		var  mdLastLastSignValue = "";
+		var  mdLastSignValue = "";
+		var  mdSignValue = "";
+		var  isMd = false;
+		var  isUl = false;
+
 		function writerMarkdown(el,data,index){
 			var oochar = data.substring(index-1,index);
 			var ochar = data.substring(index,index+1);
 			var nchar = data.substring(index+1,index+2);
+			//console.log(ochar);
+			if(ochar=="\n"){
+				//console.log(ochar+nchar);
+
+				if(isMd){		
+					var count = mdSignValue.length;
+					html = html.substring(0,html.length-count);
+					isMd = false;
+				}
+
+				if(mdSignValue.indexOf("*")!=-1 && mdLastSignValue.indexOf("*")==-1){
+					console.log(mdLastSignValue);
+					var str = mdSignValue.replace("*","");
+					html = html.replace(mdSignValue,"<ul><li>"+str+"</li>");
+					isUl = true;
+					
+				}else if(mdSignValue.indexOf("*")!=-1 ){
+					var str = mdSignValue.replace("*","");
+					html = html.replace(mdSignValue,"<li>"+str+"</li>");
+				}else{
+					if(isUl){
+						html+="</ul>"
+						isUl = false;
+					}
+				}
+
+				mdLastLastSignValue = mdLastSignValue;
+				mdLastSignValue = mdSignValue;
+				mdSignValue = "";
+				
+				
+			}else{
+				
+				mdSignValue += data.substring(index,index+1);
+				
+			}
+			if(ochar=="-" && nchar=="-" && !isMd){//&& (mdLastSignValue.indexOf("-")<0)
+				html = html.replace(mdLastSignValue,"<h1>"+mdLastSignValue+"</h1>");
+				isMd = true;
+			}
+
+
 			html += data.substring(index,index+1);
 			el.innerHTML = html;
 			index++;
