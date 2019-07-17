@@ -53,7 +53,33 @@
 		}
 
 		.translateX1095 {
-			-webkit-transform: translateX(-95%);
+			transform: translateX(-100%)!important;
+			-webkit-transform: translateX(-100%)!important;
+			position: absolute;
+		}
+
+		.translateY1105rotateY0010 {
+			transform: translateY(-105%) rotateY(10deg)!important;
+			-webkit-transform: translateY(-105%) rotateY(10deg)!important;
+			position: absolute;
+		}
+
+		.translateY0105rotateY0010 {
+			transform: translateY(105%) rotateY(10deg)!important;
+			-webkit-transform: translateY(105%) rotateY(10deg)!important;
+			position: absolute;
+		}
+
+		.rotateY0010 {
+			transform: rotateY(10deg)!important;
+			-webkit-transform: rotateY(10deg)!important;
+			position: absolute;
+		}
+
+		.test-text{
+			transform: translateY(105%) rotateY(10deg)!important;
+			-webkit-transform: translateY(105%) rotateY(10deg)!important;
+			-webkit-transform-origin: left;
 			position: absolute;
 		}
 				
@@ -136,6 +162,8 @@ pre:not(:empty) {
  box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
  white-space: pre-wrap;/*保留空白符序列，但是正常地进行换行。*/
  outline: 0;
+ border-radius: 20px;
+ position: absolute;
 }
 
 /**
@@ -317,13 +345,14 @@ cdkking.top
 		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
 		<!-- contenteditable 属性规定元素内容是否可编辑。 -->
 		<pre contenteditable id="style-text"></pre>
-		<pre id="work-text" style="opacity: 0;">
+		<pre id="test-text" style="opacity: 0;" >
+				<div id="text" class="text" style="display: none;"></div>
+			</pre>
+		<pre id="work-text" style="opacity: 0;" class="translateY0105rotateY0010">
 			<div id="md" class="md" style="display: none;"></div>
 			
 		</pre>
-		<pre id="test-text" style="opacity: 0;">
-			<div id="text" class="text" style="display: none;"></div>
-		</pre>
+		
 		</div>
 		<div id="header"></div>
 	</body>
@@ -416,11 +445,26 @@ cdkking.top
 
 				scrollToTop(workTextEl,time_id1);
 				scrollToTop(testTextEl,time_id2);
+
+				var callback = function(){
+					transformTestText();
+				}
 				
-				writerCss(styleText,str,len);
+				writerCss(styleText,str,len,callback);
 				clearInterval(time2);
 			}
 		},1000);
+
+		function transformTestText(){
+			var oClass = testTextEl.className;
+			if(oClass==""){
+				testTextEl.className ="translateX1095";
+				workTextEl.className ="translateY1105rotateY010";
+			}else{
+				testTextEl.className ="";
+				workTextEl.className ="translateY0105rotateY0010";
+			}
+		}
 
 		function scrollToTop(el,time_id){
 			time_id = setInterval(function(){
@@ -445,7 +489,7 @@ cdkking.top
 		var  isMd = false;
 		var  isUl = false;
 
-		function writerMarkdown(el,data,index){
+		function writerMarkdown(el,data,index,callback){
 			var oochar = data.substring(index-1,index);
 			var ochar = data.substring(index,index+1);
 			var nchar = data.substring(index+1,index+2);
@@ -510,14 +554,14 @@ cdkking.top
 				var char = data.substring(index-1,index);
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
-						writerMarkdown(el,data,index);
+						writerMarkdown(el,data,index,callback);
 						//console.log(el.scrollHeight);
 						workTextEl.scrollTop = el.scrollHeight;
 						//el.style.marginTop = el.scrollHeight+"px";
 					},20)
 				}else{
 					setTimeout(function(){
-						writerMarkdown(el,data,index);
+						writerMarkdown(el,data,index,callback);
 						workTextEl.scrollTop = el.scrollHeight;
 						//el.style.marginTop = el.scrollHeight+"px";
 					},10)
@@ -527,7 +571,7 @@ cdkking.top
 			}
 		}
 
-		function writerText(el,data,index){
+		function writerText(el,data,index,callback){
 			var oochar = data.substring(index-1,index);
 			var ochar = data.substring(index,index+1);
 			var nchar = data.substring(index+1,index+2);
@@ -540,12 +584,12 @@ cdkking.top
 
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
-						writerText(el,data,index);
+						writerText(el,data,index,callback);
 						testTextEl.scrollTop = el.scrollHeight;
 					},20)
 				}else{
 					setTimeout(function(){
-						writerText(el,data,index);
+						writerText(el,data,index,callback);
 						testTextEl.scrollTop = el.scrollHeight;
 					},10)
 				}
@@ -554,7 +598,7 @@ cdkking.top
 			}
 		}
 		
-		function writerCss(el,data,index){
+		function writerCss(el,data,index,callback){
 			
 			
 			if(startCss ){
@@ -639,16 +683,20 @@ cdkking.top
 
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
-						writerCss(el,data,index);
+						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
 					},20)
 				}else{
 					setTimeout(function(){
-						writerCss(el,data,index);
+						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
 					},10)
 				}
 			}else{
+				console.log(typeof(callback));
+				if(typeof(callback)=="function"){
+					callback();
+				}
 				startCss = false;
 				startMdCss = false;
 			}
@@ -675,16 +723,21 @@ cdkking.top
 			
 		}
 
+
+
 		document.addEventListener("click",function(){
 			console.log("click");
-			var oClass = workTextEl.className;
-			if(oClass==""){
-				workTextEl.className ="translateX1095";
-			}else{
-				workTextEl.className ="";
-			}
 			
+			transformTestText();
 			
 		});
+
+
+		styleText.addEventListener("input",function(){
+			console.log("input");
+
+			
+		});
+
 	</script>
 </html>
