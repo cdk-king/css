@@ -352,6 +352,11 @@ cdkking.top
 			<div id="md" class="md" style="display: none;"></div>
 			
 		</pre>
+
+		<pre id="input-text" style="opacity: 0;" class="translateY0105rotateY0010">
+			
+				
+		</pre>
 		
 		</div>
 		<div id="header"></div>
@@ -597,6 +602,102 @@ cdkking.top
 				
 			}
 		}
+
+		function addCss(el,data,index,callback){
+			if(startCss ){
+				updateCss(css0+data.substring(0,index+1));
+			}else if(startMdCss){
+				updateCss(css0+data.substring(0,index+1));
+			}
+			
+			var oochar = data.substring(index-1,index);
+			var ochar = data.substring(index,index+1);
+			var nchar = data.substring(index+1,index+2);
+
+			if(ochar=="{" && !isInside && !isComment){
+				isInside = true;
+				startSelect=false;
+				startKey = true;
+				html1 +="</span>";
+			}	
+			if(ochar=="}" && isInside && !isComment){
+				isInside = false; 
+				startKey = false;
+				startValue = false;
+				
+			}
+			
+			if(ochar==":" && isInside && !isComment){
+				isInside = true;
+				startSelect=false;
+				startValue = true;
+				startKey = false;
+				html1 +="</span>";
+			}
+			if(ochar==";" && !isComment){
+				isInside = true;
+				startSelect=false;
+				startValue = false;
+				startKey = true;
+				html1 +="</span>";
+			}
+			
+
+			if(isInside){
+
+			}
+
+			if((ochar+nchar)=="/*"){
+				isComment=true;
+				html1 +="<span class='comment'>"+ data.substring(index,index+1);
+			}else if((oochar+ochar)=="*/"){
+				isComment=false;
+				html1 += data.substring(index,index+1)+"</span>";
+			}
+			else{
+				html1 += data.substring(index,index+1);
+			}
+
+			if(!isInside && !isComment && !startSelect){
+				//选择器
+				startSelect=true;
+				html1 +="<span class='selector'>";
+			}
+
+			if(isInside && !isComment && !startSelect && startKey && !startValue){
+				//key
+				startSelect=false;
+				startKey = false;
+				html1 +="<span class='key'>";
+			}
+			
+			if(isInside && !isComment && !startSelect  && !startKey && startValue){
+				//value
+				startSelect=false;
+				startValue = false;
+				html1 +="<span class='value'>";
+			}
+
+			el.innerHTML = html1;
+			index++;
+			if(index<data.length){
+				var char = data.substring(index-1,index);
+
+				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
+					addCss(el,data,index,callback);
+						el.scrollTop = el.scrollHeight;
+				}else{
+					addCss(el,data,index,callback);
+						el.scrollTop = el.scrollHeight;
+				}
+			}else{
+				if(typeof(callback)=="function"){
+					callback();
+				}
+				startCss = false;
+				startMdCss = false;
+			}
+		}
 		
 		function writerCss(el,data,index,callback){
 			
@@ -725,17 +826,24 @@ cdkking.top
 
 
 
-		document.addEventListener("click",function(){
+		document.addEventListener("click",function(ev){
 			console.log("click");
+			console.log(ev);
+			console.log(ev.target);
 			
-			transformTestText();
+			if( ev.target==mdEl || ev.target==textEl){
+				transformTestText();
+			}
+			
 			
 		});
 
 
-		styleText.addEventListener("input",function(){
+		styleText.addEventListener("input",function(ev){
+			console.log("input");
 			console.log("input");
 			var str = css0+styleText.innerText;
+			//addCss(styleText,str,0);
 			updateCss(str);
 		});
 
