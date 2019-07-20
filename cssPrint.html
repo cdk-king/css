@@ -603,16 +603,22 @@ cdkking.top
 			}
 		}
 
+		var signValue = "";
+		var lastSignValue = "";
+		var lastLastSignValue = "";
+
+
 		function addCss(el,data,index,callback){
-			if(startCss ){
-				updateCss(css0+data.substring(0,index+1));
-			}else if(startMdCss){
-				updateCss(css0+data.substring(0,index+1));
-			}
 			
 			var oochar = data.substring(index-1,index);
 			var ochar = data.substring(index,index+1);
 			var nchar = data.substring(index+1,index+2);
+
+			if(ochar == "\n"){
+				lastLastSignValue = lastSignValue;
+				lastSignValue = signValue;
+				signValue = "";
+			}
 
 			if(ochar=="{" && !isInside && !isComment){
 				isInside = true;
@@ -641,11 +647,6 @@ cdkking.top
 				startKey = true;
 				html1 +="</span>";
 			}
-			
-
-			if(isInside){
-
-			}
 
 			if((ochar+nchar)=="/*"){
 				isComment=true;
@@ -656,6 +657,8 @@ cdkking.top
 			}
 			else{
 				html1 += data.substring(index,index+1);
+				mdSignValue += data.substring(index,index+1);
+				
 			}
 
 			if(!isInside && !isComment && !startSelect){
@@ -677,23 +680,25 @@ cdkking.top
 				startValue = false;
 				html1 +="<span class='value'>";
 			}
-
-			el.innerHTML = html1;
+			
 			index++;
 			if(index<data.length){
 				var char = data.substring(index-1,index);
 
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					addCss(el,data,index,callback);
-						el.scrollTop = el.scrollHeight;
+					//el.scrollTop = el.scrollHeight;
 				}else{
 					addCss(el,data,index,callback);
-						el.scrollTop = el.scrollHeight;
+					//el.scrollTop = el.scrollHeight;
 				}
 			}else{
+				el.innerHTML = html1;
+				el.scrollTop = el.scrollHeight;
 				if(typeof(callback)=="function"){
 					callback();
 				}
+				
 				startCss = false;
 				startMdCss = false;
 			}
@@ -827,25 +832,61 @@ cdkking.top
 
 
 		document.addEventListener("click",function(ev){
-			console.log("click");
-			console.log(ev);
-			console.log(ev.target);
+			//console.log("click");
+			//console.log(ev);
+			//console.log(ev.target);
 			
 			if( ev.target==mdEl || ev.target==textEl){
 				transformTestText();
 			}
 			
-			
 		});
 
 
 		styleText.addEventListener("input",function(ev){
-			console.log("input");
-			console.log("input");
-			var str = css0+styleText.innerText;
-			//addCss(styleText,str,0);
-			updateCss(str);
+			//console.log("input");
+
+			isInside = false;
+			isComment = false;
+			startSelect = false;
+			startKey = false;
+			startValue = false;
+			data = "";
+			html1 = "";
+
+			var str1 = css0+styleText.innerText;
+			var str2 = styleText.innerText;
+
+			//var top = styleText.scrollHeight;
+			var top = styleText.scrollTop;
+			var len = str2.length-1;
+			var callback = function(){
+				
+				styleText.scrollTop = Math.floor(top);
+			}
+			
+			addCss(styleText,str2,len,callback);
+			updateCss(str1);
 		});
+
+
+		styleText.onkeydown=function(event){
+            
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            var currKey=e.keyCode||e.which||e.charCode;
+			//console.log(currKey.toString());
+			
+			var keynum;
+			var keychar;
+
+			keynum = window.event ? e.keyCode : e.which;
+			keychar = String.fromCharCode(keynum);
+
+            if(e){ 
+                console.log(keynum+':'+keychar);
+                
+			}
+		}
 
 	</script>
 </html>
