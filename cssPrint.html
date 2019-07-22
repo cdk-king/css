@@ -526,7 +526,11 @@ cdkking.top
 
 		<pre id="input-text" style="opacity: 0;position:relative" class="">
 			<input id="input" type="" class="input" style="display: none;"/>
-			<textarea name="content" class="scrollbarTest" rows="6" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">输入几个回车试试</textarea>
+			<textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
+*{
+color:blue;
+}
+			</textarea>
 			<button id="button" class="buttonLine">提交</button>
 		</pre>
 		
@@ -553,6 +557,7 @@ cdkking.top
 		var isComment = false;
 		var startSelect = false;
 		var startKey = false;
+		var isKey = false;
 		var startValue = false;
 		var data = "";
 		var html1 = "";
@@ -592,6 +597,7 @@ cdkking.top
 				isComment = false;
 				startSelect = false;
 				startKey = false;
+				isKey = false;
 				startValue = false;
 				data = "";
 				html1 = "";
@@ -617,6 +623,7 @@ cdkking.top
 				isComment = false;
 				startSelect = false;
 				startKey = false;
+				isKey = false;
 				startValue = false;
 				data = "";
 				html1 = styleText.innerHTML;
@@ -631,7 +638,7 @@ cdkking.top
 				var callback = function(){
 					transformTestText();
 					inputTextEl.style.opacity = "1";
-					inputEl.style.display = "block";
+					//inputEl.style.display = "block";
 					//inputTextEl.style.display = "block";
 				}
 				
@@ -889,7 +896,7 @@ cdkking.top
 		function writerCss(el,data,index,callback){
 			
 			
-			if(startCss ){
+			if(startCss){
 				updateCss(css0+data.substring(0,index+1));
 			}else if(startMdCss){
 				updateCss(css0+data.substring(0,index+1));
@@ -906,10 +913,14 @@ cdkking.top
 				html1 +="</span>";
 			}	
 			if(ochar=="}" && isInside && !isComment){
+				if(isKey){
+					isKey = false;
+					startKey = false;
+					html1 +="</span>";
+				}
 				isInside = false; 
 				startKey = false;
 				startValue = false;
-				
 			}
 			
 			if(ochar==":" && isInside && !isComment){
@@ -917,14 +928,22 @@ cdkking.top
 				startSelect=false;
 				startValue = true;
 				startKey = false;
+				isKey = false;
 				html1 +="</span>";
 			}
-			if(ochar==";" && !isComment){
+			if(ochar==";" && !isComment && isInside){
 				isInside = true;
 				startSelect=false;
 				startValue = false;
 				startKey = true;
+				isKey = true;
 				html1 +="</span>";
+			}
+			if(ochar=="\n" && isKey){
+				//console.log(ochar);
+				//console.log(startKey);
+				// startKey = false;
+				// html1 +="</span>";
 			}
 			
 
@@ -943,7 +962,7 @@ cdkking.top
 				html1 += data.substring(index,index+1);
 			}
 
-			if(!isInside && !isComment && !startSelect){
+			if(!isInside && !isComment && !startSelect && !startKey){
 				//选择器
 				startSelect=true;
 				html1 +="<span class='selector'>";
@@ -959,7 +978,7 @@ cdkking.top
 			if(isInside && !isComment && !startSelect  && !startKey && startValue){
 				//value
 				startSelect=false;
-				startValue = false;
+				startValue =false;
 				html1 +="<span class='value'>";
 			}
 
@@ -1032,6 +1051,7 @@ cdkking.top
 			isComment = false;
 			startSelect = false;
 			startKey = false;
+			isKey = false;
 			startValue = false;
 			data = "";
 			html1 = "";
@@ -1069,8 +1089,31 @@ cdkking.top
 			}
 		}
 
+		var textareaEl = document.getElementById("textarea");
+		var textareaValue = textareaEl.value;
+
 		buttonEl.addEventListener("click",function(ev){
 			//console.log("buttonClick");
+			textareaValue = textareaEl.value;
+			console.log(textareaValue);
+			
+			var len = styleText.innerText.length;
+			var str = styleText.innerText+"\n"+textareaValue;
+
+			startCss = true;
+			isInside = false;
+			isComment = false;
+			startSelect = false;
+			startKey = false;
+			isKey = false;
+			startValue = false;
+			data = "";
+			html1 = styleText.innerHTML;
+			var callback = function(){
+				var str1 = css0+styleText.innerText;
+				updateCss(str1);
+			}
+			writerCss(styleText,str,len);
 			
 		});
 
