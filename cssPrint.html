@@ -69,6 +69,16 @@
 			-webkit-transform: translateY(105%) rotateY(10deg)!important;
 			position: absolute;
 		}
+		
+		.translateY0105rotateY0010R {
+			transform: translateY(105%) rotateY(10deg)!important;
+			-webkit-transform: translateY(105%) rotateY(10deg)!important;
+			position: relative!important;
+		}
+
+		.poR{
+			position: relative;
+		}
 
 		.rotateY0010 {
 			transform: rotateY(10deg)!important;
@@ -82,6 +92,159 @@
 			-webkit-transform-origin: left;
 			position: absolute;
 		}
+
+		#input-text{
+			margin-top: 42%;
+			position: relative;
+		}
+
+		.marginTop0100{
+			margin-top: 100%!important;
+		}
+
+		input{
+			outline-style: none ;
+			border: 1px solid #ccc; 
+			border-radius: 10px;
+			padding: 13px 14px;
+			width: 80%;
+			font-size: 14px;
+			font-weight: 700;
+			font-family: "Microsoft soft";
+			background:cornsilk;
+		}
+
+		textarea{
+			outline-style: none ;
+			background:cornsilk;
+			font-family: "Microsoft soft";
+			font-size: 14px;
+			font-weight: 700;
+			border: 1px solid #ccc; 
+			border-radius: 10px;
+			/*resize:none;去除谷歌textarea右下角的小三角*/
+			/*overflow-y:hidden;没有垂直滚动条*/
+		}
+
+		/*多行文本框*/
+		.multieditbox{
+			background: #f8f8f8;
+			border-bottom: #b7b7b7 1px solid;
+			border-left: #b7b7b7 1px solid;
+			border-right: #b7b7b7 1px solid;
+			border-top: #b7b7b7 1px solid;
+			color: #000000;
+			cursor: text;
+			font-family: "arial";
+			font-size: 9pt;
+			padding: 1px; /*www.52css.com*/
+		}
+		
+		/*按钮样式*/
+
+		.buttonFlow {
+			position: relative;
+			background-color: #4CAF50;
+			border: none;
+			font-size: 30px;
+			color: #FFFFFF;
+			margin: 0;
+			width: 200px;
+			height: 75px;
+			text-align: center;
+			-webkit-transition-duration: 0.4s;
+			
+			transition-duration: 0.4s;
+			text-decoration: none;
+			overflow: hidden;
+			cursor: pointer;
+				
+		}
+		
+		.buttonFlow:after {
+			content: "";
+			background: #90EE90;
+			display: block;
+			position: absolute;
+		    padding-top: 300px;
+			padding-left: 300px;
+			margin-left: -25%;
+			margin-top: -75%;
+			opacity: 0; 
+			border-radius: 10000px;
+			transition: all 1s;
+		}
+		
+		.buttonFlow:active:after {
+			padding: 0;
+			margin-left: 50%;
+			margin-top: -10%;
+			opacity: 1;
+			transition: 0s
+		}
+
+		.buttonLine {
+			font-size: 20px;
+			color: #000;
+			background: cornsilk;
+			display: inline-block;
+			vertical-align: middle;
+			-webkit-transform: perspective(1px) translateZ(0);
+			transform: perspective(1px) translateZ(0);
+			box-shadow: 0 0 1px transparent;
+			position: relative;
+			margin-top: 20px;
+			padding-left: 10px;
+			padding-right: 10px;
+			
+		}
+
+		.buttonLine:hover {
+			background: #fff;
+		}
+		
+		.buttonLine:before {
+			content: "";
+			position: absolute;
+			z-index: -1;
+			left: 50%;
+			right: 50%;
+			bottom: 0;
+			background: blue;
+			height: 8px;
+			-webkit-transition-property: left, right;
+			transition-property: left, right;
+			-webkit-transition-duration: 0.3s;
+			transition-duration: 0.3s;
+			-webkit-transition-timing-function: ease-out;
+			transition-timing-function: ease-out;
+			
+		}
+		
+		.buttonLine:hover:before {
+			left: 0;
+			right: 0;
+			background: blue;
+		}
+
+		/*
+		*scrollbar-3d-light-color立体滚动条亮边的颜色（设置滚动条的颜色）
+		*scrollbar-arrow-color上下按钮上三角箭头的颜色
+		*scrollbar-base-color滚动条的基本颜色
+		*scrollbar-dark-shadow-color立体滚动条强阴影的颜色
+		*scrollbar-face-color立体滚动条凸出部分的颜色
+		*scrollbar-highlight-color滚动条空白部分的颜色
+		*scrollbar-shadow-color立体滚动条阴影的颜色
+		*/
+
+		.scrollbarTest{
+			scrollbar-3d-light-color:red;
+			scrollbar-arrow-color:red;
+			scrollbar-base-color:red;
+		}
+	
+
+
 				
 		</div>
 		<div id="biaobai" style="display: none;">
@@ -223,6 +386,10 @@ pre:not(#style-text) {
   -webkit-transform: rotateX(0deg) rotateY(190deg) rotateZ(180deg);
 }
 
+#work-text{
+ position: absolute;
+}
+
 /**
 *  #work-text .md {
 *	-webkit-transform: rotateY(190deg) rotateZ(180deg);
@@ -271,7 +438,11 @@ pre:not(#style-text) {
  margin: 0px;
 }
 		</div>
-		<div id="css2"></div>
+		<div id="css2" style="display: none;">
+#input{
+	
+}
+		</div>
 		<div id="workText" style="display: none;">
 cdkking.top
 ===========
@@ -348,14 +519,15 @@ cdkking.top
 		<pre id="test-text" style="opacity: 0;" >
 				<div id="text" class="text" style="display: none;"></div>
 			</pre>
-		<pre id="work-text" style="opacity: 0;" class="translateY0105rotateY0010">
+		<pre id="work-text" style="opacity: 0;position:absolute" class="translateY0105rotateY0010">
 			<div id="md" class="md" style="display: none;"></div>
 			
 		</pre>
 
-		<pre id="input-text" style="opacity: 0;" class="translateY0105rotateY0010">
-			
-				
+		<pre id="input-text" style="opacity: 0;position:relative" class="">
+			<input id="input" type="" class="input" style="display: none;"/>
+			<textarea name="content" class="scrollbarTest" rows="6" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">输入几个回车试试</textarea>
+			<button id="button" class="buttonLine">提交</button>
 		</pre>
 		
 		</div>
@@ -404,6 +576,11 @@ cdkking.top
 		var mdEl = document.getElementById("md");
 		var testTextEl = document.getElementById("test-text");
 		var textEl = document.getElementById("text");
+
+		var inputTextEl = document.getElementById("input-text");
+		var inputEl = document.getElementById("input");
+
+		var buttonEl = document.getElementById("button");
 		// workTextEl.innerHTML = workText.innerHTML;
 
 		var mdCssEl = document.getElementById("mdCss");
@@ -453,6 +630,9 @@ cdkking.top
 
 				var callback = function(){
 					transformTestText();
+					inputTextEl.style.opacity = "1";
+					inputEl.style.display = "block";
+					//inputTextEl.style.display = "block";
 				}
 				
 				writerCss(styleText,str,len,callback);
@@ -465,9 +645,11 @@ cdkking.top
 			if(oClass==""){
 				testTextEl.className ="translateX1095";
 				workTextEl.className ="translateY1105rotateY010";
+				inputTextEl.className = "";
 			}else{
 				testTextEl.className ="";
 				workTextEl.className ="translateY0105rotateY0010";
+				inputTextEl.className ="marginTop0100";
 			}
 		}
 
@@ -861,11 +1043,10 @@ cdkking.top
 			var top = styleText.scrollTop;
 			var len = str2.length-1;
 			var callback = function(){
-				
 				styleText.scrollTop = Math.floor(top);
 			}
 			
-			addCss(styleText,str2,len,callback);
+			//addCss(styleText,str2,len,callback);
 			updateCss(str1);
 		});
 
@@ -887,6 +1068,11 @@ cdkking.top
                 
 			}
 		}
+
+		buttonEl.addEventListener("click",function(ev){
+			//console.log("buttonClick");
+			
+		});
 
 	</script>
 </html>
