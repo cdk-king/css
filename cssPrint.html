@@ -69,6 +69,18 @@
 			-webkit-transform: translateY(105%) rotateY(10deg)!important;
 			position: absolute;
 		}
+
+		.translateY0155rotateY0010 {
+			transform: translateY(155%) rotateY(10deg)!important;
+			-webkit-transform: translateY(155%) rotateY(10deg)!important;
+			position: absolute;
+		}
+
+		.translateY0200rotateY0010 {
+			transform: translateY(200%) rotateY(10deg)!important;
+			-webkit-transform: translateY(200%) rotateY(10deg)!important;
+			position: absolute;
+		}
 		
 		.translateY0105rotateY0010R {
 			transform: translateY(105%) rotateY(10deg)!important;
@@ -122,6 +134,7 @@
 			font-weight: 700;
 			border: 1px solid #ccc; 
 			border-radius: 10px;
+			color:black;
 			/*resize:none;去除谷歌textarea右下角的小三角*/
 			/*overflow-y:hidden;没有垂直滚动条*/
 		}
@@ -524,13 +537,13 @@ cdkking.top
 			
 		</pre>
 
-		<pre id="input-text" style="opacity: 0;position:relative" class="">
+		<pre id="input-text" style="opacity: 0;position:relative" class="translateY0200rotateY0010">
 			<input id="input" type="" class="input" style="display: none;"/>
-			<textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
+<textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
 *{
-color:blue;
+color:yellow;
 }
-			</textarea>
+</textarea>
 			<button id="button" class="buttonLine">提交</button>
 		</pre>
 		
@@ -638,6 +651,7 @@ color:blue;
 				var callback = function(){
 					transformTestText();
 					inputTextEl.style.opacity = "1";
+					inputTextEl.className = "";
 					//inputEl.style.display = "block";
 					//inputTextEl.style.display = "block";
 				}
@@ -1000,7 +1014,7 @@ color:blue;
 					},10)
 				}
 			}else{
-				console.log(typeof(callback));
+				//console.log(typeof(callback));
 				if(typeof(callback)=="function"){
 					callback();
 				}
@@ -1084,7 +1098,7 @@ color:blue;
 			keychar = String.fromCharCode(keynum);
 
             if(e){ 
-                console.log(keynum+':'+keychar);
+                //console.log(keynum+':'+keychar);
                 
 			}
 		}
@@ -1095,7 +1109,7 @@ color:blue;
 		buttonEl.addEventListener("click",function(ev){
 			//console.log("buttonClick");
 			textareaValue = textareaEl.value;
-			console.log(textareaValue);
+			//console.log(textareaValue);
 			
 			var len = styleText.innerText.length;
 			var str = styleText.innerText+"\n"+textareaValue;
