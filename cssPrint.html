@@ -130,20 +130,6 @@
 			background:cornsilk;
 		}
 
-		textarea{
-			width: 90%;
-			outline-style: none ;
-			background:cornsilk;
-			font-family: "Microsoft soft";
-			font-size: 14px;
-			font-weight: 700;
-			border: 1px solid #ccc; 
-			border-radius: 10px;
-			color:black;
-			/*resize:none;去除谷歌textarea右下角的小三角*/
-			/*overflow-y:hidden;没有垂直滚动条*/
-		}
-
 		/*多行文本框*/
 		.multieditbox{
 			background: #f8f8f8;
@@ -199,52 +185,6 @@
 			margin-top: -10%;
 			opacity: 1;
 			transition: 0s
-		}
-
-		.buttonLine {
-			float:left;
-			font-size: 20px;
-			color: #000;
-			background: cornsilk;
-			display: inline-block;
-			vertical-align: middle;
-			-webkit-transform: perspective(1px) translateZ(0);
-			transform: perspective(1px) translateZ(0);
-			box-shadow: 0 0 1px transparent;
-			position: relative;
-			margin-top: 20px;
-			padding-left: 10px;
-			padding-right: 10px;
-			
-		}
-
-		.buttonLine:hover {
-			cursor:point;
-			background: #fff;
-		}
-		
-		.buttonLine:before {
-			content: "";
-			position: absolute;
-			z-index: -1;
-			left: 50%;
-			right: 50%;
-			bottom: 0;
-			background: yellow;
-			height: 8px;
-			-webkit-transition-property: left, right;
-			transition-property: left, right;
-			-webkit-transition-duration: 0.3s;
-			transition-duration: 0.3s;
-			-webkit-transition-timing-function: ease-out;
-			transition-timing-function: ease-out;
-			
-		}
-		
-		.buttonLine:hover:before {
-			left: 0;
-			right: 0;
-			background: yellow;
 		}
 
 		/*
@@ -450,18 +390,118 @@ pre:not(#style-text) {
  padding-bottom: 5px;
 }
 
-.md li {
- margin: 5px 0;
-}
-
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6, .md ul, .md p {
  margin: 0px;
 }
+
+/**
+* 接下来就是css代码输入框了
+*/
 		</div>
 		<div id="css2" style="display: none;">
-#input{
+/**
+* 给textarea标签添加简单的美化
+*/
+
+textarea{
+	width: 90%;
+	outline-style: none ;
+	background:cornsilk;
+	font-family: "Microsoft soft";
+	font-size: 14px;
+	font-weight: 700;
+	border: 1px solid #ccc; 
+	border-radius: 10px;
+	color:black;
+	/*resize:none;去除谷歌textarea右下角的小三角*/
+	/*overflow-y:hidden;没有垂直滚动条*/
+}
+
+/**
+* 然后是提交按钮的样式
+*/
+
+.buttonLine {
+	float:left;
+	font-size: 20px;
+	color: #000;
+	background: cornsilk;
+	display: inline-block;
+	vertical-align: middle;
+	border: none;
+	overflow:hidden;
+	-webkit-transform: perspective(1px) translateZ(0);
+	transform: perspective(1px) translateZ(0);
+	box-shadow: 0 0 1px transparent;
+	position: relative;
+	margin-top: 20px;
+	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+/**
+* 加点小特效，例如点击之后的波纹效果
+*/
+
+.buttonLine:before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	left: 50%;
+	right: 50%;
+	bottom: 0;
+	background: yellow;
+	height: 8px;
+	-webkit-transition-property: left, right;
+	transition-property: left, right;
+	-webkit-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-webkit-transition-timing-function: ease-out;
+	transition-timing-function: ease-out;
 	
 }
+
+.buttonLine:hover:before {
+	left: 0;
+	right: 0;
+	background: yellow;
+}
+
+.buttonLine:after {
+	content: "";
+	background: #90EE90;
+	display: block;
+	position: absolute;
+	padding-top: 120px;
+	padding-left: 120px;
+	margin-left: -50%;
+	margin-top: -90%;
+	opacity: 0; 
+	border-radius: 10000px;
+	transition: all 1s;
+}
+
+.buttonLine:active:after {
+	padding: 0;
+	margin-left: 25%;
+	margin-top: -15%;
+	opacity: 1;
+	transition: 0s;
+}
+
+/**
+* 差点忘了加个小手了
+*/
+
+.buttonLine:hover {
+	cursor:pointer;
+	background: #fff;
+}
+
+/**
+* 这样就大功告成啦，可以试着点击一下提交吧
+*/
 		</div>
 		<div id="workText" style="display: none;">
 cdkking.top
@@ -587,12 +627,15 @@ color:yellow;
 
 		
 		
-		
+		var contentEl = document.getElementById("content");
 		var css0El = document.getElementById("css0");
 		var css0  = css0El.innerHTML;
 		var css1El= document.getElementById("css1");
 		//var css1  = "<span>"+css1El.innerHTML+"</span>";
 		var css1  = css1El.innerHTML;
+
+		var css2El= document.getElementById("css2");
+		var css2  = css2El.innerHTML;
 		//console.log(css0);
 		writerCss(styleText,css1,0);
 
@@ -658,6 +701,28 @@ color:yellow;
 				var callback = function(){
 					transformTestText();
 					inputTextEl.style.opacity = "1";
+
+					startMdCss = false;
+					startCss = true;
+					isInside = false;
+					isComment = false;
+					startSelect = false;
+					startKey = false;
+					isKey = false;
+					startValue = false;
+					data = "";
+					html1 = styleText.innerHTML;
+					
+					var str = css1+mdCss;
+					var len = str.length;
+					str = str + css2;
+
+					var callback = function(){
+						contentEl.className = "translateX1095";
+						//todo
+					}
+
+					writerCss(styleText,str,len,callback);
 					//inputTextEl.className = "";
 					//inputEl.style.display = "block";
 					//inputTextEl.style.display = "block";
@@ -773,13 +838,13 @@ color:yellow;
 						//console.log(el.scrollHeight);
 						workTextEl.scrollTop = el.scrollHeight;
 						//el.style.marginTop = el.scrollHeight+"px";
-					},20)
+					},40)
 				}else{
 					setTimeout(function(){
 						writerMarkdown(el,data,index,callback);
 						workTextEl.scrollTop = el.scrollHeight;
 						//el.style.marginTop = el.scrollHeight+"px";
-					},10)
+					},20)
 				}
 			}else{
 				startMdCss = true;
@@ -801,12 +866,12 @@ color:yellow;
 					setTimeout(function(){
 						writerText(el,data,index,callback);
 						testTextEl.scrollTop = el.scrollHeight;
-					},20)
+					},40)
 				}else{
 					setTimeout(function(){
 						writerText(el,data,index,callback);
 						testTextEl.scrollTop = el.scrollHeight;
-					},10)
+					},20)
 				}
 			}else{
 				
@@ -1013,20 +1078,22 @@ color:yellow;
 					setTimeout(function(){
 						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
-					},20)
+					},40)
 				}else{
 					setTimeout(function(){
 						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
-					},10)
+					},20)
 				}
 			}else{
 				//console.log(typeof(callback));
+				startCss = false;
+				startMdCss = false;
+
 				if(typeof(callback)=="function"){
 					callback();
 				}
-				startCss = false;
-				startMdCss = false;
+				
 			}
 			
 		}	
@@ -1137,6 +1204,9 @@ color:yellow;
 			writerCss(styleText,str,len);
 			
 		});
+
+		
+		
 
 	</script>
 </html>
