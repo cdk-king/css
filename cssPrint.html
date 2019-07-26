@@ -76,9 +76,9 @@
 			position: absolute;
 		}
 
-		.translateY0200rotateY0010 {
-			transform: translateY(200%) rotateY(10deg)!important;
-			-webkit-transform: translateY(200%) rotateY(10deg)!important;
+		.translateY0205rotateY0010 {
+			transform: translateY(205%) rotateY(10deg)!important;
+			-webkit-transform: translateY(205%) rotateY(10deg)!important;
 			position: absolute;
 		}
 		
@@ -106,7 +106,11 @@
 		}
 
 		#input-text{
-			margin-top: 42%;
+			/*margin-top: 40%;*/
+			/*transform: translateY(105%) rotateY(10deg)!important;
+			-webkit-transform: translateY(105%) rotateY(10deg)!important;*/
+			height:45%;
+			text-align:left;
 			position: relative;
 		}
 
@@ -127,6 +131,7 @@
 		}
 
 		textarea{
+			width: 90%;
 			outline-style: none ;
 			background:cornsilk;
 			font-family: "Microsoft soft";
@@ -197,6 +202,7 @@
 		}
 
 		.buttonLine {
+			float:left;
 			font-size: 20px;
 			color: #000;
 			background: cornsilk;
@@ -213,6 +219,7 @@
 		}
 
 		.buttonLine:hover {
+			cursor:point;
 			background: #fff;
 		}
 		
@@ -223,7 +230,7 @@
 			left: 50%;
 			right: 50%;
 			bottom: 0;
-			background: blue;
+			background: yellow;
 			height: 8px;
 			-webkit-transition-property: left, right;
 			transition-property: left, right;
@@ -237,7 +244,7 @@
 		.buttonLine:hover:before {
 			left: 0;
 			right: 0;
-			background: blue;
+			background: yellow;
 		}
 
 		/*
@@ -537,7 +544,7 @@ cdkking.top
 			
 		</pre>
 
-		<pre id="input-text" style="opacity: 0;position:relative" class="translateY0200rotateY0010">
+		<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
 			<input id="input" type="" class="input" style="display: none;"/>
 <textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
 *{
@@ -651,7 +658,7 @@ color:yellow;
 				var callback = function(){
 					transformTestText();
 					inputTextEl.style.opacity = "1";
-					inputTextEl.className = "";
+					//inputTextEl.className = "";
 					//inputEl.style.display = "block";
 					//inputTextEl.style.display = "block";
 				}
@@ -666,11 +673,11 @@ color:yellow;
 			if(oClass==""){
 				testTextEl.className ="translateX1095";
 				workTextEl.className ="translateY1105rotateY010";
-				inputTextEl.className = "";
+				inputTextEl.className = "translateY0105rotateY0010";
 			}else{
 				testTextEl.className ="";
 				workTextEl.className ="translateY0105rotateY0010";
-				inputTextEl.className ="marginTop0100";
+				inputTextEl.className ="translateY0155rotateY0010";
 			}
 		}
 
