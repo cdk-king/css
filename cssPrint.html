@@ -58,6 +58,12 @@
 			position: absolute;
 		}
 
+		.translateX1105 {
+			transform: translateX(-105%)!important;
+			-webkit-transform: translateX(-105%)!important;
+			position: absolute;
+		}
+
 		.translateY1105rotateY0010 {
 			transform: translateY(-105%) rotateY(10deg)!important;
 			-webkit-transform: translateY(-105%) rotateY(10deg)!important;
@@ -203,8 +209,93 @@
 			scrollbar-base-color:red;
 		}
 	
+#navigation{
+position: relative;
+height:100%;
+left:0;
+top:49%;
+border:1px solid red;
+}
 
+#navigationLeft{
+	position: absolute;
+	left:0;
+	height:30px;
+	width:30px;
+	background:red;
+	color:#fff;
+	opacity: 0.5;
+	cursor: pointer;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+	border:1px solid blue;
+	z-index:10;
+}
 
+#navigationLeft:hover{
+	cursor:pointer;
+}
+#navigationLeft:active{
+	
+}
+
+#navigationRight{
+	position: absolute;
+	right:0;
+	height:30px;
+	width:30px;
+	background:red;
+	color:#fff;
+	opacity: 0.5;
+	cursor: pointer;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+	border:1px solid blue;
+	z-index:10;
+}
+
+#navigationRight:hover{
+	cursor:pointer;
+}
+
+#page{
+	position: relative;
+	
+	text-align:center;
+	width:200px;
+	left:50%;
+	margin-left:-100px;
+	z-index:10;
+	
+}
+
+.pageContaint{
+	position: absolute;
+	border:1px solid blue;
+	width:200px;
+	text-align:center; 
+	left:50%;
+	top:90%;
+	margin-left:-100px;
+	/*margin-top:200px;*/
+}
+
+.pageNum{
+	display:inline-block;
+	text-align:center;
+	border:1px solid blue;
+	width:10px;
+	height:10px;
+	background:red;
+	border-radius: 100px;
+	z-index:10;
+	margin:0 auto;
+	margin:10px;
+}
 				
 		</div>
 		<div id="biaobai" style="display: none;">
@@ -571,6 +662,11 @@ cdkking.top
 
 		</div>
 		<div id="div"></div>
+		<div id="navigation">
+			<div id="navigationLeft">←</div>
+			<div id="navigationRight">→</div>
+			<div id="page"></div>
+		</div>
 		<div id="content">
 		<!-- <pre> 标签可定义预格式化的文本。
 		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
@@ -599,8 +695,8 @@ color:yellow;
 	</body>
 	<script>
 
-//el.scrollTop = el.scrollHeight;
-//slice()
+		//el.scrollTop = el.scrollHeight;
+		//slice()
 
 		// isInside = false;
 		// isComment = false;
@@ -610,6 +706,8 @@ color:yellow;
 		// data = "";
 		// html = "";
 		// writer(workTextEl,workText.innerHTML,0);
+
+		var pageCount = 2;
 
 		var startCss = true;
 		var startMdCss = false;
@@ -718,7 +816,7 @@ color:yellow;
 					str = str + css2;
 
 					var callback = function(){
-						contentEl.className = "translateX1095";
+						contentEl.className = "translateX1105";
 						//todo
 					}
 
@@ -1205,8 +1303,63 @@ color:yellow;
 			
 		});
 
+		//键盘事件
+		window.addEventListener('keydown', function(e) {
+			//console.log(e.keyCode);
+		    if (e.keyCode === 38) { //up
+		        contentEl.className = "";
+		    } else if (e.keyCode === 40) {
+		        contentEl.className = "translateX1105";
+		    }else if (e.keyCode === 37) {
+		        contentEl.className = "";
+		    }else if (e.keyCode === 39) {
+		        contentEl.className = "translateX1105";
+		    }
+		}, false);
 		
+		//滚轮事件
+		var mouseScroll = function(event) {
+			event = event || window.event;
+			if(event.wheelDelta < 0) {
+				contentEl.className = "";
+			} else {
+				contentEl.className = "translateX1105";
+			}
+		};
+		//FF使用DOMMouseScroll，其他浏览器都是用mousewheel
+		if(document.addEventListener) {
+			//document.addEventListener('DOMMouseScroll', mouseScroll, false);
+		}
 		
+		//js滚轮事件
+		//document.onmousewheel = mouseScroll;
+
+		var navigationLeftEl = document.getElementById("navigationLeft");
+		var navigationRightEl = document.getElementById("navigationRight");
+		var turnLeft = function(){
+			contentEl.className = "";
+		}
+		var turnRight = function(){
+			contentEl.className = "translateX1105";
+		}
+		navigationLeftEl.addEventListener("click",turnLeft);
+		navigationRightEl.addEventListener("click",turnRight);
+
+		var pageEl = document.getElementById("page");
+
+		var createPage = function(){
+			var div1 = document.createElement('div');
+			div1.className = "pageContaint";
+			for(var i = 0;i<pageCount;i++){
+				var div = document.createElement('div');
+				div.id = "page"+i;
+				div.className = "pageNum";
+				div1.appendChild(div);
+			}
+			pageEl.appendChild(div1);
+		}
+
+		createPage();
 
 	</script>
 </html>
