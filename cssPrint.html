@@ -25,10 +25,16 @@
 			width: 100%;
 			border-radius: 1px; /* Prevents bad clipping in Chrome */
 		}
+
+		.pre {
+			overflow: auto;
+			max-height: 100%;
+			border-radius: 1px; /* Prevents bad clipping in Chrome */
+		}
 		
 		#content {
 			position: absolute;
-			top: 0; right: 20px; left: 0; bottom: 20px;
+			top: 0; right: 20px; left: 0; bottom: 30px;
 		}
 		
 		#header {
@@ -115,7 +121,7 @@
 			/*margin-top: 40%;*/
 			/*transform: translateY(105%) rotateY(10deg)!important;
 			-webkit-transform: translateY(105%) rotateY(10deg)!important;*/
-			height:45%;
+			height:44%;
 			text-align:left;
 			position: relative;
 		}
@@ -210,11 +216,11 @@
 		}
 	
 #navigation{
-position: relative;
-height:100%;
-left:0;
-top:49%;
-border:1px solid red;
+	position: relative;
+	height:50%;
+	left:0;
+	top:49%;
+	user-select:none;
 }
 
 #navigationLeft{
@@ -230,7 +236,6 @@ border:1px solid red;
 	line-height:30px;
 	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
 	border-radius: 10000px;
-	border:1px solid blue;
 	z-index:10;
 }
 
@@ -238,7 +243,7 @@ border:1px solid red;
 	cursor:pointer;
 }
 #navigationLeft:active{
-	
+	box-shadow: 0px 0px 40px 5px red;
 }
 
 #navigationRight{
@@ -254,7 +259,6 @@ border:1px solid red;
 	line-height:30px;
 	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
 	border-radius: 10000px;
-	border:1px solid blue;
 	z-index:10;
 }
 
@@ -262,41 +266,57 @@ border:1px solid red;
 	cursor:pointer;
 }
 
+#navigationRight:active{
+	box-shadow: 0px 0px 40px 5px red;
+}
+
 #page{
 	position: relative;
 	
 	text-align:center;
+	height:100%;
 	width:200px;
 	left:50%;
 	margin-left:-100px;
-	z-index:10;
 	
 }
 
 .pageContaint{
 	position: absolute;
-	border:1px solid blue;
 	width:200px;
 	text-align:center; 
 	left:50%;
-	top:90%;
+	top:92%;
 	margin-left:-100px;
+	/*border:1px solid red;*/
 	/*margin-top:200px;*/
 }
 
 .pageNum{
 	display:inline-block;
 	text-align:center;
-	border:1px solid blue;
 	width:10px;
 	height:10px;
-	background:red;
+	background:white;
 	border-radius: 100px;
 	z-index:10;
 	margin:0 auto;
 	margin:10px;
+	opacity: 0.3;
 }
-				
+		
+.pageSelect{
+	opacity: 1!important;
+}
+
+.title{
+	position:fixed;
+	top:10px;
+	left:10px;
+	font-size: 18px;
+	height:10px;
+	width:95%;
+}
 		</div>
 		<div id="biaobai" style="display: none;">
 				/**
@@ -365,6 +385,7 @@ pre, a {
 */
 
 pre:not(:empty) {
+ position: absolute;
  overflow: auto;
  background: rgb(48, 48, 48);
  border: 1px solid #ccc;
@@ -374,10 +395,13 @@ pre:not(:empty) {
  font-family: monospace;
  padding: 10px 10px 20px;
  box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
- white-space: pre-wrap;/*保留空白符序列，但是正常地进行换行。*/
+ white-space: pre-wrap;/*保留空白符序列，但能正常地进行换行*/
  outline: 0;
  border-radius: 20px;
- position: absolute;
+}
+
+pre:before{
+
 }
 
 /**
@@ -526,9 +550,9 @@ textarea{
 	box-shadow: 0 0 1px transparent;
 	position: relative;
 	margin-top: 20px;
-	padding: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 8px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 /**
@@ -671,16 +695,29 @@ cdkking.top
 		<!-- <pre> 标签可定义预格式化的文本。
 		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
 		<!-- contenteditable 属性规定元素内容是否可编辑。 -->
-		<pre contenteditable id="style-text"></pre>
-		<pre id="test-text" style="opacity: 0;" >
-				<div id="text" class="text" style="display: none;"></div>
+		<div class="pre">
+			<div class="title"></div>
+			<pre contenteditable id="style-text">
 			</pre>
-		<pre id="work-text" style="opacity: 0;position:absolute" class="translateY0105rotateY0010">
-			<div id="md" class="md" style="display: none;"></div>
-			
-		</pre>
+		</div>
+		
+		<div class="pre">
+			<div class="title"></div>
+			<pre id="test-text" style="opacity: 0;" >
+					<div id="text" class="text" style="display: none;"></div>
+			</pre>
+		</div>
+		
+		<div class="pre">
+			<div class="title"></div>
+			<pre id="work-text" style="opacity: 0;position:absolute" class="translateY0105rotateY0010">
+					<div id="md" class="md" style="display: none;"></div>
+			</pre>
+		</div>
+		
 
-		<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
+			<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
+				<div class="title">css样式代码添加栏</div>
 			<input id="input" type="" class="input" style="display: none;"/>
 <textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
 *{
@@ -688,7 +725,7 @@ color:yellow;
 }
 </textarea>
 			<button id="button" class="buttonLine">提交</button>
-		</pre>
+			</pre>
 		
 		</div>
 		<div id="header"></div>
@@ -708,6 +745,7 @@ color:yellow;
 		// writer(workTextEl,workText.innerHTML,0);
 
 		var pageCount = 2;
+		var pageIndex = 1;
 
 		var startCss = true;
 		var startMdCss = false;
@@ -1176,11 +1214,19 @@ color:yellow;
 					setTimeout(function(){
 						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
+						var par = el.parentNode;
+						if(par.className=="pre" && el.scrollHeight>par.scrollHeight){
+							par.scrollTop = el.scrollHeight;
+						}
 					},40)
 				}else{
 					setTimeout(function(){
 						writerCss(el,data,index,callback);
 						el.scrollTop = el.scrollHeight;
+						var par = el.parentNode;
+						if(par.className=="pre"){
+							par.scrollTop = el.scrollHeight;
+						}
 					},20)
 				}
 			}else{
@@ -1306,14 +1352,18 @@ color:yellow;
 		//键盘事件
 		window.addEventListener('keydown', function(e) {
 			//console.log(e.keyCode);
-		    if (e.keyCode === 38) { //up
-		        contentEl.className = "";
-		    } else if (e.keyCode === 40) {
-		        contentEl.className = "translateX1105";
-		    }else if (e.keyCode === 37) {
-		        contentEl.className = "";
-		    }else if (e.keyCode === 39) {
-		        contentEl.className = "translateX1105";
+		    if (e.keyCode === 38 || e.keyCode === 37) { //up
+				contentEl.className = "";
+				if(pageIndex>1){
+					pageIndex--;
+					changePage();
+				}
+		    } else if (e.keyCode === 40 || e.keyCode === 39) {
+				contentEl.className = "translateX1105";
+				if(pageIndex<pageCount){ 
+					pageIndex++;
+					changePage();
+				}
 		    }
 		}, false);
 		
@@ -1322,8 +1372,16 @@ color:yellow;
 			event = event || window.event;
 			if(event.wheelDelta < 0) {
 				contentEl.className = "";
+				if(pageIndex>1){
+					pageIndex--;
+					changePage();
+				}
 			} else {
 				contentEl.className = "translateX1105";
+				if(pageIndex<pageCount){ 
+					pageIndex++;
+					changePage();
+				}
 			}
 		};
 		//FF使用DOMMouseScroll，其他浏览器都是用mousewheel
@@ -1338,9 +1396,17 @@ color:yellow;
 		var navigationRightEl = document.getElementById("navigationRight");
 		var turnLeft = function(){
 			contentEl.className = "";
+			if(pageIndex>1){
+				pageIndex--;
+				changePage();
+			}
 		}
 		var turnRight = function(){
 			contentEl.className = "translateX1105";
+			if(pageIndex<pageCount){ 
+				pageIndex++;
+				changePage();
+			}
 		}
 		navigationLeftEl.addEventListener("click",turnLeft);
 		navigationRightEl.addEventListener("click",turnRight);
@@ -1349,10 +1415,11 @@ color:yellow;
 
 		var createPage = function(){
 			var div1 = document.createElement('div');
+			div1.id = "pageContaint";
 			div1.className = "pageContaint";
 			for(var i = 0;i<pageCount;i++){
 				var div = document.createElement('div');
-				div.id = "page"+i;
+				div.id = "page"+(i+1);
 				div.className = "pageNum";
 				div1.appendChild(div);
 			}
@@ -1360,6 +1427,21 @@ color:yellow;
 		}
 
 		createPage();
+
+		var changePage = function(){
+			var tem = document.getElementById("pageContaint");
+			var count = tem.childNodes.length;
+			for(var i = 0;i<count;i++){
+				var child = tem.children[i];
+				child.className = "pageNum";
+			}
+
+			var str = "page"+pageIndex;
+			var el = document.getElementById(str);
+			el.className = "pageNum pageSelect";
+
+		}
+		changePage();
 
 	</script>
 </html>
