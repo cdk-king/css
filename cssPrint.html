@@ -14,6 +14,7 @@
 				/* I'm cheating a bit */
 		
 		html, body {
+			margin:10px;
 			margin-top: 0;
 			height: 100%;
 			overflow: hidden;
@@ -215,99 +216,12 @@
 			scrollbar-base-color:red;
 		}
 	
-#navigation{
-	position: relative;
-	height:50%;
-	left:0;
-	top:49%;
-	user-select:none;
-}
-
-#navigationLeft{
-	position: absolute;
-	left:0;
-	height:30px;
-	width:30px;
-	background:red;
-	color:#fff;
-	opacity: 0.5;
-	cursor: pointer;
-	text-align:center;
-	line-height:30px;
-	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
-	border-radius: 10000px;
-	z-index:10;
-}
-
-#navigationLeft:hover{
-	cursor:pointer;
-}
-#navigationLeft:active{
-	box-shadow: 0px 0px 40px 5px red;
-}
-
-#navigationRight{
-	position: absolute;
-	right:0;
-	height:30px;
-	width:30px;
-	background:red;
-	color:#fff;
-	opacity: 0.5;
-	cursor: pointer;
-	text-align:center;
-	line-height:30px;
-	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
-	border-radius: 10000px;
-	z-index:10;
-}
-
-#navigationRight:hover{
-	cursor:pointer;
-}
-
-#navigationRight:active{
-	box-shadow: 0px 0px 40px 5px red;
-}
-
-#page{
-	position: relative;
-	
-	text-align:center;
-	height:100%;
-	width:200px;
-	left:50%;
-	margin-left:-100px;
-	
-}
-
-.pageContaint{
-	position: absolute;
-	width:200px;
-	text-align:center; 
-	left:50%;
-	top:92%;
-	margin-left:-100px;
-	/*border:1px solid red;*/
-	/*margin-top:200px;*/
-}
-
-.pageNum{
-	display:inline-block;
-	text-align:center;
-	width:10px;
-	height:10px;
-	background:white;
-	border-radius: 100px;
-	z-index:10;
-	margin:0 auto;
-	margin:10px;
-	opacity: 0.3;
-}
-		
-.pageSelect{
-	opacity: 1!important;
-}
+		#navigationLeft{
+			opacity: 0; 
+		}
+		#navigationRight{
+			opacity: 0; 
+		}
 
 .title{
 	position:fixed;
@@ -389,7 +303,7 @@ pre:not(:empty) {
  overflow: auto;
  background: rgb(48, 48, 48);
  border: 1px solid #ccc;
- max-height: 44.6%;
+ max-height: 44.5%;
  width: 49%;
  font-size: 14px;
  font-family: monospace;
@@ -410,7 +324,7 @@ pre:before{
 */
 
 #style-text {
- -webkit-transform: translateX(95%);
+ -webkit-transform: translateX(96%);
  position: absolute;
 }
 
@@ -437,7 +351,7 @@ body {
 }
 
 #style-text {
- -webkit-transform: translateX(98.5%) rotateY(-10deg);
+ -webkit-transform: translateX(99%) rotateY(-10deg);
  -webkit-transform-origin: right;
  max-height: 94.5%;
 }
@@ -510,12 +424,12 @@ pre:not(#style-text) {
 }
 
 /**
-* 接下来就是css代码输入框了
+* 接下来就是css样式代码添加栏了
 */
 		</div>
 		<div id="css2" style="display: none;">
 /**
-* 给textarea标签添加简单的美化
+* 先给textarea标签添加简单的美化
 */
 
 textarea{
@@ -538,7 +452,7 @@ textarea{
 
 .buttonLine {
 	float:left;
-	font-size: 20px;
+	font-size: 18px;
 	color: #000;
 	background: cornsilk;
 	display: inline-block;
@@ -549,10 +463,10 @@ textarea{
 	transform: perspective(1px) translateZ(0);
 	box-shadow: 0 0 1px transparent;
 	position: relative;
-	margin-top: 20px;
-	padding: 8px;
-	padding-left: 15px;
-	padding-right: 15px;
+	margin-top: 10px;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 /**
@@ -574,7 +488,6 @@ textarea{
 	transition-duration: 0.3s;
 	-webkit-transition-timing-function: ease-out;
 	transition-timing-function: ease-out;
-	
 }
 
 .buttonLine:hover:before {
@@ -615,7 +528,112 @@ textarea{
 }
 
 /**
-* 这样就大功告成啦，可以试着点击一下提交吧
+* css样式代码添加栏就做好啦
+* 顺便再加个导航功能吧，以便日后添加新的展示
+*/
+
+#navigation{
+	position: relative;
+	height:50%;
+	left:0;
+	top:49%;
+	color:#fff;
+	user-select:none;
+}
+
+/**
+* 先是左边的导航按钮
+*/
+
+#navigationLeft{
+	z-index:5;
+	position: absolute;
+	opacity: 0.5;
+	left:0;
+	height:30px;
+	width:30px;
+	background:red;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+}
+
+#navigationLeft:hover{
+	cursor:pointer;
+}
+#navigationLeft:active{
+	box-shadow: 0px 0px 40px 5px red;
+}
+
+/**
+* 然后是右边的导航按钮
+*/
+
+#navigationRight{
+	z-index:5;
+	position: absolute;
+	opacity: 0.5;
+	right:0;
+	height:30px;
+	width:30px;
+	background:red;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+}
+
+#navigationRight:hover{
+	cursor:pointer;
+}
+
+#navigationRight:active{
+	box-shadow: 0px 0px 40px 5px red;
+}
+
+/**
+* 接下来是页码的显示
+*/
+
+#page{
+	position: relative;
+	text-align:center;
+	height:100%;
+	width:200px;
+	left:50%;
+	margin-left:-100px;
+}
+
+.pageContaint{
+	position: absolute;
+	width:200px;
+	text-align:center; 
+	left:50%;
+	top:92%;
+	margin-left:-100px;
+}
+
+.pageNum{
+	display:inline-block;
+	text-align:center;
+	width:10px;
+	height:10px;
+	background:white;
+	border-radius: 100px;
+	z-index:10;
+	margin:0 auto;
+	margin:10px;
+	opacity: 0.3;
+}
+		
+.pageSelect{
+	opacity: 1!important;
+}
+
+/**
+* 这样导航和页码就大功告成啦
+* 可以试着点击一下提交按钮来改变文本的颜色吧
 */
 		</div>
 		<div id="workText" style="display: none;">
@@ -642,27 +660,29 @@ cdkking.top
 工具：SVN / Git / Visual Studio Code / IntelliJ IDEA
 熟练掌握单例、工厂、构造、原型等多种Javascript设计模式
 精通原生JavaScript，canvas绘图，能够独立编写web游戏
+熟悉Web性能优化，有移动Web和混合式app开发经验
 个人Git地址：https://github.com/cdk-king
+个人作品：http://www.cdkking.top/
 
 工作经历
 -------
 深圳市中交阳光科技有限公司 | 全栈开发工程师 2017-2018
 技术栈：ASP.NET （Web Forms 、MVC）/ Vue 
-参与铁路道路门户管理系统的开发：
-负责恒泰实业公路工程动态管理系统平台、深圳地铁管理系统平台、佛山地铁OA系统平台 
-的管理和开发，主要负责公文系统，合同管理、用户管理系统的开发 
-参与工汇通农民工工资管理系统开发：
-主要负责工资查询系统、个人工资时间轴系统、话题评论系统的开发 
-参与工汇通钉钉和微信公众号平台端的开发 
+参与铁路道路门户管理系统的开发
+负责恒泰实业动态管理系统平台、深圳地铁管理系统平台、佛山地铁OA系统平台
+的管理开发，主要负责公文系统，合同管理、用户管理系统开发
+参与工汇通农民工工资管理系统开发
+主要负责工资查询系统、个人工资管理系统、社区管理系统开发
+参与工汇通钉钉端和微信公众号平台端开发
 
 深圳市九五互娱科技有限公司 | 前端开发工程师 2018-2019
 技术栈：Vue + Java SpringBoot 
-主导游戏后台管理系统前端的设计和开发：
-实现用户角色权限管理、多游戏多平台渠道区服管理、玩家日志公告道具礼包等运营管理 
-主导后台管理系统后台接口和数据库的设计开发：
-实现一对多和多对多关系数据表间映射、多线程缓存数据接口、激活码的生成和验证算法 
-参与游戏服务器部分功能开发：
-游戏任务功能的开发、游戏日活跃度功能开发 
+主导游戏后台管理系统前端的设计和开发
+实现用户角色权限管理、多平台渠道区服管理、游戏后台运营管理
+主导后台管理系统后台接口和数据库的设计开发
+实现复杂关系数据表间映射、线程池缓存数据接口、激活码生成和验证算法
+参与游戏服务器功能开发
+游戏任务功能的开发、游戏消息系统功能开发
 
 项目
 -------
@@ -724,25 +744,13 @@ cdkking.top
 color:yellow;
 }
 </textarea>
-			<button id="button" class="buttonLine">提交</button>
+			<button id="button" class="buttonLine" disabled>提交</button>
 			</pre>
 		
 		</div>
 		<div id="header"></div>
 	</body>
 	<script>
-
-		//el.scrollTop = el.scrollHeight;
-		//slice()
-
-		// isInside = false;
-		// isComment = false;
-		// startSelect = false;
-		// startKey = false;
-		// startValue = false;
-		// data = "";
-		// html = "";
-		// writer(workTextEl,workText.innerHTML,0);
 
 		var pageCount = 2;
 		var pageIndex = 1;
@@ -767,12 +775,10 @@ color:yellow;
 		var css0El = document.getElementById("css0");
 		var css0  = css0El.innerHTML;
 		var css1El= document.getElementById("css1");
-		//var css1  = "<span>"+css1El.innerHTML+"</span>";
 		var css1  = css1El.innerHTML;
 
 		var css2El= document.getElementById("css2");
 		var css2  = css2El.innerHTML;
-		//console.log(css0);
 		writerCss(styleText,css1,0);
 
 		var workText = document.getElementById("workText");
@@ -785,7 +791,6 @@ color:yellow;
 		var inputEl = document.getElementById("input");
 
 		var buttonEl = document.getElementById("button");
-		// workTextEl.innerHTML = workText.innerHTML;
 
 		var mdCssEl = document.getElementById("mdCss");
 		var mdCss = mdCssEl.innerHTML;
@@ -828,8 +833,6 @@ color:yellow;
 				html1 = styleText.innerHTML;
 				var len = css1.length;
 				var str = css1+mdCss;
-				//workTextEl.scrollTop = 0;
-				//testTextEl.scrollTop = 0;
 
 				scrollToTop(workTextEl,time_id1);
 				scrollToTop(testTextEl,time_id2);
@@ -854,14 +857,12 @@ color:yellow;
 					str = str + css2;
 
 					var callback = function(){
-						contentEl.className = "translateX1105";
+						buttonEl.disabled = false;
+						//contentEl.className = "translateX1105";
 						//todo
 					}
 
 					writerCss(styleText,str,len,callback);
-					//inputTextEl.className = "";
-					//inputEl.style.display = "block";
-					//inputTextEl.style.display = "block";
 				}
 				
 				writerCss(styleText,str,len,callback);
@@ -894,8 +895,6 @@ color:yellow;
 			}
 			}, 30);
 		}
-
-		//styleText.innerHTML = css1;
 
 		var  mdSign1 = true;
 		var  mdSign2 = false;
@@ -1164,10 +1163,7 @@ color:yellow;
 			if(ochar=="\n" && isKey){
 				//console.log(ochar);
 				//console.log(startKey);
-				// startKey = false;
-				// html1 +="</span>";
 			}
-			
 
 			if(isInside){
 
@@ -1275,9 +1271,7 @@ color:yellow;
 			
 		});
 
-
 		styleText.addEventListener("input",function(ev){
-			//console.log("input");
 
 			isInside = false;
 			isComment = false;
@@ -1317,7 +1311,6 @@ color:yellow;
 
             if(e){ 
                 //console.log(keynum+':'+keychar);
-                
 			}
 		}
 
