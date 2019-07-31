@@ -1,739 +1,4 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title></title>
-	</head>
-	<body>
-		<div id="css0" style="display: none;">
-		
-		html, body {
-			margin:10px;
-			margin-top: 0;
-			height: 100%;
-			overflow: hidden;
-		}
-		
-		pre {
-			overflow: auto;
-			max-height: 90%;
-			width: 100%;
-			border-radius: 1px; /* Prevents bad clipping in Chrome */
-		}
-
-		.pre {
-			overflow: auto;
-			max-height: 100%;
-			border-radius: 1px; /* Prevents bad clipping in Chrome */
-		}
-		
-		#content {
-			position: absolute;
-			top: 0; right: 20px; left: 0; bottom: 30px;
-		}
-
-		.content {
-			position: absolute;
-			top: 0; right: 20px; left: 0; bottom: 30px;
-		}
-		
-		#header {
-			position: absolute;
-			bottom: 0;
-			height: 20px;
-			left: 0;
-			right: 0;
-			padding: 0 10px;
-		}
-		
-		a:after {
-			content: '';
-			padding-right: 5px;
-			border-right-width: 1px;
-			border-right-style: solid;
-			border-color: inherit;
-		}
-		
-		a:last-of-type:after {
-			border: none;
-		}
-
-		.translateX1095 {
-			transform: translateX(-100%)!important;
-			-webkit-transform: translateX(-100%)!important;
-			position: absolute;
-		}
-
-		.translateX1105 {
-			transform: translateX(-105%)!important;
-			-webkit-transform: translateX(-105%)!important;
-			position: absolute;
-		}
-
-		.translateY1105rotateY0010 {
-			transform: translateY(-105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(-105%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0105rotateY0010 {
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0155rotateY0010 {
-			transform: translateY(155%) rotateY(10deg)!important;
-			-webkit-transform: translateY(155%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0205rotateY0010 {
-			transform: translateY(205%) rotateY(10deg)!important;
-			-webkit-transform: translateY(205%) rotateY(10deg)!important;
-			position: absolute;
-		}
-		
-		.translateY0105rotateY0010R {
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			position: relative!important;
-		}
-
-		.poR{
-			position: relative;
-		}
-
-		.rotateY0010 {
-			transform: rotateY(10deg)!important;
-			-webkit-transform: rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.test-text{
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform-origin: left;
-			position: absolute;
-		}
-
-		#input-text{
-			/*margin-top: 40%;*/
-			/*transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;*/
-			height:44%;
-			text-align:left;
-			position: relative;
-		}
-
-		.marginTop0100{
-			margin-top: 100%!important;
-		}
-
-		input{
-			outline-style: none ;
-			border: 1px solid #ccc; 
-			border-radius: 10px;
-			padding: 13px 14px;
-			width: 80%;
-			font-size: 14px;
-			font-weight: 700;
-			font-family: "Microsoft soft";
-			background:cornsilk;
-		}
-
-		/*多行文本框*/
-		.multieditbox{
-			background: #f8f8f8;
-			border-bottom: #b7b7b7 1px solid;
-			border-left: #b7b7b7 1px solid;
-			border-right: #b7b7b7 1px solid;
-			border-top: #b7b7b7 1px solid;
-			color: #000000;
-			cursor: text;
-			font-family: "arial";
-			font-size: 9pt;
-			padding: 1px; /*www.52css.com*/
-		}
-		
-		/*按钮样式*/
-
-		.buttonFlow {
-			position: relative;
-			background-color: #4CAF50;
-			border: none;
-			font-size: 30px;
-			color: #FFFFFF;
-			margin: 0;
-			width: 200px;
-			height: 75px;
-			text-align: center;
-			-webkit-transition-duration: 0.4s;
-			
-			transition-duration: 0.4s;
-			text-decoration: none;
-			overflow: hidden;
-			cursor: pointer;
-				
-		}
-		
-		.buttonFlow:after {
-			content: "";
-			background: #90EE90;
-			display: block;
-			position: absolute;
-		    padding-top: 300px;
-			padding-left: 300px;
-			margin-left: -25%;
-			margin-top: -75%;
-			opacity: 0; 
-			border-radius: 10000px;
-			transition: all 1s;
-		}
-		
-		.buttonFlow:active:after {
-			padding: 0;
-			margin-left: 50%;
-			margin-top: -10%;
-			opacity: 1;
-			transition: 0s
-		}
-
-		/*
-		*scrollbar-3d-light-color立体滚动条亮边的颜色（设置滚动条的颜色）
-		*scrollbar-arrow-color上下按钮上三角箭头的颜色
-		*scrollbar-base-color滚动条的基本颜色
-		*scrollbar-dark-shadow-color立体滚动条强阴影的颜色
-		*scrollbar-face-color立体滚动条凸出部分的颜色
-		*scrollbar-highlight-color滚动条空白部分的颜色
-		*scrollbar-shadow-color立体滚动条阴影的颜色
-		*/
-
-		.scrollbarTest{
-			scrollbar-3d-light-color:red;
-			scrollbar-arrow-color:red;
-			scrollbar-base-color:red;
-		}
-	
-		#navigationLeft{
-			opacity: 0; 
-		}
-		#navigationRight{
-			opacity: 0; 
-		}
-
-		.title{
-			position:fixed;
-			top:10px;
-			left:10px;
-			font-size: 18px;
-			height:10px;
-			width:95%;
-		}
-		</div>
-		<div id="css1" style="display: none;">	    
-/**
-*
-* Hey. My name's CDK. 
-*
-* 我打算建立一个动态网站。
-*
-* 实况直播编码怎么样？
-*/
-
-/**
-* 让我马上开始吧。我们先从动画开始，设置动画过渡时间
-*/
-
-* {
-	transition: all 1s;
-	-webkit-transition: all 1s;
-}
-
-/**
-*白底黑字很无聊，
-*所以让我们做点什么。
-*/
-
-html {
- background: rgb(63, 82, 99);
-}
-
-/**
-* 还有字体颜色
-*/
-
-pre, a {
- color: white;
-}
-
-/**
-* 这样就好多了。
-*
-* 在这片空旷的地方工作是很困难的。
-*
-* 我要为我们的工作创造一个好地方。
-*
-* 指定不是空的pre元素样式
-*/
-
-pre:not(:empty) {
- position: absolute;
- overflow: auto;
- background: rgb(48, 48, 48);
- border: 1px solid #ccc;
- max-height: 44.5%;
- width: 49%;
- font-size: 14px;
- font-family: monospace;
- padding: 10px 10px 20px;
- box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
- white-space: pre-wrap;/*保留空白符序列，但能正常地进行换行*/
- outline: 0;
- border-radius: 20px;
-}
-
-pre:before{
-
-}
-
-/**
-* 可以。我们要开始填充屏幕。
-* 我们准备做些工作吧。
-*/
-
-#style-text {
- -webkit-transform: translateX(96%);
- position: absolute;
-}
-
-/**
-* 这很好，但是所有的文字都是白色的！
-* 让我们让它更具可读性。
-*/
-
-.comment       { color: #857F6B; font-style: italic; }
-.selector      { color: #E69F0F; }
-.selector .key { color: #64D5EA; }
-.key           { color: #64D5EA; }
-.value         { color: #BE84F2; }
-.value.px      { color: #F92772; }
-
-/**
-* 现在我们到了某个地方。
-* 是时候了解一下情况了。
-* 设置元素被查看位置的视图
-*/
-
-body {
- -webkit-perspective: 1000px;
-}
-
-#style-text {
- -webkit-transform: translateX(99%) rotateY(-10deg);
- -webkit-transform-origin: right;
- max-height: 94.5%;
-}
-
-/**
-* 那么，让我们谈谈项目。这就是你来这里的原因，对吧？
-* 我无法想象你只是来看漂亮的颜色。
-*/
-
-pre:not(#style-text) {
- -webkit-transform: rotateY(10deg);
- -webkit-transform-origin: left;
-}
-
-
-/**
- * 左边的markdown看起来不太好。我们来渲染一下。
- */
-
-#work-text.flipped {
-  -webkit-transform: rotateX(0deg) rotateY(190deg) rotateZ(180deg);
-}
-
-#work-text{
- position: absolute;
-}
-
-/**
-*  #work-text .md {
-*	-webkit-transform: rotateY(190deg) rotateZ(180deg);
-*	margin-top: 800px;
-*  }
-*/
-
-/**
- * 就快做好了
- */
-
- pre:hover{
-   box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
- }
-
- #test-text .text{
-   color: #E69F0F;
- }
-
- /**
- * 开始打印我的简历吧
- */
-		</div>
-		<div id="mdCss" style="display: none;">
-			
-/**
-* 文本可能需要一些调整。
-*/
-
-.md {
- font-family: "Helvetica Neue", Helvetica, sans-serif;
-}
-
-.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
- display: inline-block;
- color: #ddd;
- border-bottom: 1px solid #ccc;
- padding-bottom: 5px;
-}
-
-.md h1, .md h2, .md h3, .md h4, .md h5, .md h6, .md ul, .md p {
- margin: 0px;
-}
-
-/**
-* 接下来就是css样式代码添加栏了
-*/
-		</div>
-		<div id="css2" style="display: none;">
-/**
-* 先给textarea标签添加简单的美化
-*/
-
-textarea{
-	width: 90%;
-	outline-style: none ;
-	background:cornsilk;
-	font-family: "Microsoft soft";
-	font-size: 14px;
-	font-weight: 700;
-	border: 1px solid #ccc; 
-	border-radius: 10px;
-	color:black;
-	/*resize:none;去除谷歌textarea右下角的小三角*/
-	/*overflow-y:hidden;没有垂直滚动条*/
-}
-
-/**
-* 然后是提交按钮的样式
-*/
-
-.buttonLine {
-	float:left;
-	font-size: 18px;
-	color: #000;
-	background: cornsilk;
-	display: inline-block;
-	vertical-align: middle;
-	border: none;
-	overflow:hidden;
-	-webkit-transform: perspective(1px) translateZ(0);
-	transform: perspective(1px) translateZ(0);
-	box-shadow: 0 0 1px transparent;
-	position: relative;
-	margin-top: 10px;
-	padding: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-/**
-* 加点小特效，例如点击之后的波纹效果
-*/
-
-.buttonLine:before {
-	content: "";
-	position: absolute;
-	z-index: -1;
-	left: 50%;
-	right: 50%;
-	bottom: 0;
-	background: yellow;
-	height: 8px;
-	-webkit-transition-property: left, right;
-	transition-property: left, right;
-	-webkit-transition-duration: 0.3s;
-	transition-duration: 0.3s;
-	-webkit-transition-timing-function: ease-out;
-	transition-timing-function: ease-out;
-}
-
-.buttonLine:hover:before {
-	left: 0;
-	right: 0;
-	background: yellow;
-}
-
-.buttonLine:after {
-	content: "";
-	background: #90EE90;
-	display: block;
-	position: absolute;
-	padding-top: 120px;
-	padding-left: 120px;
-	margin-left: -50%;
-	margin-top: -90%;
-	opacity: 0; 
-	border-radius: 10000px;
-	transition: all 1s;
-}
-
-.buttonLine:active:after {
-	padding: 0;
-	margin-left: 25%;
-	margin-top: -15%;
-	opacity: 1;
-	transition: 0s;
-}
-
-/**
-* 差点忘了加个小手了
-*/
-
-.buttonLine:hover {
-	cursor:pointer;
-	background: #fff;
-}
-
-/**
-* css样式代码添加栏就做好啦
-* 顺便再加个导航功能吧，以便日后添加新的展示
-*/
-
-#navigation{
-	position: relative;
-	height:50%;
-	left:0;
-	top:49%;
-	color:#fff;
-	user-select:none;
-}
-
-/**
-* 先是左边的导航按钮
-*/
-
-#navigationLeft{
-	z-index:5;
-	position: absolute;
-	opacity: 0.5;
-	left:0;
-	height:30px;
-	width:30px;
-	background:red;
-	text-align:center;
-	line-height:30px;
-	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
-	border-radius: 10000px;
-}
-
-#navigationLeft:hover{
-	cursor:pointer;
-}
-#navigationLeft:active{
-	box-shadow: 0px 0px 40px 5px red;
-}
-
-/**
-* 然后是右边的导航按钮
-*/
-
-#navigationRight{
-	z-index:5;
-	position: absolute;
-	opacity: 0.5;
-	right:0;
-	height:30px;
-	width:30px;
-	background:red;
-	text-align:center;
-	line-height:30px;
-	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
-	border-radius: 10000px;
-}
-
-#navigationRight:hover{
-	cursor:pointer;
-}
-
-#navigationRight:active{
-	box-shadow: 0px 0px 40px 5px red;
-}
-
-/**
-* 接下来是页码的显示
-*/
-
-#page{
-	position: relative;
-	text-align:center;
-	height:100%;
-	width:200px;
-	left:50%;
-	margin-left:-100px;
-}
-
-.pageContaint{
-	position: absolute;
-	width:200px;
-	text-align:center; 
-	left:50%;
-	top:92%;
-	margin-left:-100px;
-}
-
-.pageNum{
-	display:inline-block;
-	text-align:center;
-	width:10px;
-	height:10px;
-	background:white;
-	border-radius: 100px;
-	z-index:10;
-	margin:0 auto;
-	margin:10px;
-	opacity: 0.3;
-}
-		
-.pageSelect{
-	opacity: 1!important;
-}
-
-/**
-* 这样导航和页码就大功告成啦
-* 可以试着点击一下提交按钮来改变文本的颜色吧
-*/
-		</div>
-		<div id="workText" style="display: none;">
-cdkking.top
-===========
-
-基本信息
--------
-姓名:	CDK
-出生:	1995-05-30
-院校:	深圳大学
-现居:	深圳
-
-联系方式
--------
-手机： 	13670183236
-邮箱： 	1360531956@qq.com
-
-个人技能
--------
-语言：JavaScript / Html5 / Css3 / Java / C# / C++
-数据库：MySQL / SQL Server
-前端框架：Vue / Element UI / Amazing UI / Bootstrap / MUI / Echarts
-工具：SVN / Git / Visual Studio Code / IntelliJ IDEA
-熟练掌握单例、工厂、构造、原型等多种Javascript设计模式
-精通原生JavaScript，canvas绘图，能够独立编写web游戏
-熟悉Web性能优化，有移动Web和混合式app开发经验
-个人Git地址：https://github.com/cdk-king
-个人作品：http://www.cdkking.top/
-
-工作经历
--------
-深圳市中交阳光科技有限公司 | 全栈开发工程师 2017-2018
-技术栈：ASP.NET （Web Forms 、MVC）/ Vue 
-参与铁路道路门户管理系统的开发
-负责恒泰实业动态管理系统平台、深圳地铁管理系统平台、佛山地铁OA系统平台
-的管理开发，主要负责公文系统，合同管理、用户管理系统开发
-参与工汇通农民工工资管理系统开发
-主要负责工资查询系统、个人工资管理系统、社区管理系统开发
-参与工汇通钉钉端和微信公众号平台端开发
-
-深圳市九五互娱科技有限公司 | 前端开发工程师 2018-2019
-技术栈：Vue + Java SpringBoot 
-主导游戏后台管理系统前端的设计和开发
-实现用户角色权限管理、多平台渠道区服管理、游戏后台运营管理
-主导后台管理系统后台接口和数据库的设计开发
-实现复杂关系数据表间映射、线程池缓存数据接口、激活码生成和验证算法
-参与游戏服务器功能开发
-游戏任务功能的开发、游戏消息系统功能开发
-
-项目
--------
-* 游戏后台管理系统
-* cdk.js
-* web游戏
-* 个人博客
-* www.cdkking.top
-
-开源
--------
-* CerradK
-* T2D
-* lastColony
-* frootWars
-* Snail-Bait
-* Imitation
-* live_game
-* cdkBlog
-* CDK-Project
-
-		</div>
-		<div id="div"></div>
-		<div id="navigation">
-			<div id="navigationLeft">←</div>
-			<div id="navigationRight">→</div>
-			<div id="page"></div>
-		</div>
-		<div id="content" class="content">
-		<!-- <pre> 标签可定义预格式化的文本。
-		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
-		<!-- contenteditable 属性规定元素内容是否可编辑。 -->
-		<div class="pre">
-			<div class="title"></div>
-			<pre contenteditable id="style-text">
-			</pre>
-		</div>
-		
-		<div class="pre">
-			<div class="title"></div>
-			<pre id="test-text" style="opacity: 0;" >
-					<div id="text" class="text" style="display: none;"></div>
-			</pre>
-		</div>
-		
-		<div class="pre">
-			<div class="title"></div>
-			<pre id="work-text" style="opacity: 0;position:absolute" class="translateY0105rotateY0010">
-					<div id="md" class="md" style="display: none;"></div>
-			</pre>
-		</div>
-		
-
-			<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
-				<div class="title">css样式代码添加栏</div>
-			<input id="input" type="" class="input" style="display: none;"/>
-<textarea id="textarea" name="content" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
-*{
-color:yellow;
-}
-</textarea>
-			<button id="button" class="buttonLine" disabled>提交</button>
-			</pre>
-		
-		</div>
-
-		<div id="header"></div>
-	</body>
-	<script>
-
-		var pageCount = 2;
+var pageCount = 2;
 		var pageIndex = 1;
 
 		var startCss = true;
@@ -749,8 +14,14 @@ color:yellow;
 		var html2 = "";
 		var div = document.getElementById("div");
 		var styleText = document.getElementById("style-text");
+
 		
-		var contentEl = document.getElementById("content");
+		
+		var content1El = document.getElementById("content1");
+
+		var content2El = document.getElementById("content2");
+
+
 		var css0El = document.getElementById("css0");
 		var css0  = css0El.innerHTML;
 		var css1El= document.getElementById("css1");
@@ -837,7 +108,7 @@ color:yellow;
 
 					var callback = function(){
 						buttonEl.disabled = false;
-						//contentEl.className = "translateX1105";
+						//content1El.className = "translateX1105";
 						//todo
 					}
 
@@ -865,6 +136,7 @@ color:yellow;
 		function scrollToTop(el,time_id){
 			time_id = setInterval(function(){
 			var top = el.scrollTop;
+			//console.log(top);
 			top = top-50;
 			el.scrollTop = top;
 			if (el.scrollTop  <= 0) {
@@ -939,6 +211,7 @@ color:yellow;
 				isMd = true;
 			}
 
+
 			html1 += data.substring(index,index+1);
 			el.innerHTML = html1;
 			index++;
@@ -947,12 +220,15 @@ color:yellow;
 				if(char=="," || char=="，" || char=="。" || char=="." || char==";"){
 					setTimeout(function(){
 						writerMarkdown(el,data,index,callback);
+						//console.log(el.scrollHeight);
 						workTextEl.scrollTop = el.scrollHeight;
+						//el.style.marginTop = el.scrollHeight+"px";
 					},40)
 				}else{
 					setTimeout(function(){
 						writerMarkdown(el,data,index,callback);
 						workTextEl.scrollTop = el.scrollHeight;
+						//el.style.marginTop = el.scrollHeight+"px";
 					},20)
 				}
 			}else{
@@ -991,6 +267,7 @@ color:yellow;
 		var lastSignValue = "";
 		var lastLastSignValue = "";
 
+
 		function addCss(el,data,index,callback){
 			
 			var oochar = data.substring(index-1,index);
@@ -1013,6 +290,7 @@ color:yellow;
 				isInside = false; 
 				startKey = false;
 				startValue = false;
+				
 			}
 			
 			if(ochar==":" && isInside && !isComment){
@@ -1040,6 +318,7 @@ color:yellow;
 			else{
 				html1 += data.substring(index,index+1);
 				mdSignValue += data.substring(index,index+1);
+				
 			}
 
 			if(!isInside && !isComment && !startSelect){
@@ -1133,6 +412,7 @@ color:yellow;
 			}
 			if(ochar=="\n" && isKey){
 				//console.log(ochar);
+				//console.log(startKey);
 			}
 
 			if(isInside){
@@ -1196,13 +476,16 @@ color:yellow;
 					},20)
 				}
 			}else{
+				//console.log(typeof(callback));
 				startCss = false;
 				startMdCss = false;
 
 				if(typeof(callback)=="function"){
 					callback();
 				}
-			}	
+				
+			}
+			
 		}	
 		function updateCss(data){
 			var style = document.createElement('style');
@@ -1218,10 +501,14 @@ color:yellow;
 		}
 		function mapData(data){
 			
+			
 		}
 		function checkSymbol(data){
-					
+			
+			
 		}
+
+
 
 		document.addEventListener("click",function(ev){
 			//console.log("click");
@@ -1248,6 +535,7 @@ color:yellow;
 			var str1 = css0+styleText.innerText;
 			var str2 = styleText.innerText;
 
+			//var top = styleText.scrollHeight;
 			var top = styleText.scrollTop;
 			var len = str2.length-1;
 			var callback = function(){
@@ -1308,13 +596,13 @@ color:yellow;
 		window.addEventListener('keydown', function(e) {
 			//console.log(e.keyCode);
 		    if (e.keyCode === 38 || e.keyCode === 37) { //up
-				contentEl.className = "";
+				content1El.className = "";
 				if(pageIndex>1){
 					pageIndex--;
 					changePage();
 				}
 		    } else if (e.keyCode === 40 || e.keyCode === 39) {
-				contentEl.className = "translateX1105";
+				content1El.className = "translateX1105";
 				if(pageIndex<pageCount){ 
 					pageIndex++;
 					changePage();
@@ -1326,13 +614,13 @@ color:yellow;
 		var mouseScroll = function(event) {
 			event = event || window.event;
 			if(event.wheelDelta < 0) {
-				contentEl.className = "";
+				content1El.className = "";
 				if(pageIndex>1){
 					pageIndex--;
 					changePage();
 				}
 			} else {
-				contentEl.className = "translateX1105";
+				content1El.className = "translateX1105";
 				if(pageIndex<pageCount){ 
 					pageIndex++;
 					changePage();
@@ -1350,14 +638,16 @@ color:yellow;
 		var navigationLeftEl = document.getElementById("navigationLeft");
 		var navigationRightEl = document.getElementById("navigationRight");
 		var turnLeft = function(){
-			contentEl.className = "";
+			content1El.className = "";
+			content2El.className = "translateX0105";
 			if(pageIndex>1){
 				pageIndex--;
 				changePage();
 			}
 		}
 		var turnRight = function(){
-			contentEl.className = "translateX1105";
+			content1El.className = "translateX1105";
+			content2El.className = "";
 			if(pageIndex<pageCount){ 
 				pageIndex++;
 				changePage();
@@ -1397,6 +687,3 @@ color:yellow;
 
 		}
 		changePage();
-
-	</script>
-</html>

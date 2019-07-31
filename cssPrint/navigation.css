@@ -1,0 +1,116 @@
+#navigationLeft{
+	opacity: 0.5!important;
+}
+#navigationRight{
+	opacity: 0.5!important;
+}
+
+/**
+* css样式代码添加栏就做好啦
+* 顺便再加个导航功能吧，以便日后添加新的展示
+*/
+
+#navigation{
+	position: absolute;
+	width: 100%;
+	height:50%;
+	left:0;
+	top:49%;
+	color:#fff;
+	user-select:none;
+}
+
+/**
+* 先是左边的导航按钮
+*/
+
+#navigationLeft{
+	z-index:5;
+	position: absolute;
+	opacity: 0.5;
+	left:0;
+	height:30px;
+	width:30px;
+	background:red;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+}
+
+#navigationLeft:hover{
+	cursor:pointer;
+}
+#navigationLeft:active{
+	box-shadow: 0px 0px 40px 5px red;
+}
+
+/**
+* 然后是右边的导航按钮
+*/
+
+#navigationRight{
+	z-index:5;
+	position: absolute;
+	opacity: 0.5;
+	right:0;
+	height:30px;
+	width:30px;
+	background:red;
+	text-align:center;
+	line-height:30px;
+	box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.4);
+	border-radius: 10000px;
+}
+
+#navigationRight:hover{
+	cursor:pointer;
+}
+
+#navigationRight:active{
+	box-shadow: 0px 0px 40px 5px red;
+}
+
+/**
+* 接下来是页码的显示
+*/
+
+#page{
+	position: relative;
+	text-align:center;
+	height:100%;
+	width:200px;
+	left:50%;
+	margin-left:-100px;
+}
+
+.pageContaint{
+	position: absolute;
+	width:200px;
+	text-align:center; 
+	left:50%;
+	top:92%;
+	margin-left:-100px;
+}
+
+.pageNum{
+	display:inline-block;
+	text-align:center;
+	width:10px;
+	height:10px;
+	background:white;
+	border-radius: 100px;
+	z-index:10;
+	margin:0 auto;
+	margin:10px;
+	opacity: 0.3;
+}
+		
+.pageSelect{
+	opacity: 1!important;
+}
+
+/**
+* 这样导航和页码就大功告成啦
+* 可以试着点击一下提交按钮来改变文本的颜色吧
+*/
