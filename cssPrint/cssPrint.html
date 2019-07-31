@@ -754,6 +754,38 @@ color:yellow;
 			<div id="content2Box1" class="content2Box">
 				<div id="content2Box1Textarea">
 <textarea class="form-control" id="textareaCode" name="textareaCode">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;title&gt;&lt;/title&gt;
+&lt;style&gt;
+body
+{
+	background-color:#d0e4fe;
+}
+h1
+{
+	color:orange;
+	text-align:center;
+}
+p
+{
+	font-family:"Times New Roman";
+	font-size:20px;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h1&gt;CSS 实例!&lt;/h1&gt;
+&lt;p&gt;这是一个段落。&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;script&gt;
+&lt;/script&gt;
+&lt;/html&gt;
 </textarea>
 				</div>
 			</div>
@@ -769,8 +801,12 @@ color:yellow;
 	</body>
 	<script src="js/cssPrint.js"></script>
 	<script>
-
-		
-
+	document.getElementById('content2Submit').addEventListener('click', function() {
+		//下一行代码无法运行script脚本
+		//document.getElementById("iframeResult").contentWindow.document.body.innerHTML = document.getElementById('textareaCode').value;
+		document.getElementById("iframeResult").contentWindow.document.open();
+		document.getElementById("iframeResult").contentWindow.document.write(document.getElementById('textareaCode').value);
+		document.getElementById("iframeResult").contentWindow.document.close();
+	})
 	</script>
 </html>
