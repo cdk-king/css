@@ -9,17 +9,21 @@
 	</head>
 	<body>
 		<div id="css0" style="display: none;">
-				/* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
-				现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
-				我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ */
-		
-				/* I'm cheating a bit */
+		/* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
+		现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
+		我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ */
+
+		/* I'm cheating a bit */
 		
 		html, body {
 			margin:10px;
 			margin-top: 0;
 			height: 100%;
 			overflow: hidden;
+		}
+
+		.displayNone{
+			display:none;
 		}
 		
 		pre {
@@ -746,6 +750,219 @@ color:yellow;
 		
 		</div>
 
+<div id="htmlCode1" class="displayNone">
+<!-- 首先我们添加html5的基本代码结构，先是文档声明，html标签
+然后是头部head标签，里边包括字符编码声明，视图声明，文档标题
+最后是文档内容body标签 -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;script&gt;
+&lt;/script&gt;
+&lt;/html&gt;
+</div>
+<div id="htmlCode2" class="displayNone">
+<!-- 然后是样式，在head标签里新建style标签，添加全局样式 -->
+&lt;style&gt;
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #fff;
+}
+&lt;/style&gt;
+</div>
+<div id="htmlCode3" class="displayNone">
+<!-- 然后我们在body标签中添加canvas元素 -->
+&lt;canvas id=&quot;myCanvas&quot;&gt;此浏览器不支持canvas&lt;/canvas&gt;
+</div>
+<div id="htmlCode4" class="displayNone">
+<!-- 这里我打算展示一下用canvas来绘制一颗树木 -->
+
+<!-- 设置基本参数，获取标签对象元素 -->
+var w = window.innerWidth;
+var h = window.innerHeight;
+var canvas = document.getElementById(&quot;myCanvas&quot;);
+var ctx = canvas.getContext(&quot;2d&quot;);
+var isLoop = false;		//防止多次提交，保护性能
+var stop=null;
+
+<!-- 设置兼容动画定时器 -->
+window.MyRequestAnimationFrame = window.requestAnimationFrame || 
+window.mozRequestAnimationFrame ||
+window.webkitRequestAnimationFrame ||
+window.msRequestAnimationFrame ;
+
+window.MyCancelRequestAnimationFrame = window.cancelRequestAnimationFrame ||
+window.mozCancelRequestAnimationFrame ||
+window.webkitCancelRequestAnimationFrame ||
+window.msCancelRequestAnimationFrame ;
+
+/**
+* 初始化canvas
+*/
+function initCanvas(){
+	canvas.setAttribute(&quot;width&quot;,w);
+	canvas.setAttribute(&quot;height&quot;,h);
+	isLoop = false;
+	if(canvas.getContext){
+		ctx = canvas.getContext(&quot;2d&quot;);
+		initTree();
+		isLoop = true;
+		loop();
+	}
+}
+
+/**
+* 初始化树的数量
+*/
+function initTree(){
+	branchArray = new BranchArray();
+	for(var i = 0;i&lt;treeNum;i++){
+		branchArray.add(new Branch(w/2,h));
+	}
+}
+
+/**
+* 树干
+*/
+function Branch(x,y){
+	this.x = x;
+	this.y = y;
+	this.radius = initRadius;
+	this.angle = Math.PI/2;
+	this.speed = 2.35;
+	this.generation = 1;
+}
+
+Branch.prototype.grow = function(){
+	this.draw();
+	this.update();
+}
+Branch.prototype.draw = function(){
+	ctx.fillStyle = &quot;#55220F&quot;;
+	ctx.beginPath();
+	//创建一个圆形
+	ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
+	//填充
+	ctx.fill();
+}
+
+Branch.prototype.update = function(){
+	this.angle += random(-0.2 * this.generation/2,0.2*this.generation/2);
+	
+	var vx = this.speed * Math.cos(this.angle);
+	var vy = -this.speed * Math.sin(this.angle)-0.1;
+	
+	if(this.radius&lt;0.9 || this.generation &gt;= maxGeneration){
+		branchArray.remove(this);
+	}
+	
+	this.x += vx;
+	this.y += vy;
+	
+	this.radius = this.radius*0.985;
+	
+	if(this.radius&gt;=0.9){
+		//计算当前是第几代分支
+		//y=x^2/45
+		//var g = (initRadius-this.radius)*(initRadius-this.radius)/35;
+		// y=-1/x 
+		var g = 5/this.radius +(initRadius-maxGeneration)/(initRadius-1);
+		//var g =(maxGeneration-1)*initRadius/(initRadius-1)/this.radius+(initRadius-maxGeneration)/(initRadius-1);
+		//得到分支次数，比较是否大于当前分支
+		if(g&gt;this.generation + 1){
+			this.generation = Math.floor(g);
+			for(var i = 0;i&lt;random(1,3);i++){
+				
+				//创建分支
+				this.clone(this);
+			}
+		}
+	}
+}
+
+Branch.prototype.clone = function(b){
+	var obj = new Branch(b.x,b.y);
+	obj.angle = b.angle;
+	obj.radius = b.radius;
+	obj.speed = b.speed;
+	obj.generation = b.generation;
+	branchArray.add(obj);
+	//如果当前分支次数大于3,开花
+	if(b.generation &gt;= maxGeneration-1){
+		flowers.push(new Flower(b.x,b.y));
+	}
+	//如果当前分支次数等于2,开叶
+	if(b.generation &gt;= maxGeneration-2){
+		leafs.push(new Leaf(b.x,b.y));
+	}
+}
+
+/*
+树干集合 
+*/
+function BranchArray () {
+	this.branchs = [];
+}
+BranchArray.prototype.add = function(b){
+	this.branchs.push(b);
+}
+BranchArray.prototype.remove = function (b) {
+	var index = this.branchs.findIndex(
+	function(item){
+		return b===item;
+	})
+	if(index!=-1){
+		this.branchs.splice(index,1);
+	}
+}
+
+function random (min , max) {
+	return Math.random() * (max - min) + min ;
+}
+
+/**
+* 循环遍历所有树干和花，并调用更新和draw方法，实现动画效果
+*/
+function loop () {
+for(var i = 0 ; i &lt; branchArray.branchs.length ; i ++) {
+	var b = branchArray.branchs[i];
+	b.grow();
+}
+sun.draw(); 
+sun.update();
+
+var len = leafs.length;
+while (len --) {
+	leafs[len].draw();
+	leafs[len].update(len);
+}
+var len = flowers.length;
+while (len --) {
+	flowers[len].draw();
+	flowers[len].update(len);
+}
+
+if(isLoop){
+	stop = MyRequestAnimationFrame(loop);
+}else{
+	//可以取消该次动画。
+	//window.cancelRequestAnimationFrame(stop);
+}
+}
+
+window.onload = initCanvas;
+</div>
+
 		<div id="content2" class="translateX0105">
 			<div id="topbar">
 				<img id="logo" src="img/cdkking.png" />
@@ -754,38 +971,7 @@ color:yellow;
 			<div id="content2Box1" class="content2Box">
 				<div id="content2Box1Textarea">
 <textarea class="form-control" id="textareaCode" name="textareaCode">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset="utf-8"&gt;
-&lt;title&gt;&lt;/title&gt;
-&lt;style&gt;
-body
-{
-	background-color:#d0e4fe;
-}
-h1
-{
-	color:orange;
-	text-align:center;
-}
-p
-{
-	font-family:"Times New Roman";
-	font-size:20px;
-}
-&lt;/style&gt;
-&lt;/head&gt;
 
-&lt;body&gt;
-
-&lt;h1&gt;CSS 实例!&lt;/h1&gt;
-&lt;p&gt;这是一个段落。&lt;/p&gt;
-
-&lt;/body&gt;
-&lt;script&gt;
-&lt;/script&gt;
-&lt;/html&gt;
 </textarea>
 				</div>
 			</div>
@@ -807,6 +993,74 @@ p
 		document.getElementById("iframeResult").contentWindow.document.open();
 		document.getElementById("iframeResult").contentWindow.document.write(document.getElementById('textareaCode').value);
 		document.getElementById("iframeResult").contentWindow.document.close();
-	})
+	});
+
+	var html3 = "";
+	var content2SubmitEl = document.getElementById('content2Submit');
+	var textareaCodeEl = document.getElementById('textareaCode');
+	var textareaCodeValue = textareaCodeEl.value;
+	var htmlCode1El = document.getElementById('htmlCode1');
+	var htmlCode1Value = htmlCode1El.innerHTML;
+	var htmlCode2El = document.getElementById('htmlCode2');
+	var htmlCode2Value = htmlCode2El.innerHTML;
+
+	//需要优化成链式操作 
+	//.then{}
+	writerHtmlCode(textareaCodeEl,htmlCode1Value,0,0,0,function(){
+		content2SubmitEl.click();
+		var str = textareaCodeEl.value;
+		var index1 = str.indexOf("</head>");
+		var index2 = str.length-index1;
+		console.log(index1);
+		html3 = "";
+		writerHtmlCode(textareaCodeEl,htmlCode2Value,0,index1,index2,function(){
+			var htmlCode3El = document.getElementById('htmlCode3');
+			var htmlCode3Value = htmlCode3El.innerHTML;
+
+			content2SubmitEl.click();
+			var str = textareaCodeEl.value;
+			var index1 = str.indexOf("</body>");
+			var index2 = str.length-index1;
+			html3 = "";
+			writerHtmlCode(textareaCodeEl,htmlCode3Value,0,index1,index2);
+		});
+	},function(){
+		//content2SubmitEl.click();
+	});
+
+	function writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback){
+		var oochar = data.substring(dataIndex-1,dataIndex);
+		var ochar = data.substring(dataIndex,dataIndex+1);
+		var nchar = data.substring(dataIndex+1,dataIndex+2);
+
+
+		html3 += data.substring(dataIndex,dataIndex+1);
+		var len = el.value.length;
+		var len2 = html3.length;
+		el.innerHTML = el.value.substring(0,elIndex1-1)+html3+el.value.substring(len-elIndex2,len);
+		dataIndex++;
+		if(dataIndex<data.length){
+			var char = data.substring(dataIndex-1,dataIndex);
+			if(typeof(stepcallback)=="function"){
+				stepcallback();
+			}
+			if(false){
+				setTimeout(function(){
+					writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback);
+					el.scrollTop = el.scrollHeight;
+				},40)
+			}else{
+				setTimeout(function(){
+					writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback);
+					el.scrollTop = el.scrollHeight;
+				},20)
+			}
+		}else{
+			if(typeof(callback)=="function"){
+				callback();
+			}
+		}
+		return this;//实现链式
+	}
 	</script>
 </html>
