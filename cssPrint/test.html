@@ -1,0 +1,273 @@
+
+<!-- 首先我们添加html5的基本代码结构，先是文档声明，html标签
+然后是头部head标签，里边包括字符编码声明，视图声明，文档标题
+最后是文档内容body标签 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<!-- 然后是样式，在head标签里新建style标签，添加全局样式 -->
+<style>
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #fff;
+}
+</style>
+</head>
+<body>
+<!-- 然后我们在body标签中添加canvas元素 -->
+<canvas id="myCanvas">此浏览器不支持canvas</canvas>
+</body>
+<script>
+//这里我打算展示一下用canvas来绘制一颗树木
+
+//设置基本参数，获取标签对象元素
+var w = window.innerWidth;
+var h = window.innerHeight;
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var treeNum = 3;
+var initRadius = 18;		//树干的初始宽度
+var maxGeneration = 5;		//最多分支的次数
+var branchArray = new BranchArray();//树干的集合
+var isLoop = false;		//防止多次提交，保护性能
+var stop=null;
+
+var addCount = 0;
+var removeCount = 0;
+
+//设置兼容动画定时器
+window.MyRequestAnimationFrame = window.requestAnimationFrame || 
+window.mozRequestAnimationFrame ||
+window.webkitRequestAnimationFrame ||
+window.msRequestAnimationFrame ;
+
+window.MyCancelRequestAnimationFrame = window.cancelRequestAnimationFrame ||
+window.mozCancelRequestAnimationFrame ||
+window.webkitCancelRequestAnimationFrame ||
+window.msCancelRequestAnimationFrame ;
+
+/**
+* 初始化canvas
+*/
+function initCanvas(){
+	canvas.setAttribute("width",w);
+	canvas.setAttribute("height",h);
+	isLoop = false;
+	if(canvas.getContext){
+		ctx = canvas.getContext("2d");
+		initTree();
+		isLoop = true;
+		loop();
+	}
+}
+
+/**
+* 初始化树的数量
+*/
+function initTree(){
+	branchArray = new BranchArray();
+	for(var i = 0;i<treeNum;i++){
+		branchArray.add(new Branch(w/2,h));
+	}
+}
+
+/**
+* 树干
+*/
+function Branch(x,y){
+	this.x = x;
+	this.y = y;
+	this.radius = initRadius;
+	this.angle = Math.PI/2;
+	this.speed = 2.35;
+	this.generation = 1;
+}
+
+Branch.prototype.grow = function(){
+	this.draw();
+	this.update();
+}
+Branch.prototype.draw = function(){
+	ctx.fillStyle = "#55220F";
+	ctx.beginPath();
+	//创建一个圆形
+	ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
+	//填充
+	ctx.fill();
+}
+
+Branch.prototype.update = function(){
+	this.angle += random(-0.2 * this.generation/2,0.2*this.generation/2);
+	
+	var vx = this.speed * Math.cos(this.angle);
+	var vy = -this.speed * Math.sin(this.angle)-0.1;
+    
+    //console.log(this.generation);
+	if(this.radius<0.9 || (this.generation >= maxGeneration)){
+        
+		branchArray.remove(this);
+	}
+	
+	this.x += vx;
+	this.y += vy;
+	
+	this.radius = this.radius*0.985;
+	//console.log(this.radius);
+	if(this.radius>=0.9){
+		//计算当前是第几代分支
+		// y=-1/x 
+		var g = 5/this.radius +(initRadius-maxGeneration)/(initRadius-1);
+        //得到分支次数，比较是否大于当前分支
+        
+		if(g>this.generation + 1){ 
+			this.generation = Math.floor(g);
+			for(var i = 0;i<random(1,3);i++){
+				//创建分支
+				this.clone(this);
+			}
+		}
+	}
+}
+
+Branch.prototype.clone = function(b){
+	var obj = new Branch(b.x,b.y);
+	obj.angle = b.angle;
+	obj.radius = b.radius;
+	obj.speed = b.speed;
+	obj.generation = b.generation;
+    branchArray.add(obj);
+    
+	//如果当前分支次数大于3,开花
+	if(b.generation >= maxGeneration-1){
+		//flowers.push(new Flower(b.x,b.y));
+	}
+	//如果当前分支次数等于2,开叶
+	if(b.generation >= maxGeneration-2){
+		if(typeof(leafs)!='undefined'){
+			leafs.push(new Leaf(b.x,b.y));
+		}
+	}
+}
+
+/*
+树干集合 
+*/
+function BranchArray () {
+	this.branchs = [];
+}
+BranchArray.prototype.add = function(b){
+    this.branchs.push(b);
+    addCount++;
+    console.log("add:"+addCount);
+}
+BranchArray.prototype.remove = function (b) {
+	var index = this.branchs.findIndex(
+	function(item){
+		return b==item;
+	})
+	if(index!=-1){
+        //console.log(this.branchs.length);
+        this.branchs.splice(index,1);
+        removeCount++;
+        console.log("remove:"+removeCount);
+	}
+}
+
+function random (min , max) {
+	return Math.random() * (max - min) + min ;
+}
+
+//树叶
+//接着我们为树木添加叶子，新建树叶对象，
+//添加树叶对象的更新方法和绘制方法
+
+var leafs = [];			//叶的集合;
+
+var spritesheet = new Image();
+spritesheet.src = 'img/sy.png';
+
+/**
+* 树叶
+*/
+function Leaf(x,y){
+	this.x = x;
+	this.y = y;
+	this.r = 15;
+	this.w = 10;
+	this.h = this.w/2;
+	this.speed = 1.0235;
+	this.angle = Math.random()*2*Math.PI;
+}
+
+Leaf.prototype = {
+	update:function(index){
+		if(this.w==20){
+			leafs.splice(index,1);
+			return;
+		}
+		this.w = this.w * this.speed;
+		this.h = this.w/2;
+		if(this.w > 20){
+			this.w = 20;
+			this.h = this.w/2;
+		}
+	},
+	draw:function(){
+		ctx.save();
+		ctx.fillStyle = "#00FF00";
+		ctx.beginPath();
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.angle);
+		ctx.drawImage(spritesheet, 0, 0,this.w,this.h);
+		ctx.rotate(this.angle*-1);
+		ctx.translate(this.x*-1, this.y*-1);
+		//ctx.stroke();
+		ctx.fill();
+		ctx.restore();
+	}
+}
+
+/**
+* 循环遍历所有对象，并调用更新和draw方法，实现动画效果
+*/
+function loop () {
+var len = branchArray.branchs.length;
+console.log(len);
+for(var i = 0 ; i < len ; i ++) {
+    //console.log(i);
+    
+    var b = branchArray.branchs[i];
+    if(b){
+        b.grow();
+    }
+	
+}
+
+if(typeof(leafs)!='undefined'){
+	var len = leafs.length;
+	while (len --) {
+		leafs[len].draw();
+		leafs[len].update(len);
+	}
+}
+
+len = branchArray.branchs.length;
+
+if(isLoop && len>0){
+	stop = MyRequestAnimationFrame(loop);
+}else{
+	//可以取消该次动画。
+	//window.cancelRequestAnimationFrame(stop);
+}
+}
+
+window.onload = initCanvas;
+</script>
+</html>

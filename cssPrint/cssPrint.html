@@ -439,6 +439,7 @@ textarea{
 	background:cornsilk;
 	font-family: "Microsoft soft";
 	font-size: 14px;
+	line-height:22px; 
 	font-weight: 700;
 	border: 1px solid #ccc; 
 	border-radius: 10px;
@@ -768,7 +769,7 @@ color:yellow;
 &lt;/html&gt;
 </div>
 <div id="htmlCode2" class="displayNone">
-<!-- 然后是样式，在head标签里新建style标签，添加全局样式 -->
+<!-- 然后在head标签里新建style标签，添加全局样式 -->
 &lt;style&gt;
 html,body {
 	margin: 0;
@@ -785,17 +786,21 @@ html,body {
 &lt;canvas id=&quot;myCanvas&quot;&gt;此浏览器不支持canvas&lt;/canvas&gt;
 </div>
 <div id="htmlCode4" class="displayNone">
-<!-- 这里我打算展示一下用canvas来绘制一颗树木 -->
+//这里我打算展示一下用canvas来绘制一颗树木
 
-<!-- 设置基本参数，获取标签对象元素 -->
+//设置基本参数，获取标签对象元素
 var w = window.innerWidth;
 var h = window.innerHeight;
 var canvas = document.getElementById(&quot;myCanvas&quot;);
 var ctx = canvas.getContext(&quot;2d&quot;);
+var treeNum = 3;
+var initRadius = 18;		//树干的初始宽度
+var maxGeneration = 5;		//最多分支的次数
+var branchArray = new BranchArray();//树干的集合
 var isLoop = false;		//防止多次提交，保护性能
 var stop=null;
 
-<!-- 设置兼容动画定时器 -->
+//设置兼容动画定时器
 window.MyRequestAnimationFrame = window.requestAnimationFrame || 
 window.mozRequestAnimationFrame ||
 window.webkitRequestAnimationFrame ||
@@ -873,16 +878,12 @@ Branch.prototype.update = function(){
 	
 	if(this.radius&gt;=0.9){
 		//计算当前是第几代分支
-		//y=x^2/45
-		//var g = (initRadius-this.radius)*(initRadius-this.radius)/35;
 		// y=-1/x 
 		var g = 5/this.radius +(initRadius-maxGeneration)/(initRadius-1);
-		//var g =(maxGeneration-1)*initRadius/(initRadius-1)/this.radius+(initRadius-maxGeneration)/(initRadius-1);
 		//得到分支次数，比较是否大于当前分支
 		if(g&gt;this.generation + 1){
 			this.generation = Math.floor(g);
 			for(var i = 0;i&lt;random(1,3);i++){
-				
 				//创建分支
 				this.clone(this);
 			}
@@ -897,13 +898,19 @@ Branch.prototype.clone = function(b){
 	obj.speed = b.speed;
 	obj.generation = b.generation;
 	branchArray.add(obj);
-	//如果当前分支次数大于3,开花
-	if(b.generation &gt;= maxGeneration-1){
-		flowers.push(new Flower(b.x,b.y));
-	}
+	
 	//如果当前分支次数等于2,开叶
 	if(b.generation &gt;= maxGeneration-2){
-		leafs.push(new Leaf(b.x,b.y));
+		if(typeof(leafs)!=&#x27;undefined&#x27;){
+			leafs.push(new Leaf(b.x,b.y));
+		}
+	}
+	
+	//如果当前分支次数大于3,开花
+	if(b.generation &gt;= maxGeneration-1){
+		if(typeof(flowers)!=&#x27;undefined&#x27;){
+			flowers.push(new Flower(b.x,b.y));
+		}
 	}
 }
 
@@ -930,28 +937,46 @@ function random (min , max) {
 	return Math.random() * (max - min) + min ;
 }
 
+//树叶f
+
+//花f
+
+//太阳f
+
 /**
-* 循环遍历所有树干和花，并调用更新和draw方法，实现动画效果
+* 循环遍历所有对象，并调用更新和draw方法，实现动画效果
 */
 function loop () {
-for(var i = 0 ; i &lt; branchArray.branchs.length ; i ++) {
+var len = branchArray.branchs.length;
+for(var i = 0 ; i &lt; len ; i ++) {
 	var b = branchArray.branchs[i];
-	b.grow();
-}
-sun.draw(); 
-sun.update();
-
-var len = leafs.length;
-while (len --) {
-	leafs[len].draw();
-	leafs[len].update(len);
-}
-var len = flowers.length;
-while (len --) {
-	flowers[len].draw();
-	flowers[len].update(len);
+    if(b){
+        b.grow();
+    }
 }
 
+if(typeof(sun)!=&#x27;undefined&#x27;){
+	sun.draw();
+	sun.update();
+}
+
+if(typeof(leafs)!=&#x27;undefined&#x27;){
+	var len = leafs.length;
+	while (len --) {
+		leafs[len].draw();
+		leafs[len].update(len);
+	}
+}
+
+if(typeof(flowers)!=&#x27;undefined&#x27;){
+	var len = flowers.length;
+	while (len --) {
+		flowers[len].draw();
+		flowers[len].update(len);
+	}
+}
+
+len = branchArray.branchs.length;
 if(isLoop){
 	stop = MyRequestAnimationFrame(loop);
 }else{
@@ -962,7 +987,140 @@ if(isLoop){
 
 window.onload = initCanvas;
 </div>
+<div id="htmlCode5" class="displayNone">
+//接着我们为树木添加叶子，新建树叶对象，
+//添加树叶对象的更新方法和绘制方法
 
+var leafs = [];//叶的集合;
+
+var spritesheet = new Image();
+spritesheet.src = &#x27;img/sy.png&#x27;;
+
+/**
+* 树叶
+*/
+function Leaf(x,y){
+	this.x = x;
+	this.y = y;
+	this.r = 15;
+	this.w = 10;
+	this.h = this.w/2;
+	this.speed = 1.0235;
+	this.angle = Math.random()*2*Math.PI;
+}
+
+Leaf.prototype = {
+	update:function(index){
+		if(this.w==20){
+			leafs.splice(index,1);
+			return;
+		}
+		this.w = this.w * this.speed;
+		this.h = this.w/2;
+		if(this.w &gt; 20){
+			this.w = 20;
+			this.h = this.w/2;
+		}
+	},
+	draw:function(){
+		ctx.save();
+		ctx.fillStyle = &quot;#00FF00&quot;;
+		ctx.beginPath();
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.angle);
+		ctx.drawImage(spritesheet, 0, 0,this.w,this.h);
+		ctx.rotate(this.angle*-1);
+		ctx.translate(this.x*-1, this.y*-1);
+		//ctx.stroke();
+		ctx.fill();
+		ctx.restore();
+	}
+}
+</div>
+<div id="htmlCode6" class="displayNone">
+//然后添加树木的花朵，新建花朵对象，
+//添加花朵对象的更新方法和绘制方法
+var flowers = [];//花的集合
+
+function Flower(x,y){
+	this.x = x;
+	this.y = y;
+	//初始半径
+	this.r = 0.5;
+	this.petals = 5;
+	this.speed = 1.0235;
+	//最大半径
+	this.maxR = random(2,3);
+}
+Flower.prototype.update = function(index){
+	//console.log(flowers.length);
+	if(this.r == this.maxR){
+		flowers.splice(index,1);
+		return;
+	}
+	this.r = this.r * this.speed;
+	if(this.r &gt; this.maxR){
+		this.r = this.maxR;
+	}
+	
+}
+Flower.prototype.draw = function () {
+	ctx.save();
+	ctx.fillStyle = &quot;#F3097B&quot;;
+	for(var i = 1;i&lt;=this.petals;i++){
+		var x0 = this.x + this.r * Math.cos(Math.PI / 180  * (360 / this.petals) * i);
+		var y0 = this.y + this.r * Math.sin( Math.PI / 180  * (360 / this.petals) * i) ;
+		ctx.beginPath();
+		ctx.arc(x0 , y0 , this.r , 0  , 2 * Math.PI) ;
+		ctx.fill();
+	}
+	ctx.fillStyle = &quot;#F56BC1&quot;;
+	ctx.beginPath();
+	ctx.arc(this.x  , this.y  , this.r / 2 , 0  , 2 * Math.PI) ;
+	ctx.fill();
+	ctx.restore();
+}
+</div>
+<div id="htmlCode7" class="displayNone">
+//接着我们在背景添加一个太阳
+//这里新建一个恒星对象，再用恒星对象创建一个太阳
+function Star(x,y,r,cycle,bColor,eColor){
+this.x=x;
+this.y=y;
+this.r=r;
+this.cycle=cycle;
+this.time=0;
+this.bColor=bColor;
+this.eColor=eColor;
+}
+Star.prototype = {
+draw:function(){
+	ctx.save();
+	//ctx.translate(500,500);
+	ctx.rotate(this.time*(360/this.cycle)*Math.PI/180);
+	ctx.beginPath();
+	ctx.arc(this.x,this.y,this.r,0,360,false);
+	ctx.closePath();
+	var color=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r); 
+	color.addColorStop(0,this.bColor);
+	color.addColorStop(1,this.eColor);
+	ctx.fillStyle=color;
+	ctx.fill();
+	ctx.restore();
+	this.time+=1;
+},
+update:function(){
+}
+}
+var sun = new Star(w/2+200,h-500,30,0,&quot;#FFFF00&quot;,&quot;#FF9900&quot;);	
+sun.update = function(){
+if(this.y &lt;= h-500){
+	this.y = h-500;
+	return;
+}
+this.y = this.y-1;
+}
+</div>
 		<div id="content2" class="translateX0105">
 			<div id="topbar">
 				<img id="logo" src="img/cdkking.png" />
@@ -1011,7 +1169,6 @@ window.onload = initCanvas;
 		var str = textareaCodeEl.value;
 		var index1 = str.indexOf("</head>");
 		var index2 = str.length-index1;
-		console.log(index1);
 		html3 = "";
 		writerHtmlCode(textareaCodeEl,htmlCode2Value,0,index1,index2,function(){
 			var htmlCode3El = document.getElementById('htmlCode3');
@@ -1022,17 +1179,70 @@ window.onload = initCanvas;
 			var index1 = str.indexOf("</body>");
 			var index2 = str.length-index1;
 			html3 = "";
-			writerHtmlCode(textareaCodeEl,htmlCode3Value,0,index1,index2);
+			writerHtmlCode(textareaCodeEl,htmlCode3Value,0,index1,index2,function(){
+				var htmlCode4El = document.getElementById('htmlCode4');
+				var htmlCode4Value = htmlCode4El.innerHTML;
+
+				content2SubmitEl.click();
+				var str = textareaCodeEl.value;
+				var index1 = str.indexOf("</scri");
+				var index2 = str.length-index1;
+				html3 = "";
+				writerHtmlCode(textareaCodeEl,htmlCode4Value,0,index1,index2,function(){
+					content2SubmitEl.click();
+
+					var htmlCode5El = document.getElementById('htmlCode5');
+					var htmlCode5Value = htmlCode5El.innerHTML;
+					var str = textareaCodeEl.value;
+					var index1 = str.indexOf("树叶f")+4;
+					var index2 = str.length-index1;
+					html3 = "";
+					writerHtmlCode(textareaCodeEl,htmlCode5Value,0,index1,index2,function(){
+						content2SubmitEl.click();
+
+						var htmlCode6El = document.getElementById('htmlCode6');
+						var htmlCode6Value = htmlCode6El.innerHTML;
+						var str = textareaCodeEl.value;
+						var index1 = str.indexOf("花f")+3;
+						var index2 = str.length-index1;
+						html3 = "";
+						writerHtmlCode(textareaCodeEl,htmlCode6Value,0,index1,index2,function(){
+							content2SubmitEl.click();
+
+							var htmlCode7El = document.getElementById('htmlCode7');
+							var htmlCode7Value = htmlCode7El.innerHTML;
+							var str = textareaCodeEl.value;
+							var index1 = str.indexOf("太阳f")+4;
+							var index2 = str.length-index1;
+							html3 = "";
+							writerHtmlCode(textareaCodeEl,htmlCode7Value,0,index1,index2,function(){
+								content2SubmitEl.click();
+							});
+						});
+					});
+				});
+			});
 		});
 	},function(){
 		//content2SubmitEl.click();
 	});
 
+	function getScrollTop(str){
+		var count = 0;
+		var len = str.length; 
+		while(len--){
+			var char = str.substring(len-1,len);
+			if(char=="\n"){
+				count++;
+			} 
+		}
+		return count;
+	}
+
 	function writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback){
 		var oochar = data.substring(dataIndex-1,dataIndex);
 		var ochar = data.substring(dataIndex,dataIndex+1);
 		var nchar = data.substring(dataIndex+1,dataIndex+2);
-
 
 		html3 += data.substring(dataIndex,dataIndex+1);
 		var len = el.value.length;
@@ -1048,11 +1258,17 @@ window.onload = initCanvas;
 				setTimeout(function(){
 					writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback);
 					el.scrollTop = el.scrollHeight;
+					
 				},40)
 			}else{
 				setTimeout(function(){
 					writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallback);
-					el.scrollTop = el.scrollHeight;
+					//el.scrollTop = el.scrollHeight;
+					//console.log(el.scrollTop);
+					var count = getScrollTop(el.value.substring(0,elIndex1-1)+html3);
+					el.scrollTop = ((count-25)*23);
+					//console.log(count);
+					//console.log(count*23+"/"+el.scrollHeight);
 				},20)
 			}
 		}else{
