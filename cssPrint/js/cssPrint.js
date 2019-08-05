@@ -635,23 +635,60 @@ var pageCount = 2;
 		//js滚轮事件
 		//document.onmousewheel = mouseScroll;
 
+		var Queue = function(){
+			this.index = 0;
+			this.length = 0;
+			this.arr = [];
+			this.addItem = function(el){
+				for(var i = 0;i<this.arr.length;i++){
+					var item = this.arr[i];
+					if(item===el){
+						return;
+					}
+				}
+				this.arr.push(el);
+				this.length++;
+			};
+			this.update = function(num){
+				var tmp = num+this.index;
+				if(tmp<0 || tmp>(this.length-1)){
+					return;
+				}
+				this.index = tmp;
+				for(var i = 0;i<this.arr.length;i++){
+					var item = this.arr[i];
+					var n = i - this.index;
+					item.className = "";
+						item.style.transform = "translateX("+ n*105 +"%)";
+						item.style.WebkitTransform = "translateX("+ n*105 +"%)";
+						item.style.position = "absolute";
+				}
+			}
+		}
+		var queue = new Queue();
+
+		queue.addItem(content1El);
+		queue.addItem(content2El);
+
 		var navigationLeftEl = document.getElementById("navigationLeft");
 		var navigationRightEl = document.getElementById("navigationRight");
 		var turnLeft = function(){
-			content1El.className = "";
-			content2El.className = "translateX0105";
+			// content1El.className = "";
+			// content2El.className = "translateX0105";
 			if(pageIndex>1){
 				pageIndex--;
 				changePage();
 			}
+			queue.update(-1);
 		}
 		var turnRight = function(){
-			content1El.className = "translateX1105";
-			content2El.className = "";
+			// content1El.className = "translateX1105";
+			// content2El.className = "";
 			if(pageIndex<pageCount){ 
 				pageIndex++;
 				changePage();
 			}
+			queue.update(1);
 		}
 		navigationLeftEl.addEventListener("click",turnLeft);
 		navigationRightEl.addEventListener("click",turnRight);
