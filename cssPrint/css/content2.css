@@ -10,7 +10,7 @@
     /* border:1px solid red; */
 }
 
-#topbar {
+.topbar {
     position: relative;		
     height: 75px;
     width: 100%;
@@ -18,7 +18,7 @@
     padding: 0;
 }
 
-#logo{
+.logo{
     position: absolute;
     top: -10px;
     float: left;
@@ -27,31 +27,24 @@
     overflow: hidden;
 }
 
-.content2Box{
-
+.contentBox{
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    width: 49%;
+    height: 90%;
+    text-align: center;
 }
 
 #content2Box1{
     float: left;
-    position: relative;
-    margin: 0 auto;
-    width: 49%;
-    display: block;
-    height: 90%;
-    text-align: center;
 }
 
 #content2Box2{
     float: right;
-    position: relative;
-    margin: 0 auto;
-    display: block;
-    width: 49%;
-    height: 90%;
-    text-align: center;
 }
 
-#content2Box1Textarea{
+.contentBoxTextarea{
     border-radius: 12px;
     border: 1px solid #fff;
     position: absolute;
@@ -62,7 +55,7 @@
     padding: 15px;
 }
 
-#content2Box2Iframe{
+.contentBoxIframe{
     position: absolute;
     left: 0;
     margin-left: 1.5%;
@@ -74,7 +67,7 @@
     padding: 15px;
 }
 
-#textareaCode{
+.textareaCode{
     overflow: auto;
     border: none;
     display: block;
@@ -85,11 +78,10 @@
     height: 100%;
     font-size: 16px;
     color: #555;
-    /* background-color: #fff; */
 }
 
 #content2Submit {
-    float: left;
+    float:left;
     height: 40px;
     width: 64px;
     vertical-align: middle;

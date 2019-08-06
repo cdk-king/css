@@ -4,22 +4,17 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title></title>
-		<link rel="stylesheet" href="content2.css">
-		<link rel="stylesheet" href="navigation.css">
+		<link rel="stylesheet" href="css/content2.css">
+		<link rel="stylesheet" href="css/content3.css">
+		<!-- <link rel="stylesheet" href="css/navigation.css"> -->
 	</head>
 	<body>
-		<div id="css0" style="display: none;">
-		/* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
-		现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
-		我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ */
-
-		/* I'm cheating a bit */
-		
+		<div id="css0" style="display: none;">		
 		html, body {
 			margin:10px;
 			margin-top: 0;
 			height: 100%;
-			overflow: hidden;
+			overflow: hidden; 
 		}
 
 		.displayNone{
@@ -233,26 +228,6 @@
 			width:95%;
 		}
 		</div>
-		<div id="biaobai" style="display: none;">
-				/**
-				*
-				* Hey. My name's CDK. 
-				*
-				*/
-
-				/**
-				*
-				* 曾经看不懂无脸男为何为什么对千寻这么好，也不懂为何一直跟着千寻。
-				* 现在才懂，孤单的人只要一点点温暖就会感动，比起金子，纯真的灵魂更让人感动。
-				* 我能成为你的无脸男，用守护和陪伴替代说不出口的喜欢吗？ 
-				*
-				*/		
-
-				html{
-					color:red;
-				}
-				
-		</div>
 		<div id="css1" style="display: none;">	    
 /**
 *
@@ -460,6 +435,7 @@ textarea{
 	display: inline-block;
 	vertical-align: middle;
 	border: none;
+	border-radius: 10px;
 	overflow:hidden;
 	-webkit-transform: perspective(1px) translateZ(0);
 	transform: perspective(1px) translateZ(0);
@@ -623,7 +599,7 @@ textarea{
 	height:10px;
 	background:white;
 	border-radius: 100px;
-	z-index:10;
+	z-index: 50;
 	margin:0 auto;
 	margin:10px;
 	opacity: 0.3;
@@ -759,7 +735,8 @@ color:yellow;
 &lt;html&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot; /&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, 
+initial-scale=1&quot;&gt;
 &lt;title&gt;&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -1068,8 +1045,10 @@ Flower.prototype.draw = function () {
 	ctx.save();
 	ctx.fillStyle = &quot;#F3097B&quot;;
 	for(var i = 1;i&lt;=this.petals;i++){
-		var x0 = this.x + this.r * Math.cos(Math.PI / 180  * (360 / this.petals) * i);
-		var y0 = this.y + this.r * Math.sin( Math.PI / 180  * (360 / this.petals) * i) ;
+		var x0 = this.x + this.r * 
+		Math.cos(Math.PI / 180  * (360 / this.petals) * i);
+		var y0 = this.y + this.r * 
+		Math.sin( Math.PI / 180  * (360 / this.petals) * i);
 		ctx.beginPath();
 		ctx.arc(x0 , y0 , this.r , 0  , 2 * Math.PI) ;
 		ctx.fill();
@@ -1101,7 +1080,8 @@ draw:function(){
 	ctx.beginPath();
 	ctx.arc(this.x,this.y,this.r,0,360,false);
 	ctx.closePath();
-	var color=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r); 
+	var color=ctx.createRadialGradient
+	(this.x,this.y,0,this.x,this.y,this.r);
 	color.addColorStop(0,this.bColor);
 	color.addColorStop(1,this.eColor);
 	ctx.fillStyle=color;
@@ -1112,7 +1092,8 @@ draw:function(){
 update:function(){
 }
 }
-var sun = new Star(w/2+200,h-500,30,0,&quot;#FFFF00&quot;,&quot;#FF9900&quot;);	
+var sun = new Star(w/2+200,h-500,30,0,
+&quot;#FFFF00&quot;,&quot;#FF9900&quot;);	
 sun.update = function(){
 if(this.y &lt;= h-500){
 	this.y = h-500;
@@ -1121,24 +1102,40 @@ if(this.y &lt;= h-500){
 this.y = this.y-1;
 }
 </div>
+<div id="htmlCode8" class="displayNone">
+
+</div>
 		<div id="content2" class="translateX0105">
-			<div id="topbar">
-				<img id="logo" src="img/cdkking.png" />
+			<div class="topbar">
+				<img class="logo" src="img/cdkking.png" />
 				<button id="content2Submit">提交</button>
 			</div>
-			<div id="content2Box1" class="content2Box">
-				<div id="content2Box1Textarea">
-<textarea class="form-control" id="textareaCode" name="textareaCode">
-
-</textarea>
+			<div id="content2Box1" class="contentBox">
+				<div class="contentBoxTextarea">
+					<textarea class="textareaCode" id="textareaCode1"></textarea>
 				</div>
 			</div>
-			<div id="content2Box2" class="content2Box">
-				<div id="content2Box2Iframe">
-					<iframe frameborder="0" id="iframeResult"></iframe>
+			<div id="content2Box2" class="contentBox">
+				<div class="contentBoxIframe">
+					<iframe frameborder="0" id="iframeResult1"></iframe>
 				</div>
 			</div>
 
+		</div>
+		<div id="content3" class="translateX0105">
+			<div class="topbar">
+				<img class="logo" src="img/cdkking.png" />
+			</div>
+			<div id="content3Box1" class="contentBox">
+				<div class="contentBoxTextarea">
+					<textarea class="textareaCode" id="textareaCode2"></textarea>
+				</div>
+			</div>
+			<div id="content3Box2" class="contentBox">
+				<div class="contentBoxIframe">
+					<iframe frameborder="0" id="iframeResult2"></iframe>
+				</div>
+			</div>
 		</div>
 
 		<div id="header"></div>
@@ -1146,6 +1143,13 @@ this.y = this.y-1;
 	<script src="js/cssPrint.js"></script>
 	<script src="js/htmlPrint.js"></script>
 	<script>
+
+		var textareaCode2El = document.getElementById("textareaCode2");
+		var htmlCode8El = document.getElementById("htmlCode8");
+		var htmlCode8Value = htmlCode8El.value;
+		//writerHtmlCode(textareaCode2El,htmlCode8Value,0,0,0,function(){
+
+		//});
 	
 	</script>
 </html>

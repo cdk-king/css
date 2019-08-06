@@ -1,4 +1,4 @@
-var pageCount = 2;
+		var pageCount = 3;
 		var pageIndex = 1;
 
 		var startCss = true;
@@ -20,6 +20,8 @@ var pageCount = 2;
 		var content1El = document.getElementById("content1");
 
 		var content2El = document.getElementById("content2");
+
+		var content3El = document.getElementById("content3");
 
 
 		var css0El = document.getElementById("css0");
@@ -110,6 +112,13 @@ var pageCount = 2;
 						buttonEl.disabled = false;
 						//content1El.className = "translateX1105";
 						//todo
+						setTimeout(function(){
+							turnRight();
+						},2000);
+						setTimeout(function(){
+							startContent2Print();
+						},3000);
+						
 					}
 
 					writerCss(styleText,str,len,callback);
@@ -659,9 +668,9 @@ var pageCount = 2;
 					var item = this.arr[i];
 					var n = i - this.index;
 					item.className = "";
-						item.style.transform = "translateX("+ n*105 +"%)";
-						item.style.WebkitTransform = "translateX("+ n*105 +"%)";
-						item.style.position = "absolute";
+					item.style.transform = "translateX("+ n*105 +"%)";
+					item.style.WebkitTransform = "translateX("+ n*105 +"%)";
+					item.style.position = "absolute";
 				}
 			}
 		}
@@ -669,6 +678,7 @@ var pageCount = 2;
 
 		queue.addItem(content1El);
 		queue.addItem(content2El);
+		queue.addItem(content3El);
 
 		var navigationLeftEl = document.getElementById("navigationLeft");
 		var navigationRightEl = document.getElementById("navigationRight");

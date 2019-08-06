@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        /* flexible box弹性布局，子元素的float，clear，vertical-align属性失效 */
+        align-items:center;
+        /* align-items:定义flex容器内项目侧轴（纵轴）方向的对齐方式 */
+        justify-content: center;
+        /* justify-content:设置弹性盒子元素在主轴（横轴）方向上的对齐方式 */
+        min-height: 100vh;
+        /* vh:相对于视口的高度，视口被分为100单位的vh */
+        background-color: #f3eeea;
+        
+    }
+    /* em:body上设置的字体大小，body元素内的任何子元素的em值都等同于body设置的字体大小 */
+    /* em:父元素上设置字体大小，父元素内的任何子元素的em值都等同于父元素设置的字体大小 */
+    /* rem:root-em,以body为标准，不再对其其他父元素*/
+    /* vh:相对于视口的高度，视口被分为100单位的vh */
+    /* vw:相对于视口的宽度，视口被分为100单位的vw */
+    /* vmin:按视口的宽高比中取最小值，宽1100px，高700px，1vmin = 7px，1vmax = 11px  */
+    /* vmax:按视口的宽高比中取最大值，宽1100px，高700px，1vmin = 7px，1vmax = 11px  */
+
+    .sun{
+        position: relative;
+        width: 50vmin;
+        height: 50vmin;
+        border-radius: 100%;
+        background-color: #ebf259;
+        box-shadow: inset #f3eeea 0 0 0 7.1428571429vmin;
+        -webkit-animation: shimmer 6s ease alternate infinite;
+                animation: shimmer 6s ease alternate infinite;
+                border:1px solid red;
+    }
+
+    @-webkit-keyframes shimmer {
+    to {
+        -webkit-transform: rotate(5deg) scale(0.8);
+                transform: rotate(5deg) scale(0.8);
+    }
+    }
+    @keyframes shimmer {
+    to {
+        -webkit-transform: rotate(5deg) scale(0.8);
+                transform: rotate(5deg) scale(0.8);
+    }
+    }
+
+    </style>
+</head>
+<body>
+    <div class="sun">
+        <div class="ray"></div>
+        <div class="ray"></div>
+        <div class="ray"></div>
+    </div>
+    
+</body>
+</html>
