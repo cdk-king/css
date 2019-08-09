@@ -7,14 +7,28 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div id="result"></div>
 </body>
 <script>
+    var resultEl = document.getElementById("result");
+
+    var consoleLog = function(el){
+        this.el = el;
+        this.value = "";
+        this.print = function(str){
+            console.log(str);
+            this.value = this.value + "<p>"+str + "</p>";
+            this.el.innerHTML = this.value;
+        }
+    }
+    
+    window.consoleLog = new consoleLog(resultEl);
+    
     function getUserName(){
         return new Promise(function(resolve){
             //异步请求
             setTimeout(function(){
-                console.log("start-getUserName");
+                consoleLog.print("start-getUserName");
                 resolve("cdk");
             },500);
             
@@ -23,14 +37,15 @@
 
     getUserName().then(function(name){
         //一些处理
-        console.log(name);
+        consoleLog.print(name);
     }).then(getUserJobByName);
 
     function getUserJobByName(name){
         return new Promise(function(resolve){
             //异步请求
             setTimeout(function(){
-            console.log("start-getUserJobByName");
+            consoleLog.print("start-getUserJobByName");
+            consoleLog.print("king");
             resolve("king");
             },500);
         });
@@ -63,7 +78,7 @@
     //     fn(resolve);
     // }
 
-    // Promise1.0
+    // Promise2.0
     function Promise(fn){
         var state = "pending";
         var value = null;
