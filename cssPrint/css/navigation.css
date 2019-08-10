@@ -10,7 +10,7 @@
 * 顺便再加个导航功能吧，以便日后添加新的展示
 */
 
-/* #navigation{
+#navigation{
 	position: absolute;
 	width: 100%;
 	height:50%;
@@ -82,7 +82,6 @@
 	width:200px;
 	left:50%;
 	margin-left:-100px;
-	z-index: 50;
 }
 
 .pageContaint{
@@ -105,11 +104,12 @@
 	margin:0 auto;
 	margin:10px;
 	opacity: 0.3;
+	z-index: 50;
 }
 		
 .pageSelect{
 	opacity: 1!important;
-} */
+}
 
 /**
 * 这样导航和页码就大功告成啦

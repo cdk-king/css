@@ -31,7 +31,6 @@
 
 		var css2El= document.getElementById("css2");
 		var css2  = css2El.innerHTML;
-		writerCss(styleText,css1,0);
 
 		var workText = document.getElementById("workText");
 		var workTextEl = document.getElementById("work-text");
@@ -116,7 +115,7 @@
 							turnRight();
 						},2000);
 						setTimeout(function(){
-							startContent2Print();
+							//startContent2Print();
 						},3000);
 						
 					}
@@ -644,41 +643,8 @@
 		//js滚轮事件
 		//document.onmousewheel = mouseScroll;
 
-		var Queue = function(){
-			this.index = 0;
-			this.length = 0;
-			this.arr = [];
-			this.addItem = function(el){
-				for(var i = 0;i<this.arr.length;i++){
-					var item = this.arr[i];
-					if(item===el){
-						return;
-					}
-				}
-				this.arr.push(el);
-				this.length++;
-			};
-			this.update = function(num){
-				var tmp = num+this.index;
-				if(tmp<0 || tmp>(this.length-1)){
-					return;
-				}
-				this.index = tmp;
-				for(var i = 0;i<this.arr.length;i++){
-					var item = this.arr[i];
-					var n = i - this.index;
-					item.className = "";
-					item.style.transform = "translateX("+ n*105 +"%)";
-					item.style.WebkitTransform = "translateX("+ n*105 +"%)";
-					item.style.position = "absolute";
-				}
-			}
-		}
-		var queue = new Queue();
-
-		queue.addItem(content1El);
-		queue.addItem(content2El);
-		queue.addItem(content3El);
+		
+		
 
 		var navigationLeftEl = document.getElementById("navigationLeft");
 		var navigationRightEl = document.getElementById("navigationRight");
@@ -689,7 +655,7 @@
 				pageIndex--;
 				changePage();
 			}
-			queue.update(-1);
+			game.queue.update(-1);
 		}
 		var turnRight = function(){
 			// content1El.className = "translateX1105";
@@ -698,7 +664,7 @@
 				pageIndex++;
 				changePage();
 			}
-			queue.update(1);
+			game.queue.update(1);
 		}
 		navigationLeftEl.addEventListener("click",turnLeft);
 		navigationRightEl.addEventListener("click",turnRight);
@@ -718,8 +684,6 @@
 			pageEl.appendChild(div1);
 		}
 
-		createPage();
-
 		var changePage = function(){
 			var tem = document.getElementById("pageContaint");
 			var count = tem.childNodes.length;
@@ -733,4 +697,3 @@
 			el.className = "pageNum pageSelect";
 
 		}
-		changePage();

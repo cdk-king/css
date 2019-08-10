@@ -134,3 +134,8 @@ function writerHtmlCode(el,data,dataIndex,elIndex1,elIndex2,callback,stepcallbac
     }
     return this;//实现链式
 }
+
+var content2StartEl = document.getElementById("content2Start");
+content2StartEl.addEventListener("click",function(){
+    startContent2Print();
+});

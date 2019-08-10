@@ -4,229 +4,15 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title></title>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/content1.css">
 		<link rel="stylesheet" href="css/content2.css">
 		<link rel="stylesheet" href="css/content3.css">
-		<!-- <link rel="stylesheet" href="css/navigation.css"> -->
+		<link rel="stylesheet" href="css/navigation.css">
+		<link rel="stylesheet" href="css/home.css">
 	</head>
 	<body>
-		<div id="css0" style="display: none;">		
-		html, body {
-			margin:10px;
-			margin-top: 0;
-			height: 100%;
-			overflow: hidden; 
-		}
-
-		.displayNone{
-			display:none;
-		}
-		
-		pre {
-			overflow: auto;
-			max-height: 90%;
-			width: 100%;
-			border-radius: 1px; /* Prevents bad clipping in Chrome */
-		}
-
-		.pre {
-			overflow: auto;
-			max-height: 100%;
-			border-radius: 1px; /* Prevents bad clipping in Chrome */
-		}
-		
-		#content1 {
-			position: absolute;
-			top: 0; right: 20px; left: 0; bottom: 30px;
-		}
-		
-		.content {
-			position: absolute;
-			top: 0; right: 20px; left: 0; bottom: 30px;
-		}
-		
-		#header {
-			position: absolute;
-			bottom: 0;
-			height: 20px;
-			left: 0;
-			right: 0;
-			padding: 0 10px;
-		}
-		
-		a:after {
-			content: '';
-			padding-right: 5px;
-			border-right-width: 1px;
-			border-right-style: solid;
-			border-color: inherit;
-		}
-		
-		a:last-of-type:after {
-			border: none;
-		}
-
-		.translateX1095 {
-			transform: translateX(-100%)!important;
-			-webkit-transform: translateX(-100%)!important;
-			position: absolute;
-		}
-
-		.translateX1105 {
-			transform: translateX(-105%)!important;
-			-webkit-transform: translateX(-105%)!important;
-			position: absolute;
-		}
-
-		.translateY1105rotateY0010 {
-			transform: translateY(-105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(-105%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0105rotateY0010 {
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0155rotateY0010 {
-			transform: translateY(155%) rotateY(10deg)!important;
-			-webkit-transform: translateY(155%) rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.translateY0205rotateY0010 {
-			transform: translateY(205%) rotateY(10deg)!important;
-			-webkit-transform: translateY(205%) rotateY(10deg)!important;
-			position: absolute;
-		}
-		
-		.translateY0105rotateY0010R {
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			position: relative!important;
-		}
-
-		.poR{
-			position: relative;
-		}
-
-		.rotateY0010 {
-			transform: rotateY(10deg)!important;
-			-webkit-transform: rotateY(10deg)!important;
-			position: absolute;
-		}
-
-		.test-text{
-			transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform-origin: left;
-			position: absolute;
-		}
-
-		#input-text{
-			/*margin-top: 40%;*/
-			/*transform: translateY(105%) rotateY(10deg)!important;
-			-webkit-transform: translateY(105%) rotateY(10deg)!important;*/
-			height:44%;
-			text-align:left;
-			position: relative;
-		}
-
-		.marginTop0100{
-			margin-top: 100%!important;
-		}
-
-		input{
-			outline-style: none ;
-			border: 1px solid #ccc; 
-			border-radius: 10px;
-			padding: 13px 14px;
-			width: 80%;
-			font-size: 14px;
-			font-weight: 700;
-			font-family: "Microsoft soft";
-			background:cornsilk;
-		}
-
-		/*多行文本框*/
-		.multieditbox{
-			background: #f8f8f8;
-			border-bottom: #b7b7b7 1px solid;
-			border-left: #b7b7b7 1px solid;
-			border-right: #b7b7b7 1px solid;
-			border-top: #b7b7b7 1px solid;
-			color: #000000;
-			cursor: text;
-			font-family: "arial";
-			font-size: 9pt;
-			padding: 1px; /*www.52css.com*/
-		}
-		
-		/*按钮样式*/
-
-		.buttonFlow {
-			position: relative;
-			background-color: #4CAF50;
-			border: none;
-			font-size: 30px;
-			color: #FFFFFF;
-			margin: 0;
-			width: 200px;
-			height: 75px;
-			text-align: center;
-			-webkit-transition-duration: 0.4s;
-			
-			transition-duration: 0.4s;
-			text-decoration: none;
-			overflow: hidden;
-			cursor: pointer;
-				
-		}
-		
-		.buttonFlow:after {
-			content: "";
-			background: #90EE90;
-			display: block;
-			position: absolute;
-		    padding-top: 300px;
-			padding-left: 300px;
-			margin-left: -25%;
-			margin-top: -75%;
-			opacity: 0; 
-			border-radius: 10000px;
-			transition: all 1s;
-		}
-		
-		.buttonFlow:active:after {
-			padding: 0;
-			margin-left: 50%;
-			margin-top: -10%;
-			opacity: 1;
-			transition: 0s
-		}
-
-		.scrollbarTest{
-			scrollbar-3d-light-color:red;
-			scrollbar-arrow-color:red;
-			scrollbar-base-color:red;
-		}
-	
-		#navigationLeft{
-			opacity: 0;
-		}
-		#navigationRight{
-			opacity: 0;
-		}
-
-		.title{
-			position:fixed;
-			top:10px;
-			left:10px;
-			font-size: 18px;
-			height:10px;
-			width:95%;
-		}
+		<div id="css0" style="display: none;">
 		</div>
 		<div id="css1" style="display: none;">	    
 /**
@@ -279,8 +65,8 @@ pre:not(:empty) {
  overflow: auto;
  background: rgb(48, 48, 48);
  border: 1px solid #ccc;
- max-height: 44.5%;
- width: 49%;
+ max-height: 42%;
+ width: 48%;
  font-size: 14px;
  font-family: monospace;
  padding: 10px 10px 20px;
@@ -288,10 +74,6 @@ pre:not(:empty) {
  white-space: pre-wrap;/*保留空白符序列，但能正常地进行换行*/
  outline: 0;
  border-radius: 20px;
-}
-
-pre:before{
-
 }
 
 /**
@@ -329,7 +111,7 @@ body {
 #style-text {
  -webkit-transform: translateX(99%) rotateY(-10deg);
  -webkit-transform-origin: right;
- max-height: 94.5%;
+ max-height: 90%;
 }
 
 /**
@@ -450,29 +232,6 @@ textarea{
 /**
 * 加点小特效，例如点击之后的波纹效果
 */
-
-.buttonLine:before {
-	content: "";
-	position: absolute;
-	z-index: -1;
-	left: 50%;
-	right: 50%;
-	bottom: 0;
-	background: yellow;
-	height: 8px;
-	-webkit-transition-property: left, right;
-	transition-property: left, right;
-	-webkit-transition-duration: 0.3s;
-	transition-duration: 0.3s;
-	-webkit-transition-timing-function: ease-out;
-	transition-timing-function: ease-out;
-}
-
-.buttonLine:hover:before {
-	left: 0;
-	right: 0;
-	background: yellow;
-}
 
 .buttonLine:after {
 	content: "";
@@ -689,7 +448,10 @@ cdkking.top
 			<div id="navigationRight">→</div>
 			<div id="page"></div>
 		</div>
-		<div id="content1">
+		<div id="home" class="content">
+
+		</div>
+		<div id="content1" class="content">
 		<!-- <pre> 标签可定义预格式化的文本。
 		被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。 -->
 		<!-- contenteditable 属性规定元素内容是否可编辑。 -->
@@ -717,7 +479,7 @@ cdkking.top
 			<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
 				<div class="title">css样式代码添加栏</div>
 			<input id="input" type="" class="input" style="display: none;"/>
-<textarea id="textarea" class="scrollbarTest" rows="10" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
+<textarea id="textarea" class="scrollbarTest" rows="8" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
 *{
 color:yellow;
 }
@@ -1105,10 +867,12 @@ this.y = this.y-1;
 <div id="htmlCode8" class="displayNone">
 
 </div>
-		<div id="content2" class="translateX0105">
+		<div id="content2" class="content">
 			<div class="topbar">
-				<img class="logo" src="img/cdkking.png" />
-				<button id="content2Submit">提交</button>
+				<!-- <img class="logo" src="img/cdkking.png" /> -->
+				<div class="contentTitle">canvas绘制樱花树</div>
+				<button id="content2Start" class="content2Button">开始</button>
+				<button id="content2Submit" class="content2Button">提交</button>
 			</div>
 			<div id="content2Box1" class="contentBox">
 				<div class="contentBoxTextarea">
@@ -1122,9 +886,10 @@ this.y = this.y-1;
 			</div>
 
 		</div>
-		<div id="content3" class="translateX0105">
+		<div id="content3" class="content">
 			<div class="topbar">
-				<img class="logo" src="img/cdkking.png" />
+				<!-- <img class="logo" src="img/cdkking.png" /> -->
+				<div class="contentTitle">css3绘制动画</div>
 			</div>
 			<div id="content3Box1" class="contentBox">
 				<div class="contentBoxTextarea">
@@ -1140,9 +905,19 @@ this.y = this.y-1;
 
 		<div id="header"></div>
 	</body>
+	<script src="js/main.js"></script>
 	<script src="js/cssPrint.js"></script>
 	<script src="js/htmlPrint.js"></script>
 	<script>
+		window.addEventListener("load", function() {
+			game.resize();
+			game.init();
+		}, false);
+
+		window.addEventListener("resize", function() {
+			game.resize();
+		});
+
 
 		var textareaCode2El = document.getElementById("textareaCode2");
 		var htmlCode8El = document.getElementById("htmlCode8");
