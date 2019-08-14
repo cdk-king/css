@@ -3,22 +3,26 @@ var game = {
     pageCount:3,
     init:function(){
 
-        
-        initQueue();
+        this.initQueue();
         createPage();
         changePage();
 
         this.startContent1();
     },
     initQueue:function(){
-        console.log();
         this.queue = new Queue();
+        this.queue.addItem(homeEl);
 		this.queue.addItem(content1El);
 		this.queue.addItem(content2El);
-		this.queue.addItem(content3El);
+        this.queue.addItem(content3El);
+        this.queue.update(0);
     },
     resize:function(){
-        
+        if(typeof (this.queue)!='undefined'){
+            this.queue.update(0);
+        }else{
+            this.initQueue();
+        }
     },
     turnLeft:function(){
 
@@ -34,6 +38,7 @@ var game = {
     }
 }
 
+//
 var Queue = function(){
     this.index = 0;
     this.length = 0;

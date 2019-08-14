@@ -1,4 +1,4 @@
-		var pageCount = 3;
+		var pageCount = 4;
 		var pageIndex = 1;
 
 		var startCss = true;
@@ -15,7 +15,7 @@
 		var div = document.getElementById("div");
 		var styleText = document.getElementById("style-text");
 
-		
+		var homeEl = document.getElementById("home");
 		
 		var content1El = document.getElementById("content1");
 
@@ -31,6 +31,7 @@
 
 		var css2El= document.getElementById("css2");
 		var css2  = css2El.innerHTML;
+		
 
 		var workText = document.getElementById("workText");
 		var workTextEl = document.getElementById("work-text");
