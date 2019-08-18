@@ -41,6 +41,24 @@
                 border:1px solid red;
     }
 
+    .sun:after{
+        content: "";
+        border: 1px solid #ffffff;
+        width: 50vmin;
+        height: 50vmin;
+        border-radius:0 0 0 70%;
+        position:absolute;
+        top:2vmin;
+        left:-25vmin;
+        z-index:100;
+        transform:rotate(-75deg);
+        -webkit-transform:rotate(-75deg);
+        -o-transform:rotate(-75deg);
+        border-color:transparent transparent #ebf259 transparent;
+	    border-style:solid;
+        border-width:0 0 26vmin 0;
+    }
+
     @-webkit-keyframes shimmer {
     to {
         -webkit-transform: rotate(5deg) scale(0.8);
