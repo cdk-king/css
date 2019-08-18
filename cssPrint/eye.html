@@ -7,12 +7,17 @@
     <title>Document</title>
 </head>
 <style>
+
+html,body{
+    width:100%; 
+    height:100%;
+    overflow:hidden; 
+}
     /* CSS Document */
-*{margin:0;padding:0;}
+    *{margin:0;padding:0;}
 .container{ 
-    width:800px; 
-    height:200px;
-    margin:30px auto;
+    width:100%; 
+    height:100%;
     overflow:hidden; 
     background:#000; 
     position:relative;
@@ -26,10 +31,16 @@
 }
 
 .pullLeft{
-    left:150px;
+    top:50%;
+    left:50%;
+    margin-top:-35px;
+    margin-left:-265px;
 }
 .pullRight{
-    right:150px;
+    top:50%;
+    right:50%;
+    margin-top:-35px;
+    margin-right:-265px;
 }
 
 .profile{
@@ -158,16 +169,25 @@
 	transform:rotate(150deg);
 	-webkit-transform:rotate(150deg);
 	-o-transform:rotate(150deg);
-	animation:colour 0.5s ease-in 7s;
-	-webkit-animation:colour 0.5s ease-in 7s;
-	-o-animation:colour 0.5s ease-in 7s;
+	animation:colour 15s ease-in infinite;
+	/* -webkit-animation:colour 0.5s ease-in 7s;
+	-o-animation:colour 0.5s ease-in 7s; */
 }
 @keyframes colour{
 	0%{
 		background:#000;
 	}
-	100%{
+    40%{
+		background:#000; 
+	}
+    50%{
 		background:#f00;
+	}
+    95%{
+		background:#000;
+	}
+	100%{
+		background:#000;
 	}
 }
 @-webkit-keyframes colour{
@@ -335,17 +355,34 @@
 
 /*基本眼*/
 .ani-narrow{			
-	animation:ani-narrow 0.5s linear 1s;
-	-webkit-animation:ani-narrow 0.5s linear 1s;
-	-o-animation:ani-narrow 0.5s linear 1s;
+	animation:ani-narrow 15s linear infinite;
+	/* -webkit-animation:ani-narrow 0.5s linear 1s;
+	-o-animation:ani-narrow 0.5s linear 1s; */
 }
 @keyframes ani-narrow{
-	from{
+	0%{
+        opacity:1;
 		transform:scale(1);
 	}
-	to{
+	6%{
+        opacity:1;
+		transform:scale(1);
+	}
+    10%{
 		opacity:0;
 		transform:scale(0);
+	}
+    80%{
+		opacity:0;
+		transform:scale(1);
+	}
+    90%{
+		opacity:0;
+		transform:scale(1);
+	}
+	100%{
+		opacity:1;
+		transform:scale(1);
 	}
 }
 @-webkit-keyframes ani-narrow{
@@ -369,26 +406,26 @@
 
 /*红色眼*/
 .ani-zoom{				
-	animation:ani-zoom 11s linear 0.8s;
-	-webkit-animation:ani-zoom 11s linear 0.8s;
-	-o-animation:ani-zoom 11s linear 0.8s;
+	animation:ani-zoom 15s linear infinite;
+	/* -webkit-animation:ani-zoom 11s linear 0.8s;
+	-o-animation:ani-zoom 11s linear 0.8s; */
 }
 @keyframes ani-zoom{
 	0%{
 		opacity:0;
 		transform:scale(0);
 	}
-	6%{
+	10%{
 		opacity:1;
 		transform:scale(1);
 	}
-	95%{
+	80%{
 		opacity:1;
 		transform:scale(1);
 	}
 	100%{
 		opacity:0;
-		transform:scale(1.5);
+		transform:scale(0);
 	}
 }
 @-webkit-keyframes ani-zoom{
@@ -429,44 +466,61 @@
 }
 
 .ani-rotateHook{			/*三勾玉*/
-	animation:ani-rotateHook 5s ease-in 2.5s;
-	-webkit-animation:ani-rotateHook 5s ease-in 2.5s;
-	-o-animation:ani-rotateHook 5s ease-in 2.5s;
+	animation:ani-rotateHook 15s linear infinite;
+	/* -webkit-animation:ani-rotateHook 15s ease-in 2.5s infinite; */
+	/* -o-animation:ani-rotateHook 5s ease-in 2.5s; */
+    z-index: 10;
 }
 @keyframes ani-rotateHook{
 	0%{
 		opacity:0;
 		transform:scale(0) rotate(0);
 	}
-	15%{
-		opacity:1;
-		transform:scale(1) rotate(-360deg);
-	}
-	90%{
-		opacity:1;
-		transform:scale(1) rotate(-360deg);
-	}
-	100%{
+    12.5%{
 		opacity:0;
-		transform:scale(1.8) rotate(-540deg);
+		transform:scale(0) rotate(0);
+	}
+	20%{
+		opacity:1;
+		transform:scale(1) rotate(-360deg);
+	}
+	35%{
+		opacity:1;
+		transform:scale(1) rotate(-360deg);
+	}
+	44%{
+		opacity:0;
+		transform:scale(2) rotate(-600deg);
+	}
+    60%{
+		opacity:0;
+		transform:scale(1) rotate(0);
+	}
+    100%{
+		opacity:0;
+		transform:scale(0) rotate(0);
 	}
 }
 @-webkit-keyframes ani-rotateHook{
 	0%{
 		opacity:0;
-		-webkit-transform:scale(0) rotate(0);
+		transform:scale(0) rotate(0);
 	}
-	15%{
+	5%{
 		opacity:1;
-		-webkit-transform:scale(1) rotate(-360deg);
+		transform:scale(1) rotate(-360deg);
 	}
-	90%{
+	30%{
 		opacity:1;
-		-webkit-transform:scale(1) rotate(-360deg);
+		transform:scale(1) rotate(-360deg);
 	}
-	100%{
+	33%{
 		opacity:0;
-		-webkit-transform:scale(1.8) rotate(-540deg);
+		transform:scale(1.8) rotate(-540deg);
+	}
+    100%{
+		opacity:0;
+		transform:scale(1) rotate(0);
 	}
 }
 @-o-keyframes ani-rotateHook{
@@ -489,22 +543,34 @@
 }
 
 .ani-rotateTube{			/*万花筒*/
-	animation:ani-rotateTube 5s ease-in-out 6.5s;
-	-webkit-animation:ani-rotateTube 5s ease-in-out 6.5s;
-	-o-animation:ani-rotateTube 5s ease-in-out 6.5s;
+	animation:ani-rotateTube 15s ease-in-out infinite;
+	/* -webkit-animation:ani-rotateTube 5s ease-in-out 6.5s;
+	-o-animation:ani-rotateTube 5s ease-in-out 6.5s; */
 }
 @keyframes ani-rotateTube{
 	0%{
 		opacity:0;
 		transform:scale(0) rotate(0);
 	}
-	30%{
+    40%{
+		opacity:0;
+		transform:scale(0) rotate(0);
+	}
+	45%{
 		opacity:1;
 		transform:scale(1) rotate(-360deg);
 	}
-	100%{
+	85%{
 		opacity:1;
-		transform:scale(1) rotate(-360deg);
+		transform:scale(1) rotate(-450deg);
+	}
+    99%{
+		opacity:0;
+		transform:scale(1) rotate(-450deg);
+	}
+    100%{
+		opacity:0;
+		transform:scale(0) rotate(0);
 	}
 }
 @-webkit-keyframes ani-rotateTube{
@@ -537,29 +603,46 @@
 }
 
 .ani-shadow{			/*轮回眼*/
-	animation:ani-shadow 1s linear 11s;
-	-webkit-animation:ani-shadow 1s linear 11s;
-	-o-animation:ani-shadow 1s linear 11s;
+	animation:ani-shadow 15s linear infinite;
+	/* -webkit-animation:ani-shadow 15s linear infinite; */
+	/* -o-animation:ani-shadow 1s linear 11s; */
+    z-index: 5;
 }
 @keyframes ani-shadow{
 	0%{
 		opacity:0;
 		box-shadow:none;
 	}
-	100%{
+    65%{
+		opacity:0;
+		box-shadow:none;
+    }
+	70%{
 		opacity:1;
 		box-shadow:0 0 0 14px #464646,0 0 0 16px #000,0 0 0 30px #6c6c6c,0 0 0 32px #000,0 0 0 44px #a6a6a6,0 0 0 46px #000;
 	}
+    90%{
+		opacity:1;
+		box-shadow:0 0 0 14px #464646,0 0 0 16px #000,0 0 0 30px #6c6c6c,0 0 0 32px #000,0 0 0 44px #a6a6a6,0 0 0 46px #000;
+	}
+    100%{
+        opacity:0;
+		box-shadow:none;
+    }
 }
 @-webkit-keyframes ani-shadow{
 	0%{
 		opacity:0;
 		box-shadow:none;
 	}
-	100%{
+	50%{
 		opacity:1;
 		box-shadow:0 0 0 14px #464646,0 0 0 16px #000,0 0 0 30px #6c6c6c,0 0 0 32px #000,0 0 0 44px #a6a6a6,0 0 0 46px #000;
 	}
+    100%{
+        opacity:0;
+		box-shadow:none;
+    }
 }
 @-o-keyframes ani-shadow{
 	0%{
