@@ -14,6 +14,7 @@
     width:100vw;
     height:100vh;
     top: 0px; right: 0px; left: 0px; bottom: 0px;
+    overflow: hidden;
 }
 
 .topbar {
@@ -37,7 +38,7 @@
     position: relative;
     margin: 0 auto;
     display: block;
-    width: 49%;
+    width: 49vw;
     height: 90%;
     text-align: center;
 }
@@ -55,22 +56,20 @@
     border: 1px solid #fff;
     position: absolute;
     right: 0;
-    margin-right: 1.5%;
     width: 90%;
     height: 90%;
-    padding: 15px;
+    padding: 5px;
 }
 
 .contentBoxIframe{
     position: absolute;
     left: 0;
-    margin-left: 1.5%;
     display: block;
     border-radius: 12px;
     border: 1px solid #fff;
     width: 90%;
     height: 90%;
-    padding: 15px;
+    padding: 5px;
 }
 
 .textareaCode{
@@ -87,14 +86,14 @@
 }
 
 .content2Button{
+    position: absolute;
     vertical-align: middle;
     background: #4CD964;
     display: inline-block;
     vertical-align: middle;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #fff;
     font-weight: 500;
-    line-height: 1.2;
     text-align: center;
     white-space: nowrap;
     background-image: none;
@@ -108,26 +107,25 @@
     float:left;
     height: 40px;
     color: #fff;
-    font-size: 26px;
-    line-height: 40px;
-    margin-top: 20px;
+    font-size: 1.2rem;
+    margin-top: 24px;
     margin-left: 30px;
 }
 
 #content2Start{
     float:left;
-    height: 40px;
-    width: 64px; 
-    margin-top: 20px;
+    height: 30px;
+    width: 50px; 
+    margin-top: 24px;
     margin-left: 20px;
 }
 
 #content2Submit {
     float:left;
-    height: 40px;
-    width: 64px; 
-    margin-top: 20px;
-    margin-left: 20px;
+    height: 30px;
+    width: 50px; 
+    margin-top: 24px;
+    margin-left: 80px;
 }
 
 iframe {

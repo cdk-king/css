@@ -1,0 +1,190 @@
+/* 
+animation-direction: normal|alternate;
+normal	默认值。动画应该正常播放。
+alternate	动画应该轮流反向播放。
+*/
+.sun{
+    position: absolute;
+    width: 50vmin;
+    height: 50vmin;
+    border-radius: 100%;
+    background-color: #ff0000;
+    /* box-shadow: inset #f3eeea 0 0 0 7.1428571429vmin; */
+    -webkit-animation: rond 6s linear normal infinite;
+            animation: rond 6s linear normal infinite;
+            animation-direction: normal;
+    /* -webkit-animation: rond 6s ease alternate infinite;
+            animation: rond 6s ease alternate infinite; */
+    transition-timing-function: linear;
+    -moz-transition-timing-function: linear; /* Firefox 4 */
+    -webkit-transition-timing-function: linear; /* Safari 和 Chrome */
+    -o-transition-timing-function: linear; /* Opera */
+            /* border:10px dashed red; */
+    border:10px solid rgb(0, 0, 0);
+    top: 50%;
+    left: 50%;
+    margin-left: -25vmin;
+    margin-top: -25vmin;
+}
+
+@keyframes rond {
+    0% {transform : rotate(0deg) scale(1);}
+    50% {transform : rotate(180deg) scale(0.9);}
+    100% {transform : rotate(360deg) scale(1);}
+}
+
+@-webkit-keyframes rond {
+    0%{-webkit-transform : rotate(0deg) scale(1);}
+    50% {-webkit-transform : rotate(180deg) scale(0.9);}
+    100%{-webkit-transform : rotate(360deg) scale(1);}
+}
+
+@-webkit-keyframes shimmer {
+to {
+    -webkit-transform: rotate(50deg) scale(0.8);
+            transform: rotate(50deg) scale(0.8);
+}
+}
+@keyframes shimmer {
+to {
+    -webkit-transform: rotate(50deg) scale(0.8);
+            transform: rotate(50deg) scale(0.8);
+}
+}
+
+.eyeBox{
+    /* overflow: hidden; */
+    transform: scale(0.5);
+}
+
+.eye{
+    width: 120vmin;
+    height: 60vmin;
+    border-radius: 60vmin 0 60vmin 0;
+    
+    background-color: #ffffff;
+    border: 8px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -60vmin;
+    margin-top: -30vmin;
+}
+
+.dot{
+    width: 5vmin;
+    height: 5vmin;
+    border-radius: 100%;
+    background-color: #000000;
+    border: 1px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -2.5vmin;
+    margin-top: -2.5vmin;
+}
+
+.ring{
+    width: 30vmin;
+    height: 30vmin;
+    border-radius: 100%;
+    background-color: #ffffff00;
+    border: 10px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -15vmin;
+    margin-top: -15vmin;
+    z-index: 2;
+}
+
+.ray{
+    width: 15vmin;
+    height: 15vmin;
+    border-radius: 100%;
+    background-color: #ff0000;
+    /* border: 10px solid black; */
+    /* box-shadow: inset #377de7 0 0 0 7.1428571429vmin; */
+    position: absolute;
+    top: 5vmin;
+    left: 25vmin;
+    -webkit-transform-origin: 0 20vmin;
+    transform-origin: 0 20vmin;
+    /* -webkit-transform: translateY(25vmin);
+    transform: translateY(25vmin); */
+    overflow: hidden;
+}
+
+
+.ray:nth-child(1) {
+    background-color: #ff0000;
+-webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+}
+.ray:nth-child(1):before, .ray:nth-child(1):after {
+-webkit-animation-delay: -0.33s;
+        animation-delay: -0.33s;
+}
+.ray:nth-child(2) {
+    background-color: #ff0000;
+-webkit-transform: rotate(120deg);
+        transform: rotate(120deg);
+}
+.ray:nth-child(2):before, .ray:nth-child(2):after {
+-webkit-animation-delay: -0.66s;
+        animation-delay: -0.66s;
+}
+.ray:nth-child(3) {
+    background-color: #ff0000;
+-webkit-transform: rotate(240deg);
+        transform: rotate(240deg);
+}
+.ray:nth-child(3):before, .ray:nth-child(3):after {
+-webkit-animation-delay: -0.99s;
+        animation-delay: -0.99s;
+}
+
+.rayA{
+    position: absolute;
+    background: black;
+    border-radius: 100%;
+    width: 8vmin;
+    height: 8vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -4vmin;
+    margin-top: 0vmin;
+    -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+}
+
+.rayC{
+    position: absolute;
+    background: rgb(255, 0, 0);
+    border-radius: 100%;
+    width: 8vmin;
+    height: 8vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -4vmin;
+    margin-top: -8vmin;
+    -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+}
+
+.rayB{
+    position: absolute;
+    background: black;
+    /* border-radius: 100%; */
+    width: 20vmin;
+    height: 20vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: 0vmin;
+    margin-top: -10vmin;
+    /* -webkit-transform: rotate(50deg);
+        transform: rotate(50deg); */
+}

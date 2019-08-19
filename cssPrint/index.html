@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=0.5">
 		<title></title>
 		<link rel="stylesheet" href="css/main.css">
 		<link rel="stylesheet" href="css/content1.css">
@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="css/content3.css">
 		<link rel="stylesheet" href="css/navigation.css">
 		<link rel="stylesheet" href="css/home.css">
+		<link rel="stylesheet" href="css/eye.css">
 	</head>
 	<body>
 		<div id="css0" style="display: none;">
@@ -69,7 +70,7 @@ pre:not(:empty) {
  width: 48%;
  font-size: 14px;
  font-family: monospace;
- padding: 10px 10px 20px;
+ padding: 5px 5px 10px;
  box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
  white-space: pre-wrap;/*保留空白符序列，但能正常地进行换行*/
  outline: 0;
@@ -109,9 +110,10 @@ body {
 }
 
 #style-text {
- -webkit-transform: translateX(99%) rotateY(-10deg);
+ -webkit-transform:rotateY(-10deg);
  -webkit-transform-origin: right;
  max-height: 90%;
+ margin-left: 50vw;
 }
 
 /**
@@ -135,6 +137,7 @@ pre:not(#style-text) {
 
 #work-text{
  position: absolute;
+ right: 50vw;
 }
 
 /**
@@ -451,28 +454,31 @@ cdkking.top
 		<div id="home" class="content">
 			<div class="homeBox">
 				<div class="homeBoxFlex">
+					<div class="eyeBox">
 						<div class="eye"></div>
+						<div class="ring"></div>
 						<div class="sun">
-							
+		
 							<div class="dot"></div>
+		
+							<div class="ray">
+								<div class="rayA"></div>
+								<div class="rayB"></div>
+								<div class="rayC"></div>
+							</div>
+							<div class="ray">
+								<div class="rayA"></div>
+								<div class="rayB"></div>
+								<div class="rayC"></div>
+							</div>
+							<div class="ray">
+								<div class="rayA"></div>
+								<div class="rayB"></div>
+								<div class="rayC"></div>
+							</div>
 							
-									<div class="ray">
-										<div class="rayA"></div>
-										<div class="rayB"></div>
-										<div class="rayC"></div>
-									</div>
-									<div class="ray">
-										<div class="rayA"></div>
-										<div class="rayB"></div>
-										<div class="rayC"></div>
-									</div>
-									<div class="ray">
-										<div class="rayA"></div>
-										<div class="rayB"></div>
-										<div class="rayC"></div>
-									</div>
-							<div class="ring"></div>
 						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -500,8 +506,8 @@ cdkking.top
 			</pre>
 		</div>
 		
-
-			<pre id="input-text" style="opacity: 0;position:relative" class="translateY0205rotateY0010">
+		<div class="pre">
+			<pre id="input-text" style="opacity: 0;position:absolute" class="translateY0205rotateY0010">
 				<div class="title">css样式代码添加栏</div>
 			<input id="input" type="" class="input" style="display: none;"/>
 <textarea id="textarea" class="scrollbarTest" rows="8" cols="50" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">
@@ -511,7 +517,7 @@ color:yellow;
 </textarea>
 			<button id="button" class="buttonLine" disabled>提交</button>
 			</pre>
-		
+		</div>
 		</div>
 
 <div id="htmlCode1" class="displayNone">
@@ -895,7 +901,7 @@ this.y = this.y-1;
 		<div id="content2" class="content">
 			<div class="topbar">
 				<!-- <img class="logo" src="img/cdkking.png" /> -->
-				<div class="contentTitle">canvas绘制樱花树</div>
+				<div class="contentTitle">canvas绘制</div>
 				<button id="content2Start" class="content2Button">开始</button>
 				<button id="content2Submit" class="content2Button">提交</button>
 			</div>

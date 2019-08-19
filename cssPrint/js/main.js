@@ -23,6 +23,15 @@ var game = {
         }else{
             this.initQueue();
         }
+
+        var width = document.documentElement.clientWidth;
+        var height = document.documentElement.clientHeight;
+        var scale = Math.min(width/1280,height/732);
+
+        // var gameContainer = document.getElementById("container");
+        // gameContainer.style.transform = "translate(-50%, -50%) " + "scale(" + scale + ")";
+
+        console.log(scale);
     },
     turnLeft:function(){
 
