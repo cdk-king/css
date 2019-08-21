@@ -1,7 +1,16 @@
 #content1 {
     position: absolute;
+    font-size: 0.1rem;
+}
+
+#style-text {
+    font-size: 0.1rem;
 }
 
 #input-text{
+    right: 50vw;
+}
+
+#test-text{
     right: 50vw;
 }
