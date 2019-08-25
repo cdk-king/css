@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        
+        /* flexible box弹性布局，子元素的float，clear，vertical-align属性失效 */
+        /* align-items:center; */
+        /* align-items:定义flex容器内项目侧轴（纵轴）方向的对齐方式 */
+        /* justify-content: center; */
+        /* justify-content:设置弹性盒子元素在主轴（横轴）方向上的对齐方式 */
+        min-height: 100vh;
+        /* vh:相对于视口的高度，视口被分为100单位的vh */
+        background-color: #f3eeea;
+        
+    }
+.outbox{
+    display: flex;
+    border: 1px solid blue;
+}
+.Lbox{
+    width: 18vmax;
+    height: 8vmax;
+    border: 1px solid rgb(255, 255, 255);
+    background: rgb(48, 111, 245);
+    margin: 1vmax;
+    /* padding: 1vmax; */
+}
+.Mbox{
+    width: 8vmax;
+    height: 8vmax;
+    border: 1px solid rgb(255, 255, 255); 
+    background: rgb(48, 111, 245);
+    margin: 1vmax;
+    /* padding: 1vmax; */
+}
+.Sbox{
+    width: 3vmax;
+    height: 3vmax;
+    border: 1px solid rgb(255, 255, 255); 
+    background: rgb(48, 111, 245);
+    margin: 1vmax;
+    /* padding: 1vmax; */
+}
+</style>
+<body>
+    <div class="outbox">
+        <div class="Lbox box">
+
+        </div>
+        <div id="Mbox" class="Mbox box">
+
+        </div>
+        <div class="Sbox box"></div>
+        <div class="Sbox box"></div>
+        <div class="Sbox box"></div>
+        <div class="Sbox box"></div>
+    </div>
+</body>
+<script>
+    ;(function(M) {
+	var moveDiv = function(el, txt) {
+		this.txt = typeof(txt) === "string" ? txt : "cdk";
+		this.el = typeof(el) === "string" ? document.getElementById(el) : el;
+		// 获取元素和初始值
+		var oBox = this.el,
+			disX = 0,
+			disY = 0;
+		// 容器鼠标按下事件
+		oBox.onmousedown = function(e) {
+			var e = e || window.event;
+			//获取按下鼠标到div left  top的距离
+			disX = e.clientX - this.offsetLeft;
+			disY = e.clientY - this.offsetTop;
+			//添加鼠标按下事件
+			document.onmousemove = function(e) {
+				var e = e || window.event;
+				oBox.style.position  = 'absolute';
+				oBox.style.left = (e.clientX - disX) + 'px';
+				oBox.style.top = (e.clientY - disY) + 'px';
+			};
+			//添加鼠标抬起事件
+			document.onmouseup = function() {
+                //清空事件
+                oBox.style.position  = '';
+                oBox.style.left = '';
+				oBox.style.top = '';
+				document.onmousemove = null;
+				document.onmouseup = null;
+			};
+			return false;
+		};
+	}
+
+	window.moveDiv = moveDiv;
+})(this)
+
+//moveDiv("Mbox");
+
+
+var boxer = function(){
+    return new boxer.prototype.init();
+};
+boxer.prototype = {
+    init:function(){
+        console.log("init boxer");
+
+        this.len = 0;
+        this.list = [];
+        this.index = 0;
+        this.word = "";
+        this.width = 0;
+        this.height = 0;
+        this.oldtop = 0;
+        this.oldleft = 0;
+        this.leftIndex = 0;
+        this.topIndex = 0;
+        this.update = function(){
+
+        };
+        this.scan = function(str){
+            this.word = str;
+            this.list =  document.querySelectorAll(str);
+            this.len = this.list.length;
+            //console.log(this.list);
+            return this;
+        };
+        this.addmoveaction = function(){
+            for(var i = 0;i<this.len;i++){
+                (function(i,that){
+                    var el = that.list[i];
+                    var computedStyle = getComputedStyle(el);
+                    var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                    el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+magin*2));
+                    el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+magin*2));
+                    el.onmousedown = function(e) {
+                        var e = e || window.event;
+                        //获取按下鼠标到div left  top的距离
+                        var disX = e.clientX - this.offsetLeft;
+                        var disY = e.clientY - this.offsetTop;
+                        // that.oldleft = this.offsetLeft;
+                        // that.oldtop = this.offsetTop;
+
+                        //left = offsetLeft-margin
+                        
+
+                        //记录坐标
+                        el.oldleft = this.offsetLeft;
+                        el.oldtop = this.offsetTop;
+
+                        //添加鼠标按下事件
+                        document.onmousemove = function(e) {
+                            var e = e || window.event;
+                            el.style.position  = 'absolute';
+                            el.style.left = (e.clientX - disX - magin) + 'px';
+                            el.style.top = (e.clientY - disY - magin) + 'px';
+                            //console.log(el.style.left);
+                            //console.log(that.oldleft);
+                        };
+                        //添加鼠标抬起事件
+                        document.onmouseup = function() {
+                            
+                            //检测碰撞或包含
+                            if(that.checkcollide(el)){
+                                //碰撞
+                                
+                                var computedStyle = getComputedStyle(el);
+                                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                                
+                                el.style.top = (el.topIndex*(el.offsetHeight+magin*2)) + 'px';
+                                el.style.left = (el.leftIndex*(el.offsetWidth+magin*2)) + 'px';
+
+                                //el.style.left = el.oldleft+"px";
+                                //el.style.top = el.oldtop+"px";
+                            }else{
+                                that.checkposition(el);
+                            }
+                            // el.style.position  = '';
+                            //清空事件
+                            document.onmousemove = null;
+                            document.onmouseup = null;
+                        };
+                        return false;
+                    };
+                })(i,this)
+            }
+        };
+        this.checkposition = function(el){
+            var computedStyle = getComputedStyle(el);
+            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            //console.log(magin);
+            var clientWidth = el.clientWidth;
+            var clientHeight = el.clientHeight;
+            var offsetWidth = el.offsetWidth;
+            var offsetHeight = el.offsetHeight;
+            var offsetTop = el.offsetTop;
+            var offsetLeft = el.offsetLeft;
+
+            var maxTop = Math.floor((offsetHeight+magin*2));
+            var topIndex = Math.floor(offsetTop/(offsetHeight+magin*2));
+            //console.log(topIndex);
+            var topTmp = offsetTop%(offsetHeight+magin*2); 
+            if(topTmp>(0.5*(offsetHeight+magin*2))){
+                topIndex++;
+            }
+            if(topIndex<0){
+                topIndex = 0;
+            }
+            el.style.top = (topIndex*(offsetHeight+magin*2)) + 'px';
+
+            var leftIndex = Math.floor(offsetLeft/(offsetWidth+magin*2));
+            //console.log(leftIndex);
+            var leftTmp = offsetLeft%(offsetWidth+magin*2); 
+            if(leftTmp>(0.5*(offsetWidth+magin*2))){
+                leftIndex++;
+            }
+            if(leftIndex<0){
+                leftIndex = 0;
+            }
+            el.style.left = (leftIndex*(offsetWidth+magin*2)) + 'px';
+
+            //检测碰撞或包含
+            if(this.checkcollide(el)){
+                //碰撞
+                
+                var computedStyle = getComputedStyle(el);
+                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                
+                el.style.top = (el.topIndex*(el.offsetHeight+magin*2)) + 'px';
+                el.style.left = (el.leftIndex*(el.offsetWidth+magin*2)) + 'px';
+
+                //el.style.left = el.oldleft+"px";
+                //el.style.top = el.oldtop+"px";
+            }else{
+                el.oldleft = el.style.left;
+                el.oldtop = el.style.top;
+                el.leftIndex = leftIndex;
+                el.topIndex = topIndex; 
+            }
+
+            //console.log(offsetWidth);
+        };
+        this.checkcollide = function(el){
+            for(var i = 0;i<this.len;i++){
+                var item = this.list[i];
+                if(item!=el){
+                    if(this.calculateCollide(el,item)){
+                        console.log("collide");
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+        this.calculateCollide = function(el,item){
+            if(!(el.offsetLeft>(item.offsetLeft+item.offsetWidth)
+            || el.offsetTop>(item.offsetTop+item.offsetHeight)
+            || (el.offsetTop+el.offsetHeight)<(item.offsetTop)
+            || (el.offsetLeft+el.offsetWidth)<(item.offsetLeft)
+            )){
+                //碰撞
+                return true;
+            }
+            return false;
+        }
+        this.aaa = function(){
+            //console.log("cdkckdkcdkckdk");
+        }
+        //
+        this.aaa();
+        this.getMaxWidthHeight();
+        
+        return this;
+    },
+    getMaxWidthHeight:function(){
+        var outboxs = document.getElementsByClassName("outbox");
+        if(outboxs.length>0){
+            this.width = outboxs[0].offsetWidth;
+            this.height = outboxs[0].offsetHeight;
+            //console.log(this.width);
+        }
+    }
+}
+boxer.prototype.init.prototype = boxer.prototype;
+var boxer = boxer();
+boxer.scan(".box").addmoveaction();
+
+</script>
+</html>
