@@ -50,15 +50,15 @@ body {
     margin: 1vmax;
     /* padding: 1vmax; */
 }
+.box{
+    cursor: move;
+}
 </style>
 <body>
     <div class="outbox">
-        <div class="Lbox box">
-
-        </div>
-        <div id="Mbox" class="Mbox box">
-
-        </div>
+        <div class="Lbox box"></div> 
+        <div id="Mbox" class="Mbox box"></div>
+        <div class="Mbox box"></div>
         <div class="Sbox box"></div>
         <div class="Sbox box"></div>
         <div class="Sbox box"></div>
@@ -162,8 +162,6 @@ boxer.prototype = {
                             el.style.position  = 'absolute';
                             el.style.left = (e.clientX - disX - magin) + 'px';
                             el.style.top = (e.clientY - disY - magin) + 'px';
-                            //console.log(el.style.left);
-                            //console.log(that.oldleft);
                         };
                         //添加鼠标抬起事件
                         document.onmouseup = function() {
@@ -172,11 +170,8 @@ boxer.prototype = {
                             if(that.checkcollide(el)){
                                 //碰撞
                                 
-                                var computedStyle = getComputedStyle(el);
-                                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
-                                
-                                el.style.top = (el.topIndex*(el.offsetHeight+magin*2)) + 'px';
-                                el.style.left = (el.leftIndex*(el.offsetWidth+magin*2)) + 'px';
+                                el.style.top = (el.topIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
+                                el.style.left = (el.leftIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
 
                                 //el.style.left = el.oldleft+"px";
                                 //el.style.top = el.oldtop+"px";
@@ -203,29 +198,31 @@ boxer.prototype = {
             var offsetHeight = el.offsetHeight;
             var offsetTop = el.offsetTop;
             var offsetLeft = el.offsetLeft;
+            var SBoxOffsetWidth = this.SBoxOffsetWidth;
+            console.log(SBoxOffsetWidth);
 
-            var maxTop = Math.floor((offsetHeight+magin*2));
-            var topIndex = Math.floor(offsetTop/(offsetHeight+magin*2));
+            var maxTop = Math.floor((SBoxOffsetWidth+magin*2));
+            var topIndex = Math.floor(offsetTop/(SBoxOffsetWidth+magin*2));
             //console.log(topIndex);
-            var topTmp = offsetTop%(offsetHeight+magin*2); 
-            if(topTmp>(0.5*(offsetHeight+magin*2))){
+            var topTmp = offsetTop%(SBoxOffsetWidth+magin*2); 
+            if(topTmp>(0.5*(SBoxOffsetWidth+magin*2))){
                 topIndex++;
             }
             if(topIndex<0){
                 topIndex = 0;
             }
-            el.style.top = (topIndex*(offsetHeight+magin*2)) + 'px';
+            el.style.top = (topIndex*(SBoxOffsetWidth+magin*2)) + 'px';
 
-            var leftIndex = Math.floor(offsetLeft/(offsetWidth+magin*2));
+            var leftIndex = Math.floor(offsetLeft/(SBoxOffsetWidth+magin*2));
             //console.log(leftIndex);
-            var leftTmp = offsetLeft%(offsetWidth+magin*2); 
-            if(leftTmp>(0.5*(offsetWidth+magin*2))){
+            var leftTmp = offsetLeft%(SBoxOffsetWidth+magin*2); 
+            if(leftTmp>(0.5*(SBoxOffsetWidth+magin*2))){
                 leftIndex++;
             }
             if(leftIndex<0){
                 leftIndex = 0;
             }
-            el.style.left = (leftIndex*(offsetWidth+magin*2)) + 'px';
+            el.style.left = (leftIndex*(SBoxOffsetWidth+magin*2)) + 'px';
 
             //检测碰撞或包含
             if(this.checkcollide(el)){
@@ -282,9 +279,19 @@ boxer.prototype = {
     },
     getMaxWidthHeight:function(){
         var outboxs = document.getElementsByClassName("outbox");
+        var Sbox = document.getElementsByClassName("Sbox");
+        if(Sbox.length==0){
+            var div = document.createElement("div");
+            div.className = "Sbox box";
+            outboxs[0].appendChild(div);
+            console.log(div.offsetWidth);
+            this.SBoxOffsetWidth = div.offsetWidth;
+            outboxs[0].removeChild(div);
+        }
         if(outboxs.length>0){
             this.width = outboxs[0].offsetWidth;
             this.height = outboxs[0].offsetHeight;
+            this.SBoxOffsetWidth = Sbox[0].offsetWidth;
             //console.log(this.width);
         }
     }

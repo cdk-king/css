@@ -31,7 +31,7 @@ var game = {
         // var gameContainer = document.getElementById("container");
         // gameContainer.style.transform = "translate(-50%, -50%) " + "scale(" + scale + ")";
 
-        console.log(scale);
+        //console.log(scale);
     },
     turnLeft:function(){
 
