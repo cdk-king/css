@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>磁贴</title>
 </head>
 <style>
 body {
@@ -18,13 +18,15 @@ body {
         /* justify-content: center; */
         /* justify-content:设置弹性盒子元素在主轴（横轴）方向上的对齐方式 */
         min-height: 100vh;
+        min-width: 100vw;
         /* vh:相对于视口的高度，视口被分为100单位的vh */
         background-color: #f3eeea;
+        
         
     }
 .outbox{
     display: flex;
-    border: 1px solid blue;
+    background: #ccc;
 }
 .Lbox{
     width: 18vmax;
@@ -37,7 +39,7 @@ body {
 .Mbox{
     width: 8vmax;
     height: 8vmax;
-    border: 1px solid rgb(255, 255, 255); 
+    border: 1px solid rgb(255, 255, 255);
     background: rgb(48, 111, 245);
     margin: 1vmax;
     /* padding: 1vmax; */
@@ -52,59 +54,34 @@ body {
 }
 .box{
     cursor: move;
+    color:#fff;
+    text-align: center;
+    padding: 0;
+    background: linear-gradient(
+            290deg,
+            rgba(0, 133, 185, 0.37) 0%,
+            rgba(48, 111, 245, 1) 100%
+        );
+}
+.box:before{
+    content: "";
+    display:inline-block;
+    vertical-align:middle;
+    height:100%;
 }
 </style>
 <body>
     <div class="outbox">
-        <div class="Lbox box"></div> 
-        <div id="Mbox" class="Mbox box"></div>
-        <div class="Mbox box"></div>
-        <div class="Sbox box"></div>
-        <div class="Sbox box"></div>
-        <div class="Sbox box"></div>
-        <div class="Sbox box"></div>
+        <div class="Lbox box">L</div> 
+        <div id="Mbox" class="Mbox box">M</div>
+        <div class="Mbox box">M</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
     </div>
 </body>
 <script>
-    ;(function(M) {
-	var moveDiv = function(el, txt) {
-		this.txt = typeof(txt) === "string" ? txt : "cdk";
-		this.el = typeof(el) === "string" ? document.getElementById(el) : el;
-		// 获取元素和初始值
-		var oBox = this.el,
-			disX = 0,
-			disY = 0;
-		// 容器鼠标按下事件
-		oBox.onmousedown = function(e) {
-			var e = e || window.event;
-			//获取按下鼠标到div left  top的距离
-			disX = e.clientX - this.offsetLeft;
-			disY = e.clientY - this.offsetTop;
-			//添加鼠标按下事件
-			document.onmousemove = function(e) {
-				var e = e || window.event;
-				oBox.style.position  = 'absolute';
-				oBox.style.left = (e.clientX - disX) + 'px';
-				oBox.style.top = (e.clientY - disY) + 'px';
-			};
-			//添加鼠标抬起事件
-			document.onmouseup = function() {
-                //清空事件
-                oBox.style.position  = '';
-                oBox.style.left = '';
-				oBox.style.top = '';
-				document.onmousemove = null;
-				document.onmouseup = null;
-			};
-			return false;
-		};
-	}
-
-	window.moveDiv = moveDiv;
-})(this)
-
-//moveDiv("Mbox");
-
 
 var boxer = function(){
     return new boxer.prototype.init();
@@ -123,14 +100,87 @@ boxer.prototype = {
         this.oldleft = 0;
         this.leftIndex = 0;
         this.topIndex = 0;
+        this.SBoxOffsetWidth = 0;
+        this.defineSboxClassName = "Sbox";
+        this.defineMboxClassName = "Mbox";
+        this.defineLboxClassName = "Lbox";
         this.update = function(){
 
+        };
+        this.reload = function(){
+            if(this.len!=0){
+                console.log("reload");
+                if(this.SBoxOffsetWidth!=0){
+                    for(var i = 0;i<this.len;i++){
+                        var el = this.list[i];
+                        var className = el.className;
+                        if(className.indexOf(this.defineSboxClassName)!=-1){
+                            el.style.width = this.SBoxOffsetWidth+"px";
+                            el.style.height = this.SBoxOffsetWidth+"px";
+                            el.style.margin = this.SBoxOffsetWidth/3+"px";
+                            //console.log(this.SBoxOffsetWidth);
+                        }
+                        if(className.indexOf(this.defineMboxClassName)!=-1){
+                            el.style.width = (this.SBoxOffsetWidth/3)*8+"px";
+                            el.style.height = (this.SBoxOffsetWidth/3)*8+"px";
+                            el.style.margin = this.SBoxOffsetWidth/3+"px";
+                        }
+                        if(className.indexOf(this.defineLboxClassName)!=-1){
+                            el.style.width = (this.SBoxOffsetWidth/3)*18+"px";
+                            el.style.height = (this.SBoxOffsetWidth/3)*8+"px";
+                            el.style.margin = this.SBoxOffsetWidth/3+"px";
+                        }
+                    }
+                }
+            }
+            return this;
+        };
+        this.autoArrange = function(){
+            //默认从左到右水平排
+
+            var topIndex = 0;
+            var leftIndex = 0;
+            if(this.len!=0){
+                if(this.SBoxOffsetWidth!=0){
+                    for(var i = 0;i<this.len;i++){
+                        var el = this.list[i];
+                        var className = el.className;
+                        if(className.indexOf(this.defineSboxClassName)!=-1){
+                            el.topIndex = topIndex;
+                            el.leftIndex = leftIndex;
+                            
+                            el.style.position  = 'absolute';
+                            var margin = this.SBoxOffsetWidth/3;
+                            el.style.top = topIndex*(this.SBoxOffsetWidth+magin*2)+"px";
+                            el.style.left = leftIndex*(this.SBoxOffsetWidth+magin*2)+"px";
+                            console.log(this.SBoxOffsetWidth);
+                            leftIndex++;
+                        }
+                        if(className.indexOf(this.defineMboxClassName)!=-1){
+                            el.topIndex = topIndex;
+                            el.leftIndex = leftIndex;
+                            
+                            el.style.position  = 'absolute';
+                            var margin = this.SBoxOffsetWidth/3;
+                            el.style.top = topIndex*(this.SBoxOffsetWidth+magin*2)+"px";
+                            el.style.left = leftIndex*(this.SBoxOffsetWidth+magin*2)+"px";
+                            console.log(this.SBoxOffsetWidth);
+                            leftIndex = leftIndex + 2;
+                        }
+                        
+                    } 
+                }
+                
+            }
+            
+
+
+            return this;
         };
         this.scan = function(str){
             this.word = str;
             this.list =  document.querySelectorAll(str);
             this.len = this.list.length;
-            //console.log(this.list);
             return this;
         };
         this.addmoveaction = function(){
@@ -141,22 +191,21 @@ boxer.prototype = {
                     var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                     el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+magin*2));
                     el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+magin*2));
+                    //添加对象鼠标按下触发事件
                     el.onmousedown = function(e) {
                         var e = e || window.event;
+
+                        that.consoleLogElInfo(el);
+
                         //获取按下鼠标到div left  top的距离
                         var disX = e.clientX - this.offsetLeft;
                         var disY = e.clientY - this.offsetTop;
-                        // that.oldleft = this.offsetLeft;
-                        // that.oldtop = this.offsetTop;
-
-                        //left = offsetLeft-margin
-                        
 
                         //记录坐标
                         el.oldleft = this.offsetLeft;
                         el.oldtop = this.offsetTop;
 
-                        //添加鼠标按下事件
+                        //添加鼠标按下移动事件
                         document.onmousemove = function(e) {
                             var e = e || window.event;
                             el.style.position  = 'absolute';
@@ -169,29 +218,32 @@ boxer.prototype = {
                             //检测碰撞或包含
                             if(that.checkcollide(el)){
                                 //碰撞
-                                
+                                //重新计算并恢复移动前的坐标
                                 el.style.top = (el.topIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
                                 el.style.left = (el.leftIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
 
-                                //el.style.left = el.oldleft+"px";
-                                //el.style.top = el.oldtop+"px";
                             }else{
+                                //未碰撞
                                 that.checkposition(el);
                             }
-                            // el.style.position  = '';
+
                             //清空事件
                             document.onmousemove = null;
                             document.onmouseup = null;
                         };
+                        //阻止默认事件
                         return false;
                     };
                 })(i,this)
             }
+            return this;
         };
         this.checkposition = function(el){
+            //获取对象的最终显示样式
             var computedStyle = getComputedStyle(el);
+            //获取对象的margin长度
             var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
-            //console.log(magin);
+
             var clientWidth = el.clientWidth;
             var clientHeight = el.clientHeight;
             var offsetWidth = el.offsetWidth;
@@ -199,11 +251,10 @@ boxer.prototype = {
             var offsetTop = el.offsetTop;
             var offsetLeft = el.offsetLeft;
             var SBoxOffsetWidth = this.SBoxOffsetWidth;
-            console.log(SBoxOffsetWidth);
 
             var maxTop = Math.floor((SBoxOffsetWidth+magin*2));
             var topIndex = Math.floor(offsetTop/(SBoxOffsetWidth+magin*2));
-            //console.log(topIndex);
+            //纵轴坐标计算
             var topTmp = offsetTop%(SBoxOffsetWidth+magin*2); 
             if(topTmp>(0.5*(SBoxOffsetWidth+magin*2))){
                 topIndex++;
@@ -212,9 +263,8 @@ boxer.prototype = {
                 topIndex = 0;
             }
             el.style.top = (topIndex*(SBoxOffsetWidth+magin*2)) + 'px';
-
+            //横轴坐标计算
             var leftIndex = Math.floor(offsetLeft/(SBoxOffsetWidth+magin*2));
-            //console.log(leftIndex);
             var leftTmp = offsetLeft%(SBoxOffsetWidth+magin*2); 
             if(leftTmp>(0.5*(SBoxOffsetWidth+magin*2))){
                 leftIndex++;
@@ -226,25 +276,24 @@ boxer.prototype = {
 
             //检测碰撞或包含
             if(this.checkcollide(el)){
-                //碰撞
-                
+                //再次碰撞
+                //再次恢复
                 var computedStyle = getComputedStyle(el);
                 var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                 
                 el.style.top = (el.topIndex*(el.offsetHeight+magin*2)) + 'px';
                 el.style.left = (el.leftIndex*(el.offsetWidth+magin*2)) + 'px';
 
-                //el.style.left = el.oldleft+"px";
-                //el.style.top = el.oldtop+"px";
             }else{
+                //最终确认对象坐标发生改变
+                //对象元素自身记录新的坐标信息
                 el.oldleft = el.style.left;
                 el.oldtop = el.style.top;
                 el.leftIndex = leftIndex;
                 el.topIndex = topIndex; 
             }
-
-            //console.log(offsetWidth);
         };
+        //检测是否发生元素间的碰撞
         this.checkcollide = function(el){
             for(var i = 0;i<this.len;i++){
                 var item = this.list[i];
@@ -257,6 +306,7 @@ boxer.prototype = {
             }
             return false;
         };
+        //计算两个元素是由存在重合的区域
         this.calculateCollide = function(el,item){
             if(!(el.offsetLeft>(item.offsetLeft+item.offsetWidth)
             || el.offsetTop>(item.offsetTop+item.offsetHeight)
@@ -267,7 +317,15 @@ boxer.prototype = {
                 return true;
             }
             return false;
-        }
+        };
+        //打印显示对象大小信息
+        this.consoleLogElInfo = function(el){
+            var computedStyle = getComputedStyle(el);
+            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            var border = computedStyle.border;
+            console.log("magin:"+magin);
+            console.log("border:"+border);
+        };
         this.aaa = function(){
             //console.log("cdkckdkcdkckdk");
         }
@@ -277,6 +335,7 @@ boxer.prototype = {
         
         return this;
     },
+    //获取容器的大小
     getMaxWidthHeight:function(){
         var outboxs = document.getElementsByClassName("outbox");
         var Sbox = document.getElementsByClassName("Sbox");
@@ -284,21 +343,21 @@ boxer.prototype = {
             var div = document.createElement("div");
             div.className = "Sbox box";
             outboxs[0].appendChild(div);
-            console.log(div.offsetWidth);
             this.SBoxOffsetWidth = div.offsetWidth;
+            console.log(this.SBoxOffsetWidth);
             outboxs[0].removeChild(div);
         }
         if(outboxs.length>0){
             this.width = outboxs[0].offsetWidth;
             this.height = outboxs[0].offsetHeight;
             this.SBoxOffsetWidth = Sbox[0].offsetWidth;
-            //console.log(this.width);
+            console.log(this.SBoxOffsetWidth);
         }
     }
 }
 boxer.prototype.init.prototype = boxer.prototype;
 var boxer = boxer();
-boxer.scan(".box").addmoveaction();
+boxer.scan(".box").reload().addmoveaction();
 
 </script>
 </html>

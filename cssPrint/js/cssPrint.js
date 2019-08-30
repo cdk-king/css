@@ -419,14 +419,6 @@
 				isKey = true;
 				html1 +="</span>";
 			}
-			if(ochar=="\n" && isKey){
-				//console.log(ochar);
-				//console.log(startKey);
-			}
-
-			if(isInside){
-
-			}
 
 			if((ochar+nchar)=="/*"){
 				isComment=true;

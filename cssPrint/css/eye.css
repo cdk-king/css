@@ -19,7 +19,7 @@ alternate	动画应该轮流反向播放。
     -moz-transition-timing-function: linear; /* Firefox 4 */
     -webkit-transition-timing-function: linear; /* Safari 和 Chrome */
     -o-transition-timing-function: linear; /* Opera */
-            /* border:10px dashed red; */
+    /* border:10px dashed red; */
     border:10px solid rgb(0, 0, 0);
     top: 50%;
     left: 50%;
