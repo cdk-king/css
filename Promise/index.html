@@ -38,7 +38,16 @@
     getUserName().then(function(name){
         //一些处理
         consoleLog.print(name);
-    }).then(getUserJobByName);
+    }).then(function(){
+        getUserJobByName().then(function(){
+        consoleLog.print("last");
+        })
+    });
+
+    // getUserName().then(function(name){
+    //     //一些处理
+    //     consoleLog.print(name);
+    // }).then(getUserJobByName);
 
     function getUserJobByName(name){
         return new Promise(function(resolve){
