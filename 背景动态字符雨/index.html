@@ -25,39 +25,77 @@
     <canvas id="c"></canvas>
 </body>
 <script>
+
+(function(){
+    var lastTime = 0;
+    var vendors = ["ms","moz","webkit","0"];
+    for(var x = 0;x<vendors.length && !window.requestAnimationFrame;x++){
+        window.requestAnimationFrame = window[vendors[x]+"RequestAnimationFrame"];
+        window.cancelAnimationFrame = window[vendors[x]+"CancelRequestAnimationFrame"] || window[vendors[x]+"CannelAnimationFrame"];
+    }
+    if(!window.requestAnimationFrame){
+        window.requestAnimationFrame = function(callback,element){
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0,16-(currTime-lastTime));
+            var id = window.setTimeout(function(){
+                callback(currTime+timeToCall);
+            },timeToCall);
+            lastTime = currTime+timeToCall;
+            return id;
+        };
+    }
+    if(!window.cancelAnimationFrame){
+        window.cancelAnimationFrame = function(id){
+            clearTimeout(id);
+        }
+    }
+}());
+
 var c = document.getElementById("c");
 var ctx = c.getContext("2d");
 
 c.height = window.innerHeight;
 c.width = window.innerWidth;
-var chinese = "cdk";
+var chinese = "cdkking";
 chinese = chinese.split("");
 
-var font_size = 10;
+var font_size = 18;
 var columns = c.width / font_size;
 //an array of drops - one per column
 var drops = [];
 for (var x = 0; x < columns; x++)
-    drops[x] = 1;
+    drops[x] = (Math.random() * c.height)/font_size;
+
+var drawTime = 0;
+var lastDrawTime = 0;
+var drawdDalay = 30;
+
 //drawing the characters
-function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, c.width, c.height);
+function draw(now) {
+    drawTime  = now - lastDrawTime;
+    if(drawTime>drawdDalay){
+        lastDrawTime = now;
+        
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.fillStyle = "#0F0"; //green text
+        ctx.font = (Math.random() * font_size) + "px arial";
+        //looping over drops
+        for (var i = 0; i < drops.length; i++) {
+            var text = chinese[Math.floor(Math.random() * chinese.length)];
+            ctx.fillText(text, i * font_size, drops[i] * font_size);
 
-    ctx.fillStyle = "#0F0"; //green text
-    ctx.font = (Math.random() * font_size) + "px arial";
-    //looping over drops
-    for (var i = 0; i < drops.length; i++) {
-        var text = chinese[Math.floor(Math.random() * chinese.length)];
-        ctx.fillText(text, i * font_size, drops[i] * font_size);
+            if (drops[i] * font_size > c.height && Math.random() > 0.985)
+                drops[i] = 0;
 
-        if (drops[i] * font_size > c.height && Math.random() > 0.975)
-            drops[i] = 0;
-
-        drops[i]++;
+            //drops[i]++;
+            drops[i] = drops[i]+0.3;
+        }
     }
+    
+    window.requestAnimationFrame(draw)
 }
-setInterval(draw, 33);
+draw();
 
 </script>
 </html>
