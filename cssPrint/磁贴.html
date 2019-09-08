@@ -25,7 +25,7 @@ body {
         
     }
 .outbox{
-    display: flex;
+    /* display: flex; */
     background: #ccc;
 }
 .Lbox{
@@ -62,6 +62,9 @@ body {
             rgba(0, 133, 185, 0.37) 0%,
             rgba(48, 111, 245, 1) 100%
         );
+    /* box-sizing: border-box; */
+    /* 暂时为空，1像素边距 */
+    border: none;
 }
 .box:before{
     content: "";
@@ -79,9 +82,24 @@ body {
         <div class="Sbox box">S</div>
         <div class="Sbox box">S</div>
         <div class="Sbox box">S</div>
+        <div class="Lbox box">L</div> 
+        <div id="Mbox" class="Mbox box">M</div>
+        <div class="Mbox box">M</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Lbox box">L</div> 
+        <div id="Mbox" class="Mbox box">M</div>
+        <div class="Mbox box">M</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
+        <div class="Sbox box">S</div>
     </div>
 </body>
 <script>
+    //magin会出现小数的计算，需要统一 
 
 var boxer = function(){
     return new boxer.prototype.init();
@@ -104,6 +122,10 @@ boxer.prototype = {
         this.defineSboxClassName = "Sbox";
         this.defineMboxClassName = "Mbox";
         this.defineLboxClassName = "Lbox";
+
+        this.freedomBoxX = 0;
+        this.freedomBoxY = 0;
+
         this.update = function(){
 
         };
@@ -135,45 +157,127 @@ boxer.prototype = {
             }
             return this;
         };
+        this.calLeftIndex = function(leftIndex){
+            var width = this.width;
+            
+            var margin = this.SBoxOffsetWidth/3;
+            var maxIndex = width/(this.SBoxOffsetWidth+margin*2);
+            if(leftIndex>maxIndex){
+                console.log(leftIndex)
+                console.log(maxIndex)
+                return false;
+            }
+            return true;
+        },
         this.autoArrange = function(){
             //默认从左到右水平排
-
+            console.log("autoArrange");
             var topIndex = 0;
             var leftIndex = 0;
+            this.freedomBoxY = 0;
+            this.freedomBoxX = 0;
             if(this.len!=0){
                 if(this.SBoxOffsetWidth!=0){
                     for(var i = 0;i<this.len;i++){
                         var el = this.list[i];
                         var className = el.className;
                         if(className.indexOf(this.defineSboxClassName)!=-1){
+                            
+
+                            if(!this.calLeftIndex(leftIndex+1)){
+                                topIndex = this.freedomBoxY;
+                                console.log(this.freedomBoxY);
+                                leftIndex = 0;
+                            };
+
                             el.topIndex = topIndex;
                             el.leftIndex = leftIndex;
                             
                             el.style.position  = 'absolute';
-                            var margin = this.SBoxOffsetWidth/3;
-                            el.style.top = topIndex*(this.SBoxOffsetWidth+magin*2)+"px";
-                            el.style.left = leftIndex*(this.SBoxOffsetWidth+magin*2)+"px";
-                            console.log(this.SBoxOffsetWidth);
+                            
+                            
+                            var computedStyle = getComputedStyle(el);
+                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+
+                            //var margin = this.SBoxOffsetWidth/3;
+                            el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            //console.log(this.SBoxOffsetWidth);
                             leftIndex++;
+                            if(this.freedomBoxY<(topIndex+1)){
+                                this.freedomBoxY = topIndex+1;
+                            }
+                            if(this.freedomBoxX<=leftIndex){
+                                this.freedomBoxX = leftIndex+1;
+                            }
                         }
                         if(className.indexOf(this.defineMboxClassName)!=-1){
+
+                            if(!this.calLeftIndex(leftIndex+2)){
+                                
+                                console.log(this.freedomBoxY);
+                                topIndex = this.freedomBoxY;
+                                leftIndex = 0;
+                            };
+
                             el.topIndex = topIndex;
                             el.leftIndex = leftIndex;
                             
                             el.style.position  = 'absolute';
+                            
+                            var computedStyle = getComputedStyle(el);
+                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            
                             var margin = this.SBoxOffsetWidth/3;
-                            el.style.top = topIndex*(this.SBoxOffsetWidth+magin*2)+"px";
-                            el.style.left = leftIndex*(this.SBoxOffsetWidth+magin*2)+"px";
-                            console.log(this.SBoxOffsetWidth);
+
+
+
+                            el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            //console.log(this.SBoxOffsetWidth);
                             leftIndex = leftIndex + 2;
+                            if(this.freedomBoxY<(topIndex+2)){
+                                this.freedomBoxY = topIndex+2;
+                            }
+                            if(this.freedomBoxX<=leftIndex){
+                                this.freedomBoxX = leftIndex+2;
+                            }
                         }
-                        
+                        if(className.indexOf(this.defineLboxClassName)!=-1){
+
+                            if(!this.calLeftIndex(leftIndex+4)){
+                                
+                                console.log(this.freedomBoxY);
+                                topIndex = this.freedomBoxY;
+                                leftIndex = 0;
+                            };
+
+                            el.topIndex = topIndex;
+                            el.leftIndex = leftIndex;
+                            
+                            el.style.position  = 'absolute';
+                            
+                            var computedStyle = getComputedStyle(el);
+                            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            
+                            //margin = this.SBoxOffsetWidth/3;
+                            console.log(magin*2);
+                            
+                            el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
+                            //console.log(this.SBoxOffsetWidth);
+                            leftIndex = leftIndex + 4;
+                            if(this.freedomBoxY<(topIndex+2)){
+                                this.freedomBoxY = topIndex+2;
+                            }
+                            if(this.freedomBoxX<=leftIndex){
+                                this.freedomBoxX = leftIndex+4;
+                            }
+                        }
                     } 
                 }
                 
             }
-            
-
 
             return this;
         };
@@ -357,7 +461,13 @@ boxer.prototype = {
 }
 boxer.prototype.init.prototype = boxer.prototype;
 var boxer = boxer();
-boxer.scan(".box").reload().addmoveaction();
+boxer.scan(".box").reload().addmoveaction().autoArrange();
+
+window.onresize = function(){
+    console.log("resize");
+    boxer.getMaxWidthHeight();
+    boxer.autoArrange();
+}
 
 </script>
 </html>
