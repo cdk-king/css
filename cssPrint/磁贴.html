@@ -63,6 +63,7 @@ body {
             rgba(48, 111, 245, 1) 100%
         );
     /* box-sizing: border-box; */
+    box-sizing: border-box;
     /* 暂时为空，1像素边距 */
     border: none;
 }
@@ -197,7 +198,7 @@ boxer.prototype = {
                             
                             
                             var computedStyle = getComputedStyle(el);
-                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
 
                             //var margin = this.SBoxOffsetWidth/3;
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
@@ -226,9 +227,9 @@ boxer.prototype = {
                             el.style.position  = 'absolute';
                             
                             var computedStyle = getComputedStyle(el);
-                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                             
-                            var margin = this.SBoxOffsetWidth/3;
+                            //var margin = this.SBoxOffsetWidth/3;
 
 
 
@@ -258,10 +259,10 @@ boxer.prototype = {
                             el.style.position  = 'absolute';
                             
                             var computedStyle = getComputedStyle(el);
-                            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                             
                             //margin = this.SBoxOffsetWidth/3;
-                            console.log(magin*2);
+                            console.log(margin*2);
                             
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
@@ -274,7 +275,7 @@ boxer.prototype = {
                                 this.freedomBoxX = leftIndex+4;
                             }
                         }
-                    } 
+                    }
                 }
                 
             }
