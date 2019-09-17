@@ -8,10 +8,10 @@
 </head>
 <style>
 /* 缓动 */
-* {
+/* * {
     transition: all 1s;
     -webkit-transition: all 1s;
-}
+} */
 body {
         margin: 0;
         padding: 0;
@@ -25,9 +25,7 @@ body {
         min-height: 100vh;
         min-width: 100vw;
         /* vh:相对于视口的高度，视口被分为100单位的vh */
-        background-color: #f3eeea;
-        
-        
+        background-color: #f3eeea;   
     }
 .outbox{
     /* display: flex; */
@@ -236,8 +234,6 @@ boxer.prototype = {
                             
                             //var margin = this.SBoxOffsetWidth/3;
 
-
-
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             //console.log(this.SBoxOffsetWidth);
@@ -321,10 +317,11 @@ boxer.prototype = {
                             el.style.position  = 'absolute';
                             el.style.left = (e.clientX - disX - magin) + 'px';
                             el.style.top = (e.clientY - disY - magin) + 'px';
+                            el.style.transition = "";
                         };
                         //添加鼠标抬起事件
-                        document.onmouseup = function() {
-                            
+                        document.onmouseup = function(e) {
+                            el.style.transition = "all 0.5s";
                             //检测碰撞或包含
                             if(that.checkcollide(el)){
                                 //碰撞
