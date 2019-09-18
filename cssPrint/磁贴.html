@@ -60,15 +60,21 @@ body {
     color:#fff;
     text-align: center;
     padding: 0;
-    background: linear-gradient(
+    background: rgba(0, 133, 185, 1);
+    /* background: linear-gradient(
             290deg,
             rgba(0, 133, 185, 0.37) 0%,
             rgba(48, 111, 245, 1) 100%
-        );
+        ); */
     /* box-sizing: border-box; */
     box-sizing: border-box;
     /* 暂时为空，1像素边距 */
     border: none;
+    /* border: 4px solid red; */
+    border: 2px solid transparent;
+}
+.box:hover{
+    border: 2px solid rgb(255, 255, 255);
 }
 .box:before{
     content: "";
@@ -321,7 +327,7 @@ boxer.prototype = {
                         };
                         //添加鼠标抬起事件
                         document.onmouseup = function(e) {
-                            el.style.transition = "all 0.5s";
+                            el.style.transition = "all 0.25s";
                             //检测碰撞或包含
                             if(that.checkcollide(el)){
                                 //碰撞
