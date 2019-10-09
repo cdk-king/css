@@ -40,27 +40,27 @@ body {
     background: #ccc;
 }
 .Lbox{
-    width: 18vmax;
-    height: 8vmax;
+    width: 36vh;
+    height: 16vh;
     border: 1px solid rgb(255, 255, 255);
     background: rgb(48, 111, 245);
-    margin: 1vmax;
+    margin: 2vh;
     /* padding: 1vmax; */
 }
 .Mbox{
-    width: 8vmax;
-    height: 8vmax;
+    width: 16vh;
+    height: 16vh;
     border: 1px solid rgb(255, 255, 255);
     background: rgb(48, 111, 245);
-    margin: 1vmax;
+    margin: 2vh;
     /* padding: 1vmax; */
 }
 .Sbox{
-    width: 3vmax;
-    height: 3vmax;
+    width: 6vh;
+    height: 6vh;
     border: 1px solid rgb(255, 255, 255); 
     background: rgb(48, 111, 245);
-    margin: 1vmax;
+    margin: 2vh;
     /* padding: 1vmax; */
 }
 .box{
@@ -80,6 +80,9 @@ body {
     border: none;
     /* border: 4px solid red; */
     border: 2px solid transparent;
+
+    /* 不可选择 */
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
 
 
 }
@@ -143,7 +146,7 @@ h1{
     </div>
 </body>
 <script>
-    //magin会出现小数的计算，需要统一 
+    //margin会出现小数的计算，需要统一 
 
 var boxer = function(){
     return new boxer.prototype.init();
@@ -174,6 +177,7 @@ boxer.prototype = {
 
         };
         this.reload = function(){
+            this.reloading = true;
             if(this.len!=0){
                 console.log("reload");
                 if(this.SBoxOffsetWidth!=0){
@@ -184,7 +188,6 @@ boxer.prototype = {
                             el.style.width = this.SBoxOffsetWidth+"px";
                             el.style.height = this.SBoxOffsetWidth+"px";
                             el.style.margin = this.magrin+"px";
-                            //console.log(this.SBoxOffsetWidth);
                         }
                         if(className.indexOf(this.defineMboxClassName)!=-1){
                             el.style.width = (this.magrin)*8+"px";
@@ -199,24 +202,21 @@ boxer.prototype = {
                     }
                 }
             }
+            this.reloading = false;
             return this;
         };
         // 计算是否大于最大的index
         this.calLeftIndex = function(leftIndex){
             var width = this.width;
-            
-            var margin = this.SBoxOffsetWidth/3;//纠结
-            //var margin = this.margin;
-            //console.log(margin);undefined????
-            var maxIndex = width/(this.SBoxOffsetWidth+margin*2);
-            if(leftIndex>maxIndex){
-                console.log(leftIndex)
-                console.log(maxIndex)
+            var margin = this.margin;
+            //console.log(this.maxIndex);
+            if(leftIndex>this.maxIndex){
                 return false;
             }
             return true;
         },
         this.autoArrange = function(){
+            this.autoing = true;
             //默认从左到右水平排
             console.log("autoArrange");
             var topIndex = 0;
@@ -234,7 +234,6 @@ boxer.prototype = {
                             //计算是否大于最大的index
                             if(!this.calLeftIndex(leftIndex+1)){
                                 topIndex = this.freedomBoxY;
-                                console.log(this.freedomBoxY);
                                 leftIndex = 0;
                             };
 
@@ -243,9 +242,7 @@ boxer.prototype = {
                             
                             el.style.position  = 'absolute';
                             
-                            
-                            var computedStyle = getComputedStyle(el);
-                            var magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var magrin = this.margin;
 
                             //var margin = this.SBoxOffsetWidth/3;
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
@@ -276,8 +273,8 @@ boxer.prototype = {
                             
                             el.style.position  = 'absolute';
                             
-                            var computedStyle = getComputedStyle(el);
-                            var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var magrin = this.margin;
+                            
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             //console.log(this.SBoxOffsetWidth);
@@ -304,8 +301,7 @@ boxer.prototype = {
                             
                             el.style.position  = 'absolute';
                             
-                            var computedStyle = getComputedStyle(el);
-                            var magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                            var margin = this.margin;
                             
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
@@ -322,7 +318,7 @@ boxer.prototype = {
                 }
                 
             }
-
+            this.autoing = false;
             return this;
         };
         this.scan = function(str){
@@ -336,9 +332,9 @@ boxer.prototype = {
                 (function(i,that){
                     var el = that.list[i];
                     var computedStyle = getComputedStyle(el);
-                    var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
-                    el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+magin*2));
-                    el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+magin*2));
+                    var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                    el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+margin*2));
+                    el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+margin*2));
                     //添加对象鼠标按下触发事件
                     el.onmousedown = function(e) {
                         var e = e || window.event;
@@ -357,8 +353,8 @@ boxer.prototype = {
                         document.onmousemove = function(e) {
                             var e = e || window.event;
                             el.style.position  = 'absolute';
-                            el.style.left = (e.clientX - disX - magin) + 'px';
-                            el.style.top = (e.clientY - disY - magin) + 'px';
+                            el.style.left = (e.clientX - disX - margin) + 'px';
+                            el.style.top = (e.clientY - disY - margin) + 'px';
                             el.style.transition = "";
                         };
                         //添加鼠标抬起事件
@@ -368,8 +364,8 @@ boxer.prototype = {
                             if(that.checkcollide(el)){
                                 //碰撞
                                 //重新计算并恢复移动前的坐标
-                                el.style.top = (el.topIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
-                                el.style.left = (el.leftIndex*(that.SBoxOffsetWidth+magin*2)) + 'px';
+                                el.style.top = (el.topIndex*(that.SBoxOffsetWidth+margin*2)) + 'px';
+                                el.style.left = (el.leftIndex*(that.SBoxOffsetWidth+margin*2)) + 'px';
 
                             }else{
                                 //未碰撞
@@ -391,7 +387,7 @@ boxer.prototype = {
             //获取对象的最终显示样式
             var computedStyle = getComputedStyle(el);
             //获取对象的margin长度
-            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
 
             var clientWidth = el.clientWidth;
             var clientHeight = el.clientHeight;
@@ -401,37 +397,37 @@ boxer.prototype = {
             var offsetLeft = el.offsetLeft;
             var SBoxOffsetWidth = this.SBoxOffsetWidth;
 
-            var maxTop = Math.floor((SBoxOffsetWidth+magin*2));
-            var topIndex = Math.floor(offsetTop/(SBoxOffsetWidth+magin*2));
+            var maxTop = Math.floor((SBoxOffsetWidth+margin*2));
+            var topIndex = Math.floor(offsetTop/(SBoxOffsetWidth+margin*2));
             //纵轴坐标计算
-            var topTmp = offsetTop%(SBoxOffsetWidth+magin*2); 
-            if(topTmp>(0.5*(SBoxOffsetWidth+magin*2))){
+            var topTmp = offsetTop%(SBoxOffsetWidth+margin*2); 
+            if(topTmp>(0.5*(SBoxOffsetWidth+margin*2))){
                 topIndex++;
             }
             if(topIndex<0){
                 topIndex = 0;
             }
-            el.style.top = (topIndex*(SBoxOffsetWidth+magin*2)) + 'px';
+            el.style.top = (topIndex*(SBoxOffsetWidth+margin*2)) + 'px';
             //横轴坐标计算
-            var leftIndex = Math.floor(offsetLeft/(SBoxOffsetWidth+magin*2));
-            var leftTmp = offsetLeft%(SBoxOffsetWidth+magin*2); 
-            if(leftTmp>(0.5*(SBoxOffsetWidth+magin*2))){
+            var leftIndex = Math.floor(offsetLeft/(SBoxOffsetWidth+margin*2));
+            var leftTmp = offsetLeft%(SBoxOffsetWidth+margin*2); 
+            if(leftTmp>(0.5*(SBoxOffsetWidth+margin*2))){
                 leftIndex++;
             }
             if(leftIndex<0){
                 leftIndex = 0;
             }
-            el.style.left = (leftIndex*(SBoxOffsetWidth+magin*2)) + 'px';
+            el.style.left = (leftIndex*(SBoxOffsetWidth+margin*2)) + 'px';
 
             //检测碰撞或包含
             if(this.checkcollide(el)){
                 //再次碰撞
                 //再次恢复
                 var computedStyle = getComputedStyle(el);
-                var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                 
-                el.style.top = (el.topIndex*(el.offsetHeight+magin*2)) + 'px';
-                el.style.left = (el.leftIndex*(el.offsetWidth+magin*2)) + 'px';
+                el.style.top = (el.topIndex*(el.offsetHeight+margin*2)) + 'px';
+                el.style.left = (el.leftIndex*(el.offsetWidth+margin*2)) + 'px';
 
             }else{
                 //最终确认对象坐标发生改变
@@ -470,9 +466,9 @@ boxer.prototype = {
         //打印显示对象大小信息
         this.consoleLogElInfo = function(el){
             var computedStyle = getComputedStyle(el);
-            var magin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
             var border = computedStyle.border;
-            console.log("magin:"+magin);
+            console.log("margin:"+margin);
             console.log("border:"+border);
         };
         this.aaa = function(){
@@ -495,9 +491,9 @@ boxer.prototype = {
             outboxs[0].appendChild(div);
             this.SBoxOffsetWidth = div.offsetWidth;
             var computedStyle = getComputedStyle(div);
-            this.magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            this.margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
             console.log(this.SBoxOffsetWidth);
-            console.log(this.magrin);
+            console.log(this.margin);
             outboxs[0].removeChild(div);
         }
         if(outboxs.length>0){
@@ -509,9 +505,9 @@ boxer.prototype = {
             //var margin = this.SBoxOffsetWidth/3;
             //记录最小单位margin(取整)
             var computedStyle = getComputedStyle( Sbox[0]);
-            this.magrin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            this.margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
             console.log(this.SBoxOffsetWidth);
-            console.log(this.magrin);
+            console.log(this.margin);
         }
     },
     calMapIndex:function(){
@@ -519,7 +515,7 @@ boxer.prototype = {
         var width = this.width;
         var margin = this.margin;
         //var margin = this.SBoxOffsetWidth/3;//纠结
-        this.maxIndex = width/(this.SBoxOffsetWidth+margin*2);
+        this.maxIndex = parseInt(width/(this.SBoxOffsetWidth+margin*2));
     }
 }
 //如果我在boxer.prototype上扩展方法,确保实例能够调用.
@@ -528,8 +524,13 @@ var boxer = boxer();
 boxer.scan(".box").reload().addmoveaction().autoArrange();
 
 window.onresize = function(){
-    console.log("resize");
-    boxer.getMaxWidthHeight();
+    //console.log("resize");
+    if(!this.autoing && !this.reloading){
+        boxer.getMaxWidthHeight();
+        boxer.calMapIndex();
+        boxer.reload();
+    }
+    
     boxer.autoArrange();
 }
 
