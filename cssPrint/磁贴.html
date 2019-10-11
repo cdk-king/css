@@ -47,6 +47,9 @@ body {
     margin: 2vh;
     /* padding: 1vmax; */
 }
+.Lbox:hover{
+    transform:rotateY(180deg);
+}
 .Mbox{
     width: 16vh;
     height: 16vh;
@@ -54,6 +57,9 @@ body {
     background: rgb(48, 111, 245);
     margin: 2vh;
     /* padding: 1vmax; */
+}
+.Mbox:hover{
+    transform:rotateY(180deg);
 }
 .Sbox{
     width: 6vh;
@@ -84,10 +90,16 @@ body {
     /* 不可选择 */
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
 
+    transition: all 0.25s;
+    -webkit-transition: all 0.25s;
 
 }
 .box:hover{
     border: 2px solid rgb(255, 255, 255);
+    
+    box-shadow: 0px 0px 10px 1px #000;
+    transition: all 1s;
+    -webkit-transition: all 1s;
 }
 .box:before{
     content: "";
@@ -158,6 +170,7 @@ boxer.prototype = {
         this.len = 0;
         this.list = [];
         this.index = 0;
+        this.zIndex = "10";
         this.word = "";
         this.width = 0;
         this.height = 0;
@@ -183,17 +196,20 @@ boxer.prototype = {
                 if(this.SBoxOffsetWidth!=0){
                     for(var i = 0;i<this.len;i++){
                         var el = this.list[i];
+                        el.style.zIndex = this.zIndex;
                         var className = el.className;
                         if(className.indexOf(this.defineSboxClassName)!=-1){
                             el.style.width = this.SBoxOffsetWidth+"px";
                             el.style.height = this.SBoxOffsetWidth+"px";
                             el.style.margin = this.magrin+"px";
                         }
+                        //这里不对
                         if(className.indexOf(this.defineMboxClassName)!=-1){
                             el.style.width = (this.magrin)*8+"px";
                             el.style.height = (this.magrin)*8+"px";
                             el.style.margin = this.magrin+"px";
                         }
+                        //这里不对
                         if(className.indexOf(this.defineLboxClassName)!=-1){
                             el.style.width = (this.magrin)*18+"px";
                             el.style.height = (this.magrin)*8+"px";
@@ -335,11 +351,18 @@ boxer.prototype = {
                     var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
                     el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+margin*2));
                     el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+margin*2));
+                    el.onmouseover = function(){
+                        el.style.transition = "all 1s";
+                        el.style.WebkitTransition = "all 1s";
+                    }
+                    el.onmouseout = function(){
+                        el.style.transition = "all 0.25s";
+                        el.style.WebkitTransition = "all 0.25s";
+                    }
                     //添加对象鼠标按下触发事件
-                    el.onmousedown = function(e) {
+                    el.ontouchstart = el.onmousedown = function(e) {
                         var e = e || window.event;
-
-                        that.consoleLogElInfo(el);
+                        //that.consoleLogElInfo(el);
 
                         //获取按下鼠标到div left  top的距离
                         var disX = e.clientX - this.offsetLeft;
@@ -349,17 +372,25 @@ boxer.prototype = {
                         el.oldleft = this.offsetLeft;
                         el.oldtop = this.offsetTop;
 
+                        el.style.transition = "";
+                        el.style.WebkitTransition = "";
+                        
                         //添加鼠标按下移动事件
-                        document.onmousemove = function(e) {
+                        document.ontouchmove = document.onmousemove = function(e) {
                             var e = e || window.event;
                             el.style.position  = 'absolute';
+                            el.style.transition = "all 0s";
+                            el.style.WebkitTransition = "all 0s";
                             el.style.left = (e.clientX - disX - margin) + 'px';
                             el.style.top = (e.clientY - disY - margin) + 'px';
-                            el.style.transition = "";
+                            el.style.zIndex  = '999';
                         };
                         //添加鼠标抬起事件
-                        document.onmouseup = function(e) {
+                        document.ontouchend = document.onmouseup = function(e) {
                             el.style.transition = "all 0.25s";
+                            el.style.WebkitTransition = "all 0.25s";
+                            
+                            el.style.zIndex  = that.zIndex;
                             //检测碰撞或包含
                             if(that.checkcollide(el)){
                                 //碰撞
