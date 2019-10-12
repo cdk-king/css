@@ -28,45 +28,46 @@ body {
         background-color: #f3eeea;   
 
         background-image: -webkit-linear-gradient(left,
-   #22c1c3, #fdbb2d 25%, #22c1c3 50%, #fdbb2d 75%, #22c1c3);
-  /* -webkit-text-fill-color: transparent; */
-  -webkit-background-clip: text;
-  -webkit-background-size: 200% 100%;
-  -webkit-animation: myGradientChange 4s infinite linear;
-  animation: myGradientChange 4s infinite linear;
+        #22c1c3, #fdbb2d 25%, #22c1c3 50%, #fdbb2d 75%, #22c1c3);
+        /* -webkit-text-fill-color: transparent; */
+        -webkit-background-clip: text;
+        -webkit-background-size: 200% 100%;
+        -webkit-animation: myGradientChange 4s infinite linear;
+        animation: myGradientChange 4s infinite linear;
     }
 .outbox{
     /* display: flex; */
     background: #ccc;
 }
 .Lbox{
-    width: 36vh;
-    height: 16vh;
+    width: 31vh;
+    height: 15vh;
     border: 1px solid rgb(255, 255, 255);
     background: rgb(48, 111, 245);
-    margin: 2vh;
+    margin: 0.5vh;
     /* padding: 1vmax; */
 }
 .Lbox:hover{
-    transform:rotateY(180deg);
+    /* transform:rotateY(180deg); */
+    
 }
 .Mbox{
-    width: 16vh;
-    height: 16vh;
+    width: 15vh;
+    height: 15vh;
     border: 1px solid rgb(255, 255, 255);
     background: rgb(48, 111, 245);
-    margin: 2vh;
+    margin: 0.5vh;
     /* padding: 1vmax; */
 }
 .Mbox:hover{
-    transform:rotateY(180deg);
+    /* transform:rotateY(180deg); */
 }
 .Sbox{
-    width: 6vh;
-    height: 6vh;
+    width: 7vh;
+    height: 7vh;
     border: 1px solid rgb(255, 255, 255); 
     background: rgb(48, 111, 245);
-    margin: 2vh;
+    margin: 0.5vh;
     /* padding: 1vmax; */
 }
 .box{
@@ -97,7 +98,7 @@ body {
 .box:hover{
     border: 2px solid rgb(255, 255, 255);
     
-    box-shadow: 0px 0px 10px 1px #000;
+    box-shadow: 0px 0px 15px 1px rgb(80, 80, 80);
     transition: all 1s;
     -webkit-transition: all 1s;
 }
@@ -198,22 +199,27 @@ boxer.prototype = {
                         var el = this.list[i];
                         el.style.zIndex = this.zIndex;
                         var className = el.className;
+                        var time = 16;
                         if(className.indexOf(this.defineSboxClassName)!=-1){
                             el.style.width = this.SBoxOffsetWidth+"px";
                             el.style.height = this.SBoxOffsetWidth+"px";
-                            el.style.margin = this.magrin+"px";
+                            el.style.margin = this.margin+"px";
                         }
                         //这里不对
                         if(className.indexOf(this.defineMboxClassName)!=-1){
-                            el.style.width = (this.magrin)*8+"px";
-                            el.style.height = (this.magrin)*8+"px";
-                            el.style.margin = this.magrin+"px";
+                            //el.style.width = parseInt((this.rMargin)*30)+"px";
+                            //el.style.height = parseInt((this.rMargin)*30)+"px";
+                            el.style.width = (this.SBoxOffsetWidth+(this.margin*2))*2-(2*this.margin)+"px";
+                            el.style.height = el.style.width;
+                            el.style.margin = this.margin+"px";
                         }
                         //这里不对
                         if(className.indexOf(this.defineLboxClassName)!=-1){
-                            el.style.width = (this.magrin)*18+"px";
-                            el.style.height = (this.magrin)*8+"px";
-                            el.style.margin = this.magrin+"px";
+                            //el.style.width = parseInt((this.rMargin)*62)+"px";
+                            //el.style.height = parseInt((this.rMargin)*30)+"px";
+                            el.style.width = (this.SBoxOffsetWidth+(this.margin*2))*4-(2*this.margin)+"px";
+                            el.style.height = (this.SBoxOffsetWidth+(this.margin*2))*2-(2*this.margin)+"px";
+                            el.style.margin = this.margin+"px";
                         }
                     }
                 }
@@ -260,10 +266,9 @@ boxer.prototype = {
                             
                             var magrin = this.margin;
 
-                            //var margin = this.SBoxOffsetWidth/3;
                             el.style.top = topIndex*(this.SBoxOffsetWidth+margin*2)+"px";
                             el.style.left = leftIndex*(this.SBoxOffsetWidth+margin*2)+"px";
-                            //console.log(this.SBoxOffsetWidth);
+
                             leftIndex++;
 
                             if(this.freedomBoxY<(topIndex+1)){
@@ -348,16 +353,18 @@ boxer.prototype = {
                 (function(i,that){
                     var el = that.list[i];
                     var computedStyle = getComputedStyle(el);
-                    var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                    var margin = that.margin;
                     el.topIndex = Math.floor(el.offsetTop/(el.offsetHeight+margin*2));
                     el.leftIndex = Math.floor(el.offsetLeft/(el.offsetWidth+margin*2));
                     el.onmouseover = function(){
                         el.style.transition = "all 1s";
                         el.style.WebkitTransition = "all 1s";
+                        el.style.zIndex  = '999';
                     }
                     el.onmouseout = function(){
                         el.style.transition = "all 0.25s";
                         el.style.WebkitTransition = "all 0.25s";
+                        el.style.zIndex  = that.zIndex;
                     }
                     //添加对象鼠标按下触发事件
                     el.ontouchstart = el.onmousedown = function(e) {
@@ -418,7 +425,7 @@ boxer.prototype = {
             //获取对象的最终显示样式
             var computedStyle = getComputedStyle(el);
             //获取对象的margin长度
-            var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+            var margin = this.margin;
 
             var clientWidth = el.clientWidth;
             var clientHeight = el.clientHeight;
@@ -455,7 +462,7 @@ boxer.prototype = {
                 //再次碰撞
                 //再次恢复
                 var computedStyle = getComputedStyle(el);
-                var margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
+                var margin = this.margin;
                 
                 el.style.top = (el.topIndex*(el.offsetHeight+margin*2)) + 'px';
                 el.style.left = (el.leftIndex*(el.offsetWidth+margin*2)) + 'px';
@@ -503,7 +510,7 @@ boxer.prototype = {
             console.log("border:"+border);
         };
         this.aaa = function(){
-            //console.log("cdkckdkcdkckdk");
+
         }
         //
         this.aaa();
@@ -522,6 +529,7 @@ boxer.prototype = {
             outboxs[0].appendChild(div);
             this.SBoxOffsetWidth = div.offsetWidth;
             var computedStyle = getComputedStyle(div);
+            this.rMargin = computedStyle.margin.substring(0,computedStyle.margin.length-2);
             this.margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
             console.log(this.SBoxOffsetWidth);
             console.log(this.margin);
@@ -536,6 +544,7 @@ boxer.prototype = {
             //var margin = this.SBoxOffsetWidth/3;
             //记录最小单位margin(取整)
             var computedStyle = getComputedStyle( Sbox[0]);
+            this.rMargin = computedStyle.margin.substring(0,computedStyle.margin.length-2);
             this.margin = parseInt(computedStyle.margin.substring(0,computedStyle.margin.length-2));
             console.log(this.SBoxOffsetWidth);
             console.log(this.margin);
