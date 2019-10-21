@@ -9,10 +9,10 @@
 </head>
 <style>
     /* 缓动 */
-    /* * {
-    transition: all 1s;
-    -webkit-transition: all 1s;
-} */
+    * {
+        perspective: 1000;
+        transform-style: preserve-3d;
+    }
     body {
         margin: 0;
         padding: 0;
@@ -28,20 +28,22 @@
         /* vh:相对于视口的高度，视口被分为100单位的vh */
         background-color: #f3eeea;
 
-        background-image: -webkit-linear-gradient(left,
-                #22c1c3, #fdbb2d 25%, #22c1c3 50%, #fdbb2d 75%, #22c1c3);
+        /* background-image: -webkit-linear-gradient(left,
+                #22c1c3, #fdbb2d 25%, #22c1c3 50%, #fdbb2d 75%, #22c1c3); */
         /* -webkit-text-fill-color: transparent; */
-        -webkit-background-clip: text;
+
+        
+        /* -webkit-background-clip: text;
         -webkit-background-size: 200% 100%;
         -webkit-animation: myGradientChange 4s infinite linear;
-        animation: myGradientChange 4s infinite linear;
+        animation: myGradientChange 4s infinite linear; */
+        
     }
 
     .outbox {
         /* display: flex; */
         background: #ccc;
-        /* perspective: 1000;
-        transform-style: preserve-3d; */
+
     }
 
     .Lbox {
@@ -69,6 +71,13 @@
 
     .Mbox:hover {
         transform: rotateY(180deg);
+    }
+
+    .rotateY180{
+        transform: rotateY(180deg);
+    }
+    .rotateY360{
+        transform: rotateY(360deg);
     }
 
     .Sbox {
@@ -111,8 +120,8 @@
         -webkit-transition: all 0.25s;
 
         /* 配合翻转，原理我也不懂 */
-        perspective: 1000;
-        transform-style: preserve-3d;
+        /* perspective: 1000;
+        transform-style: preserve-3d; */
 
     }
 
@@ -125,19 +134,15 @@
     }
 
     .box:before {
-        /* content: ""; */
-        /* display:inline-block;
-    vertical-align:middle;
-    height:100%; */
     }
 
     .front {
         position: absolute;
         top: 0px;
-        left: 0px;
-        
-        background: rgb(148, 231, 132);
+        left: 0px; 
+        background: rgb(25, 172, 98);
         height: 100%;
+        text-align:center;
         width: 100%;
         backface-visibility: hidden;
     }
@@ -153,8 +158,7 @@
         display: block;
         height: 100%;
         width: 100%;
-        transform: rotateY(-180deg);
-        z-index: 20;
+        transform: rotateY(-180deg); 
     }
 
     h1 {
@@ -266,23 +270,19 @@
                             var time = 16;
                             if (className.indexOf(this.defineSboxClassName) != -1) {
                                 el.style.width = this.SBoxOffsetWidth + "px";
-                                el.style.height = this.SBoxOffsetWidth + "px";
+                                el.style.height = el.style.lineHeight = this.SBoxOffsetWidth + "px";
                                 el.style.margin = this.margin + "px";
                             }
                             //这里不对
                             if (className.indexOf(this.defineMboxClassName) != -1) {
-                                //el.style.width = parseInt((this.rMargin)*30)+"px";
-                                //el.style.height = parseInt((this.rMargin)*30)+"px";
                                 el.style.width = (this.SBoxOffsetWidth + (this.margin * 2)) * 2 - (2 * this.margin) + "px";
-                                el.style.height = el.style.width;
+                                el.style.height = el.style.lineHeight = el.style.width;
                                 el.style.margin = this.margin + "px";
                             }
                             //这里不对
                             if (className.indexOf(this.defineLboxClassName) != -1) {
-                                //el.style.width = parseInt((this.rMargin)*62)+"px";
-                                //el.style.height = parseInt((this.rMargin)*30)+"px";
                                 el.style.width = (this.SBoxOffsetWidth + (this.margin * 2)) * 4 - (2 * this.margin) + "px";
-                                el.style.height = (this.SBoxOffsetWidth + (this.margin * 2)) * 2 - (2 * this.margin) + "px";
+                                el.style.height = el.style.lineHeight = (this.SBoxOffsetWidth + (this.margin * 2)) * 2 - (2 * this.margin) + "px";
                                 el.style.margin = this.margin + "px";
                             }
                         }
@@ -573,6 +573,12 @@
                 console.log("margin:" + margin);
                 console.log("border:" + border);
             };
+            this.addActionClass = function(){
+                for (var i = 0; i < this.len; i++) {
+                    var el = this.list[i];
+                    addClass(el,"rotateY180");
+                }
+            },
             this.aaa = function () {
 
             }
@@ -625,7 +631,7 @@
     //如果我在boxer.prototype上扩展方法,确保实例能够调用.
     boxer.prototype.init.prototype = boxer.prototype;
     var boxer = boxer();
-    boxer.scan(".box").reload().addmoveaction().autoArrange();
+    boxer.scan(".box").reload().addmoveaction().autoArrange().addActionClass();
 
     window.onresize = function () {
         //console.log("resize");
@@ -637,6 +643,34 @@
 
         boxer.autoArrange();
     }
+
+
+function addClass(obj, cls){
+  var obj_class = obj.className,//获取 class 内容.
+  blank = (obj_class != '') ? ' ' : '';//判断获取到的 class 是否为空, 如果不为空在前面加个'空格'.
+  added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
+  obj.className = added;//替换原来的 class.
+}
+   
+function removeClass(obj, cls){
+  var obj_class = ' '+obj.className+' ';//获取 class 内容, 并在首尾各加一个空格. ex) 'abc    bcd' -> ' abc    bcd '
+  obj_class = obj_class.replace(/(\s+)/gi, ' '),//将多余的空字符替换成一个空格. ex) ' abc    bcd ' -> ' abc bcd '
+  removed = obj_class.replace(' '+cls+' ', ' ');//在原来的 class 替换掉首尾加了空格的 class. ex) ' abc bcd ' -> 'bcd '
+  removed = removed.replace(/(^\s+)|(\s+$)/g, '');//去掉首尾空格. ex) 'bcd ' -> 'bcd'
+  obj.className = removed;//替换原来的 class.
+}
+   
+function hasClass(obj, cls){
+  var obj_class = obj.className,//获取 class 内容.
+  obj_class_lst = obj_class.split(/\s+/);//通过split空字符将cls转换成数组.
+  x = 0;
+  for(x in obj_class_lst) {
+    if(obj_class_lst[x] == cls) {//循环数组, 判断是否包含cls
+      return true;
+    }
+  }
+  return false;
+}
 
 </script>
 
